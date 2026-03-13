@@ -85,11 +85,20 @@ class SaveFiles:
     def loads(self, category: Category, user_context: UserContext):
         file_name = self._define_file_name(category, user_context)
         logger.debug(f"file_name : {file_name}")
+
+
+        
         if Path(file_name).exists():
-            with open(file_name, "r", encoding="utf-8") as f:
-                return f.read()
+            extension = Path(file_name).suffix
+            match extension:
+                case ".json":
+                    with open(file_name, "r", encoding="utf-8") as f:
+                        return json.load(f)
+                case _:
+                    with open(file_name, "r", encoding="utf-8") as f:
+                    return f.read()
         else:
-            logger.warning("Strategy file missing!")
+            logger.warning(f"{category} File missing!")
 
     def does_exist(self, category: Category, user_context: UserContext):
         file_name = self._define_file_name(category, user_context)
