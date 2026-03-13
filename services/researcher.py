@@ -106,7 +106,15 @@ class Research:
                         theme=self.research_topic["name"],
                         angle_narratif=self.research_angle
                     )                    
-                    
+                case "Brief":
+                    with open("prompt/master_prompt_content_prospector_brief.md", "r", encoding="utf-8") as f:
+                        template_brut = Template(f.read())
+
+                    prompt = template_brut.substitute(
+                        city_name=self.user_context.city,
+                        theme=self.research_topic["name"],
+                        angle_narratif=self.research_angle
+                    )
 
             if is_simulation:
                 worker = self.registery.simulation_content_prospector

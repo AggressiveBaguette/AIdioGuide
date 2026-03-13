@@ -1,3 +1,4 @@
+import openai.types.realtime.realtime_transcription_session_create_request_param
 import asyncio
 from string import Template
 from loguru import logger
@@ -55,7 +56,7 @@ class Orchestration:
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
             logger.info("Plan already created!")
             plan = self.registery.storage.loads(Category.PLAN, self.user_context)
-            return plan
+            self.plan = AudioguidePlan.model_validate_json(plan)
 
         else:
             with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
@@ -63,12 +64,6 @@ class Orchestration:
             
             logger.debug(f"plan_stratege : {self.strategy}")
 
-            # We need reasearch_phase_1 to be a string to be sent to the LLM. We add an ID in front of each research topic to save tokens and references
-            research_table = self.registery.storage.loads_all_verifed_research(self.user_context, "phase_1")
-            all_lines = [line for block in research_table for line in block.split("\n")]
-            self.research_phase_1 = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
-
-            logger.debug(f"research_phase_1 : {self.research_phase_1[:1000]}")
 
             logger.debug(f"template_brut : {template_brut}")
 
@@ -88,7 +83,21 @@ class Orchestration:
             self.registery.storage.save(Category.PLAN, self.user_context, plan)
             logger.info("Plan created!")
             logger.debug(f"Plan : {plan}")
-            return plan
+            self.plan = AudioguidePlan.model_validate_json(plan)
+
+    async def parse_plan():
+        research_topic_list = []
+
+        for stop in self.plan.parcours:
+            logger.debug(f"Parse_plan stop : {stop}")
+            for research_topic in stop.briefs_recherche_additionnelle:
+                research_topic_list.append({
+                    "type":"Brief",
+                    "name":research_topic.name,
+                    "angle":research_topic.angle
+                })
+        return research_topic_list
+            
 
     async def parse_strategy(self):
         strategy_line = self.strategy.split("\n")
@@ -120,7 +129,13 @@ class Orchestration:
     async def research(self, phase, is_simulation=False):
         coroutine_search_list = []
 
-        research_topic_list = await self.parse_strategy()
+        if phase == "phase_1":
+            # if phase_1, then we get the research_topic_list from strategy 
+            # if phase 2, we get the research_topic_list from the plan
+            research_topic_list = await self.parse_strategy()
+        else:
+            research_topic_list = await self.parse_plan()
+
 
         logger.debug(f"Strategy : {self.strategy}")
         for research_topic in research_topic_list:
@@ -138,11 +153,65 @@ class Orchestration:
 
         # We create a file with all verified research from the given phase
         self._bundle_all_verified_research(phase)
-    
+
+        if phase == "phase_1":
+            # We need reasearch_phase_1 to be a string to be sent to the LLM. We add an ID in front of each research topic to save tokens and references
+            research_table = self.registery.storage.loads_all_verifed_research(self.user_context, "phase_1")
+            all_lines = [line for block in research_table for line in block.split("\n")]
+            self.research_phase_1 = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
+
+            logger.debug(f"research_phase_1 : {self.research_phase_1[:1000]}")        
+
     def _bundle_all_verified_research(self, phase):
         list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
         concatened_research = "\n-----\n".join(list)
         self.registery.storage.save(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research)
+
+    async def redaction(self, is_simulation=False):
+        coroutine_search_list = []
+        with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
+            template_brut = Template(f.read())
+
+
+        for stop in self.plan.parcours:
+            logger.debug(f"Stop : {stop}")
+
+            if self.registery.storage.does_exist(Category.REDACTION, self.user_context):
+                logger.info(f"Redaction {stop.titre_etape} already created!")
+
+            else:
+
+                facts_phase_1 = await self.get_facts(stop)
+
+                facts_phase_2 = self.research("phase_2")
+
+                # PHASE 2 TO DO
+                content = template_brut.substitute(
+                    title_audioguide = self.plan.titre_audioguide,
+                    city_name = self.user_context.city,
+                    language = self.user_context.language,
+                    strategie = self.plan.strategie,
+                    nom_lieu = stop.localisation,
+                    titre_etape = stop.titre_etape,
+                    consigne_plume = stop.consigne_plume,
+                    transition_vers_prochain = stop.transition_vers_prochain,
+                    cible_duree_audio = stop.cible_duree_audio,
+                    facts = facts
+                )
+
+    async def get_facts(self, stop):
+        requested_facts_id = stop.faits_retenus
+        verified_facts_list = self.research_phase_1.split("\n")
+        
+        requested_facts = []
+        for fact in verified_facts_list:
+            if fact.split("|")[0] in requested_facts_id:
+                requested_facts.append(fact)
+        logger.debug(f"Requested Facts Id : {requested_facts_id}")
+        logger.debug(f"Requested facts : {requested_facts}")
+        return "\n".join(requested_facts)
+                
+
 
 
 
@@ -166,4 +235,12 @@ async def orchestrator(user_context: UserContext):
     await orchestration.research("phase_1", is_simulation=False)
     logger.info("FIN DE LA RECHERCHE")
 
+    logger.info("DEBUT DU PLAN")
     await orchestration.plan(is_simulation=False)
+    logger.info("FIN DU PLAN")
+
+    #PHASE 2 TO DO
+
+    logger.info("DEBUT DE LA REDACTION")
+    await orchestration.redaction(is_simulation=False)
+    logger.info("FIN DE LA REDACTION")

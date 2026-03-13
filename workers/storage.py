@@ -93,10 +93,11 @@ class SaveFiles:
             match extension:
                 case ".json":
                     with open(file_name, "r", encoding="utf-8") as f:
-                        return json.load(f)
+                        file = json.load(f)
+                        return file
                 case _:
                     with open(file_name, "r", encoding="utf-8") as f:
-                    return f.read()
+                        return f.read()
         else:
             logger.warning(f"{category} File missing!")
 
@@ -127,7 +128,11 @@ class SaveFiles:
             match extension:
                 case ".json":
                     with open(file_name, "r", encoding="utf-8") as f:
-                        return json.load(f)
+                        file = json.loads(f)
+                        if type(file) == str:
+                            # Sometime the LLM return json with a double encoding...
+                            file = json.loads(file) 
+                        return file
                 case _:
                     with open(file_name, "r", encoding="utf-8") as f:
                         return f.read()

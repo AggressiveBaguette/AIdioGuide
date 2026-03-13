@@ -9,19 +9,24 @@ class FaitRetenu(BaseModel):
     affirmation: str
     preuve_visuelle: str
 
+class RechercheAdditionnelle(BaseModel):
+    name: str
+    angle: str
+
+
 class EtapeParcours(BaseModel):
     numero: int
     type: Literal["Vestige_Majeur", "Respiration_Contexte"]
     titre_etape: str
     localisation: str
     # Optional car la première étape n'a pas de transition
-    transition_depuis_precedent: Optional[str] = None
+    transition_vers_prochain: Optional[str] = None
     consigne_plume: str
     cible_duree_audio: str
     is_grand_format: bool
     # Listes vides acceptées selon les règles de ton prompt
     faits_retenus: List[str] = Field(default_factory=list)
-    briefs_recherche_additionnelle: List[str] = Field(default_factory=list)
+    briefs_recherche_additionnelle: List[RechercheAdditionnelle] = Field(default_factory=list)
 
 class AudioguidePlan(BaseModel):
     titre_audioguide: str
