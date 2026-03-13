@@ -24,7 +24,7 @@ Un rédacteur arrivera ensuite pour écrire l'ensemble des étapes que tu as con
 7. Calibrage Audio : Pour chaque étape, définis une cible_duree_audio claire (ex: "30 secondes", "2 minutes", "3 minutes").
 8. Le GRAND FORMAT : Tu dois OBLIGATOIREMENT désigner UNE étape comme le "Grand Format". Sa cible_duree_audio doit être d'environ "8 minutes".
 9. COPIE STRICTE DES FAITS (CRITIQUE) : Pour les champs affirmation et preuve_visuelle du JSON, tu dois EXACTEMENT COPIER-COLLER le texte brut de la liste faits_valides. ZÉRO RÉÉCRITURE. ZÉRO AJOUT. La preuve_visuelle doit RESTER un élément purement physique que l'utilisateur peut pointer du doigt (s'il ne peut pas le voir, c'est que la data d'entrée est foireuse, copie-la quand même sans modifier).
-10. Les Briefs d'Approfondissement (OPTIONNELS) : Génère 1 à 2 briefs de recherche UNIQUEMENT si tu estimes qu'il manque du contexte macro/sociétal pour écrire ton "Ouverture". Si les faits suffisent, laisse le tableau vide []. [RÈGLE ABSOLUE] INTERDICTION de demander une recherche sur une information déjà contenue dans les faits validés !
+10. Les Briefs d'Approfondissement (OPTIONNELS) : Génère 1 à 2 briefs de recherche UNIQUEMENT si tu estimes qu'il manque du contexte macro/sociétal pour écrire ton "Ouverture". Si les faits suffisent, laisse le tableau vide []. S'il y en a, formate-les STRICTEMENT avec un name (le sujet court) et un angle (la directive précise de recherche).[RÈGLE ABSOLUE] INTERDICTION de demander une recherche sur une information déjà contenue dans les faits validés !
 
 ## Format de Sortie Exigé
 
@@ -46,7 +46,10 @@ Structure du JSON :
 "is_grand_format": false,
 "faits_retenus": ["ID_03", "ID_12"],
 "briefs_recherche_additionnelle": [
-"Mission pour l'agent chercheur : Enquêter sur un NOUVEL angle pour nourrir l'Ouverture..."
+{
+"name": "Sujet de la recherche (ex: Corruption immobilière 1990)",
+"angle": "Directive précise (ex: Trouver le nom des promoteurs et le montage financier)"
+}
 ]
 }
 ]

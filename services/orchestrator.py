@@ -85,14 +85,14 @@ class Orchestration:
             logger.debug(f"Plan : {plan}")
             self.plan = AudioguidePlan.model_validate_json(plan)
 
-    async def parse_plan():
+    async def parse_plan(self):
         research_topic_list = []
 
         for stop in self.plan.parcours:
             logger.debug(f"Parse_plan stop : {stop}")
             for research_topic in stop.briefs_recherche_additionnelle:
                 research_topic_list.append({
-                    "type":"Brief",
+                    "type":"Deep_Dive",
                     "name":research_topic.name,
                     "angle":research_topic.angle
                 })
@@ -142,7 +142,8 @@ class Orchestration:
             logger.info(f"Recherche pour le monument : {research_topic["name"]}")
 
             # if research_topic["name"] in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            # if research_topic["name"] in ["Arènes de Lutèce"]:      
+            # if research_topic["name"] in ["Arènes de Lutèce"]:   
+            # if research_topic["name"] in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
             if True:        
                 research = Research(self.user_context, research_topic, phase, self.registery, self.research_angle)
                 coroutine_search_list.append(research.get_research_results(is_simulation))
@@ -183,8 +184,6 @@ class Orchestration:
 
                 facts_phase_1 = await self.get_facts(stop)
 
-                facts_phase_2 = self.research("phase_2")
-
                 # PHASE 2 TO DO
                 content = template_brut.substitute(
                     title_audioguide = self.plan.titre_audioguide,
@@ -196,7 +195,6 @@ class Orchestration:
                     consigne_plume = stop.consigne_plume,
                     transition_vers_prochain = stop.transition_vers_prochain,
                     cible_duree_audio = stop.cible_duree_audio,
-                    facts = facts
                 )
 
     async def get_facts(self, stop):
@@ -238,6 +236,10 @@ async def orchestrator(user_context: UserContext):
     logger.info("DEBUT DU PLAN")
     await orchestration.plan(is_simulation=False)
     logger.info("FIN DU PLAN")
+
+    logger.info("DEBUT PHASE RECHERCHE 2")
+    await orchestration.research("phase_2", is_simulation=False)
+    logger.info("FIN PHASE RECHERCHE 2")
 
     #PHASE 2 TO DO
 
