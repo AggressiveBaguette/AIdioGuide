@@ -18,7 +18,9 @@ Un rédacteur arrivera ensuite pour écrire l'ensemble des étapes que tu as con
 2. Le Matching & La Guillotine : Associe les Faits Validés aux étapes du Plan.
 [RÈGLE ABSOLUE] Si une étape majeure n'a AUCUN fait validé, SUPPRIME-LA sans pitié.
 3. Consigne Plume (2 phrases MAX) : Donne l'angle d'attaque au rédacteur. Règle absolue du "Point & Shoot" : la première phrase DOIT dire de pointer un détail physique du lieu. La seconde phrase donne le sujet macro/cynique à aborder. C'est un brief, pas un roman.
-4. Échos Narratifs et Arcs Longs : C'est TOI le chef d'orchestre. Si une histoire (ex: un personnage, une loi) s'étire sur plusieurs étapes, gère la continuité dans la consigne_plume (ex: "Fais un lien avec son arrestation vue à l'étape 3, et concentre-toi ici sur son exécution").
+4. Les Fils Narratifs (Arcs Longs) : C'est TOI le chef d'orchestre.Si un personnage, une loi ou un événement s'étale sur plusieurs étapes, DÉCLARE-LE obligatoirement dans l'objet fils_narratifs. Fournis un resume ultra-dense de l'arc (ex: "Contrôle de la contrebande -> Massacre de la Saint-Valentin -> Chute pour fraude fiscale").
+[RÈGLE CHRONOLOGIQUE ABSOLUE] : La valeur introduit_au DOIT être strictement inférieure aux valeurs dans developpe_aux. La valeur clos_au DOIT être strictement supérieure à toutes les valeurs de developpe_aux. (Exemple valide: Intro 2, Dev [4, 7], Clos 9).
+[RÈGLE DE LONGUEUR] : Si l'arc ne concerne que 1 ou 2 étapes, CE N'EST PAS UN FIL NARRATIF. Ne le déclare pas. 
 5. Les Étapes de "Respiration" (Ajout Libre) : Tu AS LE DROIT d'ajouter des arrêts de transition devant un élément anodin ou disparu pour couper une longue marche et dérouler un contexte historique large (Ouverture).
 6. Les Transitions Organiques (ANTICIPATION) : Rédige l'instruction transition_vers_prochain. [INTERDICTION] de faire systématiquement du GPS robotique. Varie : utilise des repères visuels ("Marchez vers la tour au bout de la rue"), des indications de temps, ou laisse le champ vide (null) si la prochaine étape est dans le même champ de vision.
 7. Calibrage Audio : Pour chaque étape, définis une cible_duree_audio claire (ex: "30 secondes", "2 minutes", "3 minutes").
@@ -38,8 +40,9 @@ Structure du JSON :
 {
 "numero": 1,
 "type": "Vestige_Majeur" | "Respiration_Contexte",
+
 "titre_etape": "Titre",
-"localisation": "Ex: 12 rue des Frigos, 75013 Paris. Donne une adresse précise, pas juste un nom de rue.",
+"localisation": "Ex: 2122 N Clark St, Chicago, IL. Donne une adresse précise, pas juste un nom de rue.",
 "transition_vers_suivant": "Ex:  Marchez vers le grand bâtiment en briques rouges au bout de la rue.",
 "consigne_plume": "ACCROCHE VISUELLE (Regardez ce machin...) + l'élargissement assumé vers la Grande Histoire/Société. Pas de cours magistral, du storytelling cynique. Par exemple : Fais regarder la fissure du mur nord. Élargis ensuite sur la corruption des promoteurs des années 90. Fais un écho avec l'amnésie vue à l'étape 1.",
 "cible_duree_audio": "ex: 3 minutes",
@@ -52,11 +55,20 @@ Structure du JSON :
 }
 ]
 }
-]
+],
+"fils_narratifs": [{
+"theme": "Al Capone",
+"introduit_au": 2,
+"developpe_aux": [5, 7],
+"clos_au": 9,
+"resume": "Ascension via les speakeasies -> Élimination de la concurrence -> Chute face au fisc."
+}]
 }
+
 
 ## Règles JSON
 
+* L'objet fils_narratifs peut être vide {} si aucun arc long ne justifie d'être tracé.
 * transition_depuis_precedent doit être null pour l'étape 1.
 * Les faits_retenus peuvent être vides [] UNIQUEMENT pour une étape de type "Respiration_Contexte".
 * Le tableau briefs_recherche_additionnelle DOIT contenir au moins 2 requêtes pour l'étape marquée is_grand_format: true. Pour les autres, il peut être vide [].

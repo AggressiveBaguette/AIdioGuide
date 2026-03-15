@@ -13,16 +13,23 @@ class RechercheAdditionnelle(BaseModel):
     name: str
     angle: str
 
+class FilNarratif(BaseModel):
+    theme: str
+    introduit_au: int
+    developpe_aux: List[int] = Field(default_factory=list)
+    clos_au: int
+    resume: str
+
 
 class EtapeParcours(BaseModel):
     numero: int
     type: Literal["Vestige_Majeur", "Respiration_Contexte"]
     titre_etape: str
     localisation: str
-    transition_vers_suivant: Optional[str] = None
+    transition_vers_suivant: str | None = None
     consigne_plume: str
     cible_duree_audio: str
-    is_grand_format: bool
+    is_grand_format: bool = False
     faits_retenus: List[str] = Field(default_factory=list)
     briefs_recherche_additionnelle: List[RechercheAdditionnelle] = Field(default_factory=list)
 
@@ -30,6 +37,7 @@ class AudioguidePlan(BaseModel):
     titre_audioguide: str
     strategie: str
     parcours: List[EtapeParcours]
+    fils_narratifs: List[FilNarratif] = Field(default_factory=list)
     
 class ResearchItem(BaseModel):
     category: str = Field(..., alias="c")

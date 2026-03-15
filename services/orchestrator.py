@@ -171,6 +171,18 @@ class Orchestration:
         with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
 
+        stop_list = "\n".join([f"arrêt {stop.numero} : {stop.titre_etape}" for stop in self.plan.parcours])
+        
+        system_prompt = template_brut.substitute(
+            title_audioguide = self.plan.titre_audioguide,
+            city_name = self.user_context.city,
+            language = self.user_context.language,
+            strategie = self.plan.strategie,
+            plan_global = stop_list,
+            fils_narratifs = self.plan.fils_narratifs,
+        )
+        
+        messages_history = []      
 
         for stop in self.plan.parcours:
             logger.debug(f"Stop : {stop}")
@@ -179,31 +191,64 @@ class Orchestration:
                 logger.info(f"Redaction {stop.numero} - {stop.titre_etape} already created!")
 
             else:
+                # LA V1 
+                # facts_phase_1, facts_phase_2 = await self.get_facts(stop)
+
+                # prompt = template_brut.substitute(
+                #     title_audioguide = self.plan.titre_audioguide,
+                #     city_name = self.user_context.city,
+                #     language = self.user_context.language,
+                #     strategie = self.plan.strategie,
+                #     nom_lieu = stop.localisation,
+                #     titre_etape = stop.titre_etape,
+                #     consigne_plume = stop.consigne_plume,
+                #     transition_vers_suivant = stop.transition_vers_suivant,
+                #     cible_duree_audio = stop.cible_duree_audio,
+                # )
+
+                # logger.debug(f"Content : {prompt}")
+                # logger.debug(f"Stop name : {stop.numero} - {stop.titre_etape}")
+                # if is_simulation:
+                #     worker = self.registery.simulation_plan
+                # else:
+                #     worker = self.registery.claude_worker
+
+                # # if stop.titre_etape == "La Conciergerie : Quand le Palais Devient Cage":
+                # if True:
+                #     stop_text = worker.get_text("--", system_prompt=prompt, research_block_1=facts_phase_1, research_block_2 = facts_phase_2, temperature = 0.8)
+                #     self.registery.storage.save(Category.REDACTION, self.user_context, stop_text, id = stop.numero)
+
+
+                # DEBUT V2 AVEC MÉMOIRE
                 facts_phase_1, facts_phase_2 = await self.get_facts(stop)
 
-                prompt = template_brut.substitute(
-                    title_audioguide = self.plan.titre_audioguide,
-                    city_name = self.user_context.city,
-                    language = self.user_context.language,
-                    strategie = self.plan.strategie,
-                    nom_lieu = stop.localisation,
-                    titre_etape = stop.titre_etape,
-                    consigne_plume = stop.consigne_plume,
-                    transition_vers_suivant = stop.transition_vers_suivant,
-                    cible_duree_audio = stop.cible_duree_audio,
-                )
-
-                logger.debug(f"Content : {prompt}")
+                logger.debug(f"Content : {system_prompt}")
                 logger.debug(f"Stop name : {stop.numero} - {stop.titre_etape}")
                 if is_simulation:
                     worker = self.registery.simulation_plan
                 else:
                     worker = self.registery.claude_worker
 
+                with open("prompt/prompt_instructions_redaction.md", "r", encoding="utf-8") as f:
+                    template_brut = Template(f.read())
+                prompt = template_brut.substitute(
+                    nom_lieu = stop.localisation,
+                    titre_etape = stop.titre_etape,
+                    consigne_plume = stop.consigne_plume,
+                    transition_vers_suivant = stop.transition_vers_suivant,
+                    cible_duree_audio = stop.cible_duree_audio,
+                    faits_bruts_phase_1 = facts_phase_1,
+                    faits_bruts_phase_2 = facts_phase_2,
+                )
+
                 # if stop.titre_etape == "La Conciergerie : Quand le Palais Devient Cage":
                 if True:
-                    stop_text = worker.get_text("--", system_prompt=prompt, research_block_1=facts_phase_1, research_block_2 = facts_phase_2, temperature = 0.8)
+                    stop_text = worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
                     self.registery.storage.save(Category.REDACTION, self.user_context, stop_text, id = stop.numero)
+                    messages_history.append({"role": "assistant", "content": stop_text})
+
+                # FIN V2 AVEC MÉMOIRE
+
 
     async def get_facts_phase_2(self, stop):
             requested_facts = stop.briefs_recherche_additionnelle
