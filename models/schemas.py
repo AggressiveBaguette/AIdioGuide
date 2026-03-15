@@ -19,12 +19,10 @@ class EtapeParcours(BaseModel):
     type: Literal["Vestige_Majeur", "Respiration_Contexte"]
     titre_etape: str
     localisation: str
-    # Optional car la première étape n'a pas de transition
-    transition_vers_prochain: Optional[str] = None
+    transition_vers_suivant: Optional[str] = None
     consigne_plume: str
     cible_duree_audio: str
     is_grand_format: bool
-    # Listes vides acceptées selon les règles de ton prompt
     faits_retenus: List[str] = Field(default_factory=list)
     briefs_recherche_additionnelle: List[RechercheAdditionnelle] = Field(default_factory=list)
 

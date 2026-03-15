@@ -47,7 +47,7 @@ def custom_filter(record):
     #         return True
 
         # Filtering by function
-        if record["function"] in ["redaction", "get_facts"]:
+        if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:
             return True
         
             

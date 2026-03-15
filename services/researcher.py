@@ -217,6 +217,13 @@ class Research:
 
                 verified_claims = worker.get_text(content=content, system_prompt=system_prompt, temperature = 0) 
                 logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
+
+                if self.phase == "phase_2":
+                    # We need to add the request name in phase_2 as a key, otherwise we won't be able to determine which claims is needed for which stop.
+                    # phase 2 content is a little different than phase 1. Phase 1 is needed as a whole to determine the plan and ID are only managed later, after the plan is done. While pahse 2 is only aimed at a single stop.
+                    verified_claims = "\n".join(f"{self.research_topic['name']}|{line}" for line in verified_claims.split("\n"))
+                    logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
+
                 self.registery.storage.save_research(
                     Category.VERIFIED_RESEARCH,
                     self.user_context,
