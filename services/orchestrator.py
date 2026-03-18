@@ -15,13 +15,15 @@ from models.schemas import Category
 from workers.azureTTS import AzureTTS
 from services.audio_generation import AudioService
 from config import TTS_LANGUAGES_NO_PHONEMES
+from services.strategy import StrategyService
 
 class Orchestration:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService):
+    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService):
         self.user_context = user_context
         self.registery = registery
         self.research_phases = {}
         self.audio_service = audio_service
+        self.strategy_service = strategy_service
 
         with open("prompt/master_prompt.txt", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
@@ -31,29 +33,14 @@ class Orchestration:
             language=user_context.language.code
         )
 
-    async def strategy_agent(self, is_simulation=False):
+    def strategy_agent(self, is_simulation=False):
         """First, define the strategy"""
         if self.registery.storage.does_exist(Category.STRATEGY, self.user_context):
             logger.info("Strategy already created!")
-            self.strategy = self.registery.storage.loads(Category.STRATEGY, self.user_context)
+            strategy = self.registery.storage.loads(Category.STRATEGY, self.user_context)
 
         else:
-            with open("prompt/master_prompt_strategy.md", "r", encoding="utf-8") as f:
-                template_brut = Template(f.read())
-            content = template_brut.substitute(
-                city_name=self.user_context.city,
-                language=self.user_context.language.code,
-                user_profile=self.user_context.comment
-            )
-            logger.debug(f"content : {content}")
-
-            if is_simulation:
-                worker = self.registery.simulation_strategy
-            else:
-                worker = self.registery.claude_worker
-
-            self.strategy = worker.get_text(content = content, temperature = 1)
-
+            strategy = define_strategy() 
             logger.debug(f"Strategy : {self.strategy}")
             self.registery.storage.save(Category.STRATEGY, self.user_context, str(self.strategy))
 
@@ -314,12 +301,16 @@ async def orchestrator(user_context: UserContext):
 
     # Load all the business classes
     audio_service = AudioService(user_context, registery, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
-
-    orchestration = Orchestration(user_context, registery, audio_service=audio_service)
+    strategy_service = StrategyService(user_context, registery)
+    
+    orchestration = Orchestration(user_context, 
+        registery,
+        audio_service=audio_service
+        strategy_service=strategy_service)
 
 
     logger.info("DEBUT DE LA STRATEGIE")
-    await orchestration.strategy_agent(is_simulation=False)
+    strategy = orchestration.strategy_agent(is_simulation=False)
     logger.info("FIN DE LA STRATEGIE")
 
     logger.info("DEBUT DE LA RECHERCHE")
