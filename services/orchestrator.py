@@ -273,9 +273,11 @@ class Orchestration:
                 continue
 
             content = self.registery.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
-            if stop.numero == True:
+            # if stop.numero == 1:
+            if True:
                 coroutine_list.append(self._audio_single_stop(content, stop, foreign_terms, is_simulation))
-        
+            logger.info(f"Audio generation for stop {stop.numero} - {stop.titre_etape} added to the queue!")
+
         await asyncio.gather(*coroutine_list)
 
         logger.info(f"Audio generation completed!")
