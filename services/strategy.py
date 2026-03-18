@@ -3,7 +3,7 @@ from models.schemas import ResearchTopic
 from loguru import logger
 from string import Template
 from typing import TYPE_CHECKING
-from models.schemas import Stategy, ResearchTopic
+from models.schemas import Strategy, ResearchTopic
 
 if TYPE_CHECKING:
     from models.context import UserContext
@@ -32,7 +32,7 @@ class StrategyService:
         return parsed_strategy
 
     def parse_strategy(self, raw_output):
-        result = Stategy(raw_output=raw_output)
+        result = Strategy(raw_output=raw_output)
 
         strategy_line = raw_output.strip().split("\n")
 

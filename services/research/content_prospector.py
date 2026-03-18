@@ -1,4 +1,3 @@
-
 from loguru import logger
 from string import Template
 from typing import TYPE_CHECKING
@@ -11,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class ContentProspector:
-    def _init_(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
         self.user_context = user_context
         self.registery = registery
 
@@ -42,9 +41,9 @@ class ContentProspector:
         logger.info(f"content_prospector | location={research_topic.name}")
         content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
 
-        parsed_content = self._parse_content_prospector(content, research_topic)
+        return self.parse_content_prospector(content, research_topic)
 
-    def _parse_content_prospector(self, text, research_topic: ResearchTopic):
+    def parse_content_prospector(self, text, research_topic: ResearchTopic):
         research_output = ResearchOutput(raw_output = text)
 
         # We get only the DSV part without the sources
@@ -61,7 +60,7 @@ class ContentProspector:
                         # Exa requests are on the six columns for "lieu"
                         parsed_research_requests = parts[5].split(";;")
 
-                        research_output.research_topics.append(ResearchOutputLine(
+                        research_output.research_lines.append(ResearchOutputLine(
                                     category=parts[0],
                                     title=parts[1],
                                     affirmation=parts[2], 

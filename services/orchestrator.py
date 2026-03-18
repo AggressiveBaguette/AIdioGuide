@@ -3,12 +3,12 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import AudioguidePlan
+from models.schemas import AudioguidePlan, Strategy
 from workers.exa import ExaSearch
 from workers.claude import Claude
 from workers.storage import SaveFiles
 from workers.simulation import SimulationStrategy, SimulationPlan
-from services.researcher import Research
+from services.research.research_orchestrator import ResearchOrchestrator
 from workers.gemini import Gemini
 from services.phonemes_detection import PhonemDetection
 from models.schemas import Category
@@ -96,12 +96,12 @@ class Orchestration:
                 })
         return research_topic_list
 
-    async def research(self, phase, strategy: Stategy, plan: AudioguidePlan):
+    async def research(self, phase, strategy: Strategy, plan: AudioguidePlan = None):
         coroutine_search_list = []
 
         if phase == "phase_1":
-            # if phase_1, then we get the research_topic from strategy 
-            # if phase 2, we get the research_topic from the plan
+            # if phase_1, then we get the research_topics from strategy 
+            # if phase 2, we get the research_topics from the plan
             research_topic_list = strategy.research_topics
             logger.debug(f"Strategy : {strategy}")
         else:
@@ -109,14 +109,14 @@ class Orchestration:
 
 
         for research_topic in research_topic_list:
-            logger.info(f"Recherche pour le monument : {research_topic["name"]}")
+            logger.info(f"Recherche on topic : {research_topic.name}")
 
-            # if research_topic["name"] in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            # if research_topic["name"] in ["Arènes de Lutèce"]:   
-            # if research_topic["name"] in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
+            # if research_topic.name in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
+            # if research_topic.name in ["Arènes de Lutèce"]:   
+            # if research_topic.name in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
             if True:        
-                research = Research(self.user_context, research_topic, phase, self.registery, self.research_angle)
-                coroutine_search_list.append(research.get_research_results(is_simulation))
+                research = ResearchOrchestrator(self.user_context, self.registery)
+                coroutine_search_list.append(research.get_research_results(phase, research_topic, strategy.research_angle))
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
         await asyncio.gather(*coroutine_search_list)
@@ -124,6 +124,8 @@ class Orchestration:
 
         self._bundle_all_verified_research(phase)
 
+    def _perform_unit_research():
+        pass
 
     def _bundle_all_verified_research(self, phase):
         list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
@@ -288,11 +290,11 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA STRATEGIE")
 
     logger.info("DEBUT DE LA RECHERCHE")
-    await orchestration.research("phase_1", is_simulation=False)
+    await orchestration.research("phase_1", strategy)
     logger.info("FIN DE LA RECHERCHE")
 
-    # logger.info("DEBUT DU PLAN")
-    # plan = await orchestration.plan(is_simulation=False)
+    logger.info("DEBUT DU PLAN")
+    plan = await orchestration.plan(is_simulation=False)
     # logger.info("FIN DU PLAN")
 
     # logger.info("DEBUT PHASE RECHERCHE 2")

@@ -6,8 +6,8 @@ from enum import Enum
 class ResearchTopic(BaseModel):
     type: Literal["Lieu", "Theme"]
     name: str
-    narrative_pitch: Optional(str) = None
-    angle: Optional(str) = None
+    narrative_pitch: Optional[str] = None
+    angle: Optional[str] = None
 
 class Strategy(BaseModel):
     raw_output: str

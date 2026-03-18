@@ -4,56 +4,54 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import ResearchBlock, Category
+from models.schemas import Category
+from services.research.content_prospector import ContentProspector
 
 class ResearchOrchestrator:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
 
-    def __init__(self, user_context: UserContext, research_topic, phase, registery: WorkerRegistry, research_angle):
+    def __init__(self, user_context: UserContext, registery: WorkerRegistry):
         self.user_context = user_context
-        self.research_topic = research_topic
-        self.phase = phase
         self.registery = registery
-        self.web_searches = ""
-        self.research = ""
-        self.research_angle = research_angle
 
-    async def get_research_results(self, is_simulation):
+    async def get_research_results(self, phase, research_topic, research_angle):
         """Prospection by a first LLM with high temperature
            Then, we perform research on the web to fact check it
            Lastly, a low temperature LLM removes hallucination or low quality data
         """
-        logger.info(f"get_research_results | topic={self.research_topic}")
-        await self._content_prospector(is_simulation)
-        logger.info(f"get_research_results | Content Prospector done | topic={self.research_topic}")   
+        self.content_prospector = ContentProspector(self.user_context, self.registery)
 
-        await self._perform_web_searches(is_simulation)
+        logger.info(f"get_research_results | topic={research_topic}")
+        await self._content_prospector(phase, research_topic, research_angle)
+        logger.info(f"get_research_results | Content Prospector done | topic={research_topic}")   
+
+        await self._perform_web_searches()
         # logger.debug(f"web_search_results : {self.web_search_results}")
-        logger.info(f"get_research_results | Web Searches done | topic={self.research_topic}")   
+        logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
 
-        await self._verify_content(is_simulation)        
-        logger.info(f"get_research_results | verify content done | topic={self.research_topic}")   
+        await self._verify_content()        
+        logger.info(f"get_research_results | verify content done | topic={research_topic}")   
 
  
 
 
-    async def _content_prospector(self, is_simulation):
+    async def _content_prospector(self, phase, research_topic, research_angle):
         """Generation of content, with high risk of hallucination, 0.6 temperature to have a good mix between creativity and fiability"""
 
-        if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"]):
-            logger.info(f"content_prospector | research_topic={self.research_topic["name"]} already done")
-            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"])
-            parsed_prospection = self.content_prospector.parse_content_prospector(content)            
+        if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, phase, research_topic.name):
+            logger.info(f"content_prospector | research_topic={research_topic.name} already done")
+            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, phase, research_topic.name)
+            parsed_prospection = self.content_prospector.parse_content_prospector(prospection, research_topic)            
             return parsed_prospection
 
         
-        prospection = self.content_prospector.content_prospector(self.research_topic, self.research_angle)
+        prospection = await self.content_prospector.content_prospector(research_topic, research_angle)
         self.registery.storage.save_research(
             category = Category.PROSPECTOR,
             user_context = self.user_context,
-            content = self.prospection.raw_output,
-            phase = self.phase,
-            research_topic = self.research_topic["name"],
+            content = prospection.raw_output,
+            phase = phase,
+            research_topic = research_topic.name,
             )
         return prospection
 
