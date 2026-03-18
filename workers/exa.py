@@ -51,13 +51,6 @@ class ExaSearch:
                 }            
             },
             num_results=5
-            # contents = {
-            #     "highlights": {
-            #         "num_sentences": 5, 
-            #         "highlights_per_url": 1 
-            #     }            
-
-            # }
         )
 
         clean_results = [
@@ -65,10 +58,6 @@ class ExaSearch:
             for r in results.results
         ]
 
-
-        # clean_results = [
-        #     {"title": "r.title", "url": "r.url", "highlights": "r.highlights"}
-        # ]
         logger.debug(f"Exa result : {clean_results}")
 
         return clean_results

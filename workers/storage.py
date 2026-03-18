@@ -4,7 +4,8 @@ from models.context import UserContext
 import yaml
 import json
 import re
-from Poubelle.schemas import Category
+from models.schemas import Category
+
 
 
 def clean_research_results(text: str) -> str:
@@ -44,7 +45,7 @@ class SaveFiles:
         return Path(*parts)
 
 
-    def _define_file_name(self, category: Category, user_context: UserContext, phase="", research_topic="", title="", id = None):
+    def define_file_name(self, category: Category, user_context: UserContext, phase="", research_topic="", title="", id = None):
         path = self._define_path(user_context, phase, research_topic)
 
         match category:
@@ -65,62 +66,89 @@ class SaveFiles:
                 file_name = f"{path}/verified_research.dsv"
             case Category.VERIFIED_RESEARCH_CONCATENATED:
                 file_name = f"{path}/verified_research_concatenated_{phase}.dsv"
+            case Category.PHONEMES:
+                file_name = f"{path}/phonemes.json"
+            case Category.AUDIO:
+                file_name = f"{path}/audio_{id}.mp3"
+            case _:
+                logger.error(f"Category {category} not found!")
+                raise ValueError(f"Category {category} not found!")
 
         return file_name
 
     def save(self, category: Category, user_context: UserContext, content, id = None):
-        file_name = self._define_file_name(category, user_context, id=id)
+        if not content:
+            logger.error(f"Content is empty for category {category}!")
+            raise ValueError(f"Content is empty for category {category}!")
+
+        file_name = self.define_file_name(category, user_context, id=id)
         path = Path(file_name).parent
         path.mkdir(parents=True, exist_ok=True)
 
         extension = Path(file_name).suffix
         match extension:
             case ".json":
-                with open(file_name, "w", encoding="utf-8") as f:
-                    json.dump(content.model_dump_json(), f, indent=4, ensure_ascii=False)
+                if hasattr(content, "model_dump_json"): # For pydantic objects
+                    with open(file_name, "w", encoding="utf-8") as f:
+                        f.write(content.model_dump_json(indent=4))
+                else:
+                    with open(file_name, "w", encoding="utf-8") as f:
+                        json.dump(content, f, indent=4, ensure_ascii=False)                    
+            case ".mp3":
+                with open(file_name, "wb") as f:
+                    f.write(content)
             case _:
                 with open(file_name, "w", encoding="utf-8") as f:
                     f.write(content)
 
-    def loads(self, category: Category, user_context: UserContext):
-        file_name = self._define_file_name(category, user_context)
+    def loads(self, category: Category, user_context: UserContext, id = None, pydantic_model = None):
+        file_name = self.define_file_name(category, user_context, id = id)
         logger.debug(f"file_name : {file_name}")
 
 
         
-        if Path(file_name).exists():
+        if not Path(file_name).exists():
+            logger.warning(f"{category} File missing!")
+
+        with open(file_name, "r", encoding="utf-8") as f:
             extension = Path(file_name).suffix
             match extension:
                 case ".json":
-                    with open(file_name, "r", encoding="utf-8") as f:
-                        file = json.load(f)
+                    file = json.load(f)
+                    if pydantic_model:
+                        return pydantic_model.model_validate(file)
+                    else:
                         return file
                 case _:
-                    with open(file_name, "r", encoding="utf-8") as f:
-                        return f.read()
-        else:
-            logger.warning(f"{category} File missing!")
+                    return f.read()
 
     def does_exist(self, category: Category, user_context: UserContext, id = None):
-        file_name = self._define_file_name(category, user_context, id = id)
+        file_name = self.define_file_name(category, user_context, id = id)
         return Path(file_name).exists()
 
     def save_research(self, category: Category, user_context: UserContext, content, phase, research_topic="", title = ""):
-        file_name = self._define_file_name(category, user_context, phase, research_topic, title)
+        if not content:
+            logger.error(f"Content is empty for category {category}!")
+            raise ValueError(f"Content is empty for category {category}!")
+
+        file_name = self.define_file_name(category, user_context, phase, research_topic, title)
         path = Path(file_name).parent
         path.mkdir(parents=True, exist_ok=True)
         
         extension = Path(file_name).suffix
-        match extension:
-            case ".json":
-                with open(file_name, "w", encoding="utf-8") as f:
-                    json.dump(content, f, indent=4, ensure_ascii=False)
-            case _:
-                with open(file_name, "w", encoding="utf-8") as f:
-                    f.write(content)
-    
+        with open(file_name, "w", encoding="utf-8") as f:
+            match extension:
+                case ".json":
+                    if hasattr(content, "model_dump_json"): # For pydantic objects
+                        f.write(content.model_dump_json(indent=4))
+                    else:
+                        json.dump(content, f, indent=4, ensure_ascii=False)                    
+                case _:
+                        f.write(content)
+            
+
     def loads_research(self, category: Category, user_context: UserContext, phase, research_topic, title=""):
-        file_name = self._define_file_name(category, user_context, phase, research_topic, title)
+        file_name = self.define_file_name(category, user_context, phase, research_topic, title)
 
         if Path(file_name).exists():
             extension = Path(file_name).suffix
@@ -144,7 +172,7 @@ class SaveFiles:
         if title:
             args.append(title)
         
-        file_name = self._define_file_name(*args)
+        file_name = self.define_file_name(*args)
         return Path(file_name).exists()
 
     def loads_all_research(self, category: Category, user_context: UserContext, phase, research_topic):

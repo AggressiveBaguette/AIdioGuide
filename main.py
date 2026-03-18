@@ -9,13 +9,12 @@ import pyaudio
 import time
 import re
 from cartesia import Cartesia
-from utils import timer_debug, save_LLM_output
-from Poubelle.tts_integration import CartesiaWorker
+from utils import save_LLM_output
 from services.orchestrator import orchestrator
 from workers.exa import ExaSearch
 import json
 from workers.claude import Claude
-
+from config import Languages
 from google import genai
 from google.genai import types
 from loguru import logger
@@ -39,16 +38,20 @@ def custom_filter(record):
             return True
         if "claude.py" in record["file"].name:
             return True
-        if "researcher.py" in record["file"].name:
-            return True
+        # if "researcher.py" in record["file"].name:
+        #     return True
     #     if "exa.py" in record["file"].name:
     #         return True
-    #     if "gemini.py" in record["file"].name:
-    #         return True
+        if "gemini.py" in record["file"].name:
+            return True
+        if "phonem_detection.py" in record["file"].name:
+            return True
+        if "audio_generation.py" in record["file"].name:
+            return True
 
         # Filtering by function
-        if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:
-            return True
+        # if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:
+        #     return True
         
             
     return False
@@ -131,7 +134,7 @@ async def generate_audio_guide():
         # name = "Paris-002",
         # comment = "Bonne connaissance historique, habite sur Paris, mais connait mieux la rive droite et le centre que la rive gauche. Focus sur les aspects historiques."
         city="Paris",
-        language="Français",
+        language=Languages.fr_FR,
         name = "Paris-003",        
         comment = "Je connais déjà très bien Paris et j'ai d'excellente connaissance en histoire. Je veux uniquement focus le Paris médiéval."
         # city="Beyrouth, Liban",
