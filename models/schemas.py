@@ -25,7 +25,8 @@ class FilNarratif(BaseModel):
 class ResearchOutputLine(BaseModel):
     category: Optional[str] = None
     title: Optional[str] = None
-    input: Optional[str] = None
+    affirmation: Optional[str] = None
+    visual_proof: Optional[str] = None
     confidence: Optional[str] = None
     queries: Optional[List[str]] = None
 

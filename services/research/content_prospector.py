@@ -52,28 +52,28 @@ class ContentProspector:
         for line in (line for line in raw_content.strip().split("\n") if line.strip()): # a lot of lines are empty and should be removed
             try: 
                 logger.debug(f"line : {line}")
-                input = line.split("|")
+                parts = [c.strip() for c in line.split("|")]
 
                 match research_topic.type:
                     case "Lieu" | "Theme":
-                        # logger.debug(f"query list : {input[5]}")
+                        # logger.debug(f"query list : {parts[5]}")
 
                         # Exa requests are on the six columns for "lieu"
-                        parsed_research_requests = input[5].split(";;")
+                        parsed_research_requests = parts[5].split(";;")
 
                         research_output.research_topics.append(ResearchOutputLine(
-                                    category=input[0],
-                                    title=input[1],
-                                    input=input[2], 
-                                    visual_proof=input[3],
-                                    confidence=input[4],
+                                    category=parts[0],
+                                    title=parts[1],
+                                    affirmation=parts[2], 
+                                    visual_proof=parts[3],
+                                    confidence=parts[4],
                                     queries=parsed_research_requests
                         ))
                     case "Deep_Dive":
-                        parsed_research_requests = input[2].split(";;")
+                        parsed_research_requests = parts[2].split(";;")
                         research_output.research_topics.append(ResearchOutputLine(
-                                    input=input[0], 
-                                    confidence=input[1],
+                                    affirmation=parts[0], 
+                                    confidence=parts[1],
                                     queries=parsed_research_requests
                             ))
 

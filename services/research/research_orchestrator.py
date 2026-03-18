@@ -34,48 +34,7 @@ class ResearchOrchestrator:
         await self._verify_content(is_simulation)        
         logger.info(f"get_research_results | verify content done | topic={self.research_topic}")   
 
-    def _parse_content_prospector(self, text):
-        raw_content = text.split("===MASTER_INDEX===")[0]
-        content = raw_content.strip().split("\n")
-        research_requests_list = []
-
-        for line in content:
-            try: 
-                if line: # A lot of line are empty and should be ignored
-                    logger.debug(f"line : {line}")
-                    input = line.split("|")
-
-                    if self.research_topic["type"] in ["Lieu", "Theme"]:
-                        # logger.debug(f"query list : {input[5]}")
-
-                        # Exa requests are on the six columns for "lieu"
-                        parsed_research_requests = input[5].split(";;")
-
-                        research_requests_list.append({
-                                    "category":input[0],
-                                    "title":input[1],
-                                    "input":input[2], 
-                                    "visual_proof":input[3],
-                                    "confidence":input[4],
-                                    "queries":parsed_research_requests
-                                })
-                    if self.research_topic["type"] == "Deep_Dive":
-                        parsed_research_requests = input[2].split(";;")
-                        research_requests_list.append({
-                                    "input":input[0], 
-                                    "confidence":input[1],
-                                    "queries":parsed_research_requests
-                                })
-
-                        
-
-
-            except Exception as e:
-
-                logger.error(f"Cannot be parsed, line: {line} | {e}")
-
-        logger.debug(f"research_requests_list : {research_requests_list}")
-        return research_requests_list
+ 
 
 
     async def _content_prospector(self, is_simulation):
@@ -83,49 +42,20 @@ class ResearchOrchestrator:
 
         if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"]):
             logger.info(f"content_prospector | research_topic={self.research_topic["name"]} already done")
-            content = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"])
-            parsed_content = self._parse_content_prospector(content)            
-            self.prospection = parsed_content
+            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"])
+            parsed_prospection = self.content_prospector.parse_content_prospector(content)            
+            return parsed_prospection
 
-
-        else:
-            match self.research_topic["type"]:
-                case "Lieu":
-                    with open("prompt/master_prompt_content_prospector_lieu.md", "r", encoding="utf-8") as f:
-                        template_brut = Template(f.read())
-
-                case "Theme":
-                    with open("prompt/master_prompt_content_prospector_theme.md", "r", encoding="utf-8") as f:
-                        template_brut = Template(f.read())
-
-                case "Deep_Dive":
-                    with open("prompt/master_prompt_content_prospector_deep_dive.md", "r", encoding="utf-8") as f:
-                        template_brut = Template(f.read())
-
-            prompt = template_brut.substitute(
-                city_name=self.user_context.city,
-                topic=self.research_topic["name"],
-                angle_narratif=self.research_angle
+        
+        prospection = self.content_prospector.content_prospector(self.research_topic, self.research_angle)
+        self.registery.storage.save_research(
+            category = Category.PROSPECTOR,
+            user_context = self.user_context,
+            content = self.prospection.raw_output,
+            phase = self.phase,
+            research_topic = self.research_topic["name"],
             )
-
-            if is_simulation:
-                worker = self.registery.simulation_content_prospector
-            else:
-                worker = self.registery.claude_worker
-
-            logger.info(f"content_prospector | location={self.research_topic["name"]}")
-            content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
-
-            parsed_content = self._parse_content_prospector(content)
-
-            self.registery.storage.save_research(
-                category = Category.PROSPECTOR,
-                user_context = self.user_context,
-                content = content,
-                phase = self.phase,
-                research_topic = self.research_topic["name"],
-                )
-            self.prospection = parsed_content
+        return prospection
 
     async def _perform_web_searches(self, is_simulation):
         """Perform research for the monument"""
