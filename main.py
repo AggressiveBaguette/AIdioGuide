@@ -27,32 +27,27 @@ cartesia_api_key = os.getenv("CARTESIA_API_KEY")
 
 logger.remove() 
 
-# 2. Une seule ligne, pas de filtre, canal stdout (comme print)
 # logger.add(sys.stdout, level="DEBUG", format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | {name}:{function}:{line} - {message}")
-# 3. Test immédiat
 
 def custom_filter(record):
-    # 1. On laisse TOUT passer à partir de INFO (Warning, Error, etc.)
     if record["level"].no >= logger.level("INFO").no:
         return True
     
-    # 2. Pour le DEBUG, on définit nos cibles
     if record["level"].name == "DEBUG":
-    #     # Toujours voir les DEBUG de main
-    #     if record["name"] == "__main__":
-    #         return True
-    #     # On accepte si c'est le fichier qu'on investigue
+    #     # Filtering by file
+        if record["name"] == "__main__":
+            return True
         if "claude.py" in record["file"].name:
             return True
-    #     if "researcher.py" in record["file"].name:
-    #         return True
+        if "researcher.py" in record["file"].name:
+            return True
     #     if "exa.py" in record["file"].name:
     #         return True
     #     if "gemini.py" in record["file"].name:
     #         return True
 
-    #     # On peut aussi filtrer par fonction précise
-        if record["function"] in ["plan"]:
+        # Filtering by function
+        if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:
             return True
         
             

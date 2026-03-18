@@ -6,7 +6,7 @@ Historien de l'ombre, expert en "Forensic Architecture". Tu détestes l'histoire
 
 Lieu : `$city_name`
 
-Thème Imposé : `$theme`
+Thème Imposé : `$topic`
 
 Angle Éditorial : `$angle_narratif`
 

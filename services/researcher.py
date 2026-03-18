@@ -46,17 +46,11 @@ class Research:
                     logger.debug(f"line : {line}")
                     input = line.split("|")
 
-                    parsed_research_requests = []
-
                     if self.research_topic["type"] in ["Lieu", "Theme"]:
                         # logger.debug(f"query list : {input[5]}")
 
                         # Exa requests are on the six columns for "lieu"
-                        research_requests = input[5].split(";;")
-                        for request in research_requests:
-                            logger.debug(f"request : {request}")
-                            parsed_research_requests.append(request)
-
+                        parsed_research_requests = input[5].split(";;")
 
                         research_requests_list.append({
                                     "category":input[0],
@@ -66,6 +60,15 @@ class Research:
                                     "confidence":input[4],
                                     "queries":parsed_research_requests
                                 })
+                    if self.research_topic["type"] == "Deep_Dive":
+                        parsed_research_requests = input[2].split(";;")
+                        research_requests_list.append({
+                                    "input":input[0], 
+                                    "confidence":input[1],
+                                    "queries":parsed_research_requests
+                                })
+
+                        
 
 
             except Exception as e:
@@ -92,21 +95,19 @@ class Research:
                     with open("prompt/master_prompt_content_prospector_lieu.md", "r", encoding="utf-8") as f:
                         template_brut = Template(f.read())
 
-                    prompt = template_brut.substitute(
-                        city_name=self.user_context.city,
-                        monument=self.research_topic["name"],
-                        angle_narratif=self.research_angle
-                    )
                 case "Theme":
                     with open("prompt/master_prompt_content_prospector_theme.md", "r", encoding="utf-8") as f:
                         template_brut = Template(f.read())
 
-                    prompt = template_brut.substitute(
-                        city_name=self.user_context.city,
-                        theme=self.research_topic["name"],
-                        angle_narratif=self.research_angle
-                    )                    
-                    
+                case "Deep_Dive":
+                    with open("prompt/master_prompt_content_prospector_deep_dive.md", "r", encoding="utf-8") as f:
+                        template_brut = Template(f.read())
+
+            prompt = template_brut.substitute(
+                city_name=self.user_context.city,
+                topic=self.research_topic["name"],
+                angle_narratif=self.research_angle
+            )
 
             if is_simulation:
                 worker = self.registery.simulation_content_prospector
@@ -216,6 +217,13 @@ class Research:
 
                 verified_claims = worker.get_text(content=content, system_prompt=system_prompt, temperature = 0) 
                 logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
+
+                if self.phase == "phase_2":
+                    # We need to add the request name in phase_2 as a key, otherwise we won't be able to determine which claims is needed for which stop.
+                    # phase 2 content is a little different than phase 1. Phase 1 is needed as a whole to determine the plan and ID are only managed later, after the plan is done. While pahse 2 is only aimed at a single stop.
+                    verified_claims = "\n".join(f"{self.research_topic['name']}|{line}" for line in verified_claims.split("\n"))
+                    logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
+
                 self.registery.storage.save_research(
                     Category.VERIFIED_RESEARCH,
                     self.user_context,

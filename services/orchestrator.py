@@ -1,3 +1,4 @@
+import openai.types.realtime.realtime_transcription_session_create_request_param
 import asyncio
 from string import Template
 from loguru import logger
@@ -16,6 +17,7 @@ class Orchestration:
     def __init__(self, user_context: UserContext, registery: WorkerRegistry):
         self.user_context = user_context
         self.registery = registery
+        self.research_phases = {}
 
         with open("prompt/master_prompt.txt", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
@@ -55,7 +57,7 @@ class Orchestration:
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
             logger.info("Plan already created!")
             plan = self.registery.storage.loads(Category.PLAN, self.user_context)
-            return plan
+            self.plan = AudioguidePlan.model_validate_json(plan)
 
         else:
             with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
@@ -63,12 +65,6 @@ class Orchestration:
             
             logger.debug(f"plan_stratege : {self.strategy}")
 
-            # We need reasearch_phase_1 to be a string to be sent to the LLM. We add an ID in front of each research topic to save tokens and references
-            research_table = self.registery.storage.loads_all_verifed_research(self.user_context, "phase_1")
-            all_lines = [line for block in research_table for line in block.split("\n")]
-            self.research_phase_1 = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
-
-            logger.debug(f"research_phase_1 : {self.research_phase_1[:1000]}")
 
             logger.debug(f"template_brut : {template_brut}")
 
@@ -84,11 +80,25 @@ class Orchestration:
             else:
                 worker = self.registery.claude_worker
 
-            plan = worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=self.research_phase_1, temperature = 0.7)
+            plan = worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=self.research_phases["phase_1"], temperature = 0.7)
             self.registery.storage.save(Category.PLAN, self.user_context, plan)
             logger.info("Plan created!")
             logger.debug(f"Plan : {plan}")
-            return plan
+            self.plan = AudioguidePlan.model_validate_json(plan)
+
+    async def parse_plan(self):
+        research_topic_list = []
+
+        for stop in self.plan.parcours:
+            logger.debug(f"Parse_plan stop : {stop}")
+            for research_topic in stop.briefs_recherche_additionnelle:
+                research_topic_list.append({
+                    "type":"Deep_Dive",
+                    "name":research_topic.name,
+                    "angle":research_topic.angle
+                })
+        return research_topic_list
+            
 
     async def parse_strategy(self):
         strategy_line = self.strategy.split("\n")
@@ -120,14 +130,21 @@ class Orchestration:
     async def research(self, phase, is_simulation=False):
         coroutine_search_list = []
 
-        research_topic_list = await self.parse_strategy()
+        if phase == "phase_1":
+            # if phase_1, then we get the research_topic_list from strategy 
+            # if phase 2, we get the research_topic_list from the plan
+            research_topic_list = await self.parse_strategy()
+        else:
+            research_topic_list = await self.parse_plan()
+
 
         logger.debug(f"Strategy : {self.strategy}")
         for research_topic in research_topic_list:
             logger.info(f"Recherche pour le monument : {research_topic["name"]}")
 
             # if research_topic["name"] in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            # if research_topic["name"] in ["Arènes de Lutèce"]:      
+            # if research_topic["name"] in ["Arènes de Lutèce"]:   
+            # if research_topic["name"] in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
             if True:        
                 research = Research(self.user_context, research_topic, phase, self.registery, self.research_angle)
                 coroutine_search_list.append(research.get_research_results(is_simulation))
@@ -136,13 +153,133 @@ class Orchestration:
         await asyncio.gather(*coroutine_search_list)
         logger.debug("Orchestration Research: Gather terminé")
 
-        # We create a file with all verified research from the given phase
         self._bundle_all_verified_research(phase)
-    
+
+
     def _bundle_all_verified_research(self, phase):
         list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
         concatened_research = "\n-----\n".join(list)
-        self.registery.storage.save(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research)
+        self.registery.storage.save_research(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research, phase)
+        
+        all_lines = [line for block in list for line in block.split("\n")]
+        self.research_phases[phase] = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
+
+        logger.debug(f"research_phases_{phase} : {self.research_phases[phase][:1000]}")
+
+    async def redaction(self, is_simulation=False):
+        coroutine_search_list = []
+        with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
+            template_brut = Template(f.read())
+
+        stop_list = "\n".join([f"arrêt {stop.numero} : {stop.titre_etape}" for stop in self.plan.parcours])
+        
+        system_prompt = template_brut.substitute(
+            title_audioguide = self.plan.titre_audioguide,
+            city_name = self.user_context.city,
+            language = self.user_context.language,
+            strategie = self.plan.strategie,
+            plan_global = stop_list,
+            fils_narratifs = self.plan.fils_narratifs,
+        )
+        
+        messages_history = []      
+
+        for stop in self.plan.parcours:
+            logger.debug(f"Stop : {stop}")
+
+            if self.registery.storage.does_exist(Category.REDACTION, self.user_context, id = stop.numero):
+                logger.info(f"Redaction {stop.numero} - {stop.titre_etape} already created!")
+
+            else:
+                # LA V1 
+                # facts_phase_1, facts_phase_2 = await self.get_facts(stop)
+
+                # prompt = template_brut.substitute(
+                #     title_audioguide = self.plan.titre_audioguide,
+                #     city_name = self.user_context.city,
+                #     language = self.user_context.language,
+                #     strategie = self.plan.strategie,
+                #     nom_lieu = stop.localisation,
+                #     titre_etape = stop.titre_etape,
+                #     consigne_plume = stop.consigne_plume,
+                #     transition_vers_suivant = stop.transition_vers_suivant,
+                #     cible_duree_audio = stop.cible_duree_audio,
+                # )
+
+                # logger.debug(f"Content : {prompt}")
+                # logger.debug(f"Stop name : {stop.numero} - {stop.titre_etape}")
+                # if is_simulation:
+                #     worker = self.registery.simulation_plan
+                # else:
+                #     worker = self.registery.claude_worker
+
+                # # if stop.titre_etape == "La Conciergerie : Quand le Palais Devient Cage":
+                # if True:
+                #     stop_text = worker.get_text("--", system_prompt=prompt, research_block_1=facts_phase_1, research_block_2 = facts_phase_2, temperature = 0.8)
+                #     self.registery.storage.save(Category.REDACTION, self.user_context, stop_text, id = stop.numero)
+
+
+                # DEBUT V2 AVEC MÉMOIRE
+                facts_phase_1, facts_phase_2 = await self.get_facts(stop)
+
+                logger.debug(f"Content : {system_prompt}")
+                logger.debug(f"Stop name : {stop.numero} - {stop.titre_etape}")
+                if is_simulation:
+                    worker = self.registery.simulation_plan
+                else:
+                    worker = self.registery.claude_worker
+
+                with open("prompt/prompt_instructions_redaction.md", "r", encoding="utf-8") as f:
+                    template_brut = Template(f.read())
+                prompt = template_brut.substitute(
+                    nom_lieu = stop.localisation,
+                    titre_etape = stop.titre_etape,
+                    consigne_plume = stop.consigne_plume,
+                    transition_vers_suivant = stop.transition_vers_suivant,
+                    cible_duree_audio = stop.cible_duree_audio,
+                    faits_bruts_phase_1 = facts_phase_1,
+                    faits_bruts_phase_2 = facts_phase_2,
+                )
+
+                # if stop.titre_etape == "La Conciergerie : Quand le Palais Devient Cage":
+                if True:
+                    stop_text = worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
+                    self.registery.storage.save(Category.REDACTION, self.user_context, stop_text, id = stop.numero)
+                    messages_history.append({"role": "assistant", "content": stop_text})
+
+                # FIN V2 AVEC MÉMOIRE
+
+
+    async def get_facts_phase_2(self, stop):
+            requested_facts = stop.briefs_recherche_additionnelle
+
+        
+
+
+    async def get_facts(self, stop):
+        # phase 1
+        requested_facts_id = set(stop.faits_retenus)
+        verified_facts_list = self.research_phases["phase_1"].split("\n")
+
+        requested_facts = [fact for fact in verified_facts_list if fact.split("|")[0] in requested_facts_id]
+        logger.debug(f"Requested Facts Id Phase 1: {requested_facts_id}")
+        logger.debug(f"Requested facts Phase 1: {requested_facts}")
+        phase_1_response = "\n".join(requested_facts)
+
+        #phase 2
+        requested_facts_names = {brief.name for brief in stop.briefs_recherche_additionnelle}
+        verified_facts_list = self.research_phases["phase_2"].split("\n")
+        requested_facts = [fact for fact in verified_facts_list if fact.split("|")[1] in requested_facts_names]
+        logger.debug(f"stop.briefs_recherche_additionnelle : {stop.briefs_recherche_additionnelle}")
+
+        logger.debug(f"verified_facts_list : {verified_facts_list}")
+        logger.debug(f"Requested Facts Names Phase 2: {requested_facts_names}")
+        logger.debug(f"Requested facts Phase 2: {requested_facts}")
+        phase_2_response = "\n".join(requested_facts)
+
+        return phase_1_response, phase_2_response
+                
+
 
 
 
@@ -166,4 +303,14 @@ async def orchestrator(user_context: UserContext):
     await orchestration.research("phase_1", is_simulation=False)
     logger.info("FIN DE LA RECHERCHE")
 
+    logger.info("DEBUT DU PLAN")
     await orchestration.plan(is_simulation=False)
+    logger.info("FIN DU PLAN")
+
+    logger.info("DEBUT PHASE RECHERCHE 2")
+    await orchestration.research("phase_2", is_simulation=False)
+    logger.info("FIN PHASE RECHERCHE 2")
+
+    logger.info("DEBUT DE LA REDACTION")
+    await orchestration.redaction(is_simulation=False)
+    logger.info("FIN DE LA REDACTION")

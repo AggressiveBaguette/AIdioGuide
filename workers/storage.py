@@ -44,7 +44,7 @@ class SaveFiles:
         return Path(*parts)
 
 
-    def _define_file_name(self, category: Category, user_context: UserContext, phase="", research_topic="", title=""):
+    def _define_file_name(self, category: Category, user_context: UserContext, phase="", research_topic="", title="", id = None):
         path = self._define_path(user_context, phase, research_topic)
 
         match category:
@@ -53,14 +53,14 @@ class SaveFiles:
             case Category.STRATEGY:
                 file_name = f"{path}/strategy.dsv"
             case Category.REDACTION:
-                file_name = f"{path}/redaction.txt"
+                file_name = f"{path}/redaction_{id}.txt"
             case Category.RESEARCH:
                 title = self._sanitize_filename(title)
                 file_name = f"{path}/{title}.json"
             case Category.PROSPECTOR:
                 file_name = f"{path}/content_prospector.dsv"
             case Category.RESEARCH_CONCATENATED:
-                file_name = f"{path}/research_concatenated.dsv"
+                file_name = f"{path}/research_concatenated_{phase}.dsv"
             case Category.VERIFIED_RESEARCH:
                 file_name = f"{path}/verified_research.dsv"
             case Category.VERIFIED_RESEARCH_CONCATENATED:
@@ -68,8 +68,8 @@ class SaveFiles:
 
         return file_name
 
-    def save(self, category: Category, user_context: UserContext, content):
-        file_name = self._define_file_name(category, user_context)
+    def save(self, category: Category, user_context: UserContext, content, id = None):
+        file_name = self._define_file_name(category, user_context, id=id)
         path = Path(file_name).parent
         path.mkdir(parents=True, exist_ok=True)
 
@@ -85,14 +85,24 @@ class SaveFiles:
     def loads(self, category: Category, user_context: UserContext):
         file_name = self._define_file_name(category, user_context)
         logger.debug(f"file_name : {file_name}")
-        if Path(file_name).exists():
-            with open(file_name, "r", encoding="utf-8") as f:
-                return f.read()
-        else:
-            logger.warning("Strategy file missing!")
 
-    def does_exist(self, category: Category, user_context: UserContext):
-        file_name = self._define_file_name(category, user_context)
+
+        
+        if Path(file_name).exists():
+            extension = Path(file_name).suffix
+            match extension:
+                case ".json":
+                    with open(file_name, "r", encoding="utf-8") as f:
+                        file = json.load(f)
+                        return file
+                case _:
+                    with open(file_name, "r", encoding="utf-8") as f:
+                        return f.read()
+        else:
+            logger.warning(f"{category} File missing!")
+
+    def does_exist(self, category: Category, user_context: UserContext, id = None):
+        file_name = self._define_file_name(category, user_context, id = id)
         return Path(file_name).exists()
 
     def save_research(self, category: Category, user_context: UserContext, content, phase, research_topic="", title = ""):
@@ -118,7 +128,11 @@ class SaveFiles:
             match extension:
                 case ".json":
                     with open(file_name, "r", encoding="utf-8") as f:
-                        return json.load(f)
+                        file = json.loads(f)
+                        if type(file) == str:
+                            # Sometime the LLM return json with a double encoding...
+                            file = json.loads(file) 
+                        return file
                 case _:
                     with open(file_name, "r", encoding="utf-8") as f:
                         return f.read()
@@ -153,9 +167,9 @@ class SaveFiles:
 
         for file in path.rglob("*"):
             name = file.name
-            if name == "verified_research.dsv":
+            if name == f"verified_research.dsv":
                 with open(file, "r", encoding="utf-8") as f:
-                    list.append(f.read())
+                    list.append(f.read())   
         return list
 
                 

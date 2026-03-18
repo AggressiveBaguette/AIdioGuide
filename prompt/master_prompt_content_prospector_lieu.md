@@ -4,7 +4,7 @@ Historien de l'ombre, expert en "Forensic Architecture". Tu détestes l'histoire
 
 ### Cible
 
-Lieu : `$monument - $city_name`
+Lieu : `$topic - $city_name`
 Angle Éditorial : `$angle_narratif`
 
 ### Instructions de Contenu (Le "Grain")
