@@ -26,6 +26,7 @@ class Orchestration:
         self.research_phases = {}
         self.audio_service = audio_service
         self.strategy_service = strategy_service
+        self.plan_service = plan_service
 
         with open("prompt/master_prompt.txt", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
@@ -257,11 +258,6 @@ class Orchestration:
 
 
 
-
-
-
-
-
 async def orchestrator(user_context: UserContext):
     registery = WorkerRegistry(
         search_worker=ExaSearch(),
@@ -277,11 +273,13 @@ async def orchestrator(user_context: UserContext):
     # Load all the business classes
     audio_service = AudioService(user_context, registery, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
     strategy_service = StrategyService(user_context, registery)
-    
+    plan_service = PlanService(user_context, registery)
+
     orchestration = Orchestration(user_context, 
         registery,
         audio_service=audio_service,
         strategy_service=strategy_service,
+        plan_service=plan_service,
         )
 
 
@@ -289,26 +287,26 @@ async def orchestrator(user_context: UserContext):
     strategy = orchestration.strategy(is_simulation=False)
     logger.info("FIN DE LA STRATEGIE")
 
-    logger.info("DEBUT DE LA RECHERCHE")
-    await orchestration.research("phase_1", is_simulation=False)
-    logger.info("FIN DE LA RECHERCHE")
+    # logger.info("DEBUT DE LA RECHERCHE")
+    # await orchestration.research("phase_1", is_simulation=False)
+    # logger.info("FIN DE LA RECHERCHE")
 
-    logger.info("DEBUT DU PLAN")
-    plan = await orchestration.plan(is_simulation=False)
-    logger.info("FIN DU PLAN")
+    # logger.info("DEBUT DU PLAN")
+    # plan = await orchestration.plan(is_simulation=False)
+    # logger.info("FIN DU PLAN")
 
-    logger.info("DEBUT PHASE RECHERCHE 2")
-    await orchestration.research("phase_2", is_simulation=False)
-    logger.info("FIN PHASE RECHERCHE 2")
+    # logger.info("DEBUT PHASE RECHERCHE 2")
+    # await orchestration.research("phase_2", is_simulation=False)
+    # logger.info("FIN PHASE RECHERCHE 2")
 
-    logger.info("DEBUT DE LA REDACTION")
-    await orchestration.redaction(is_simulation=False)
-    logger.info("FIN DE LA REDACTION")
+    # logger.info("DEBUT DE LA REDACTION")
+    # await orchestration.redaction(is_simulation=False)
+    # logger.info("FIN DE LA REDACTION")
 
-    logger.info("DEBUT DE LA GESTION DES PHONEMES")
-    phonemes = await orchestration.phonemes_detection(is_simulation=False)
-    logger.info("FIN DE LA GESTION DES PHONEMES")
+    # logger.info("DEBUT DE LA GESTION DES PHONEMES")
+    # phonemes = await orchestration.phonemes_detection(is_simulation=False)
+    # logger.info("FIN DE LA GESTION DES PHONEMES")
 
-    logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
-    await orchestration.audio_generation(phonemes, plan, is_simulation=False)
-    logger.info("FIN DE LA GENERATION DE l'AUDIO")
+    # logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
+    # await orchestration.audio_generation(phonemes, plan, is_simulation=False)
+    # logger.info("FIN DE LA GENERATION DE l'AUDIO")

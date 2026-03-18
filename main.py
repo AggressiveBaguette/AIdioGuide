@@ -136,14 +136,18 @@ async def generate_audio_guide():
         # language="Français",
         # name = "Paris-002",
         # comment = "Bonne connaissance historique, habite sur Paris, mais connait mieux la rive droite et le centre que la rive gauche. Focus sur les aspects historiques."
-        city="Paris",
-        language=Languages.fr_FR,
-        name = "Paris-003",        
-        comment = "Je connais déjà très bien Paris et j'ai d'excellente connaissance en histoire. Je veux uniquement focus le Paris médiéval."
+        # city="Paris",
+        # language=Languages.fr_FR,
+        # name = "Paris-003",        
+        # comment = "Je connais déjà très bien Paris et j'ai d'excellente connaissance en histoire. Je veux uniquement focus le Paris médiéval."
         # city="Beyrouth, Liban",
         # language="Français",
         # name = "Beyrouth-001",        
         # comment = "Passionné d'histoire, avec une bonne connaissance de l'histoire high-level Européen mais n'a jamais été au Liban ou au Moyen-Orient. Veut visiter la ville."
+        city="Fontenay-aux-Roses",
+        language=Languages.fr_FR,
+        name = "FaR-001",        
+        comment = "Audioguide très court, 5-6 arrêts max. 15' d'audio max."
 
     )
     await orchestrator(user_context)

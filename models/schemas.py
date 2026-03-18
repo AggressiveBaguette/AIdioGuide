@@ -10,8 +10,9 @@ class ResearchTopic(BaseModel):
 
 class Stategy(BaseModel):
     raw_output: str
-    research_angle: str
-    research_topics: List[ResearchTopic]
+    research_angle: Optional[str] = None
+    strategy_thinking: Optional[str] = None
+    research_topics: List[ResearchTopic] = Field(default_factory=list)
 
 class RechercheAdditionnelle(BaseModel):
     name: str
