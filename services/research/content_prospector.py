@@ -2,7 +2,7 @@
 from loguru import logger
 from string import Template
 from typing import TYPE_CHECKING
-from models.schemas import Strategy, ResearchTopic
+from models.schemas import ResearchTopic, ResearchOutput, ResearchOutputLine
 import asyncio
 
 if TYPE_CHECKING:
@@ -42,48 +42,43 @@ class ContentProspector:
         logger.info(f"content_prospector | location={research_topic.name}")
         content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
 
-        parsed_content = self._parse_content_prospector(content)
+        parsed_content = self._parse_content_prospector(content, research_topic)
 
-    def _parse_content_prospector(self, text):
+    def _parse_content_prospector(self, text, research_topic: ResearchTopic):
+        research_output = ResearchOutput(raw_output = text)
+
+        # We get only the DSV part without the sources
         raw_content = text.split("===MASTER_INDEX===")[0]
-        content = raw_content.strip().split("\n")
-        research_requests_list = []
-
-        for line in content:
+        for line in (line for line in raw_content.strip().split("\n") if line.strip()): # a lot of lines are empty and should be removed
             try: 
-                if line: # A lot of line are empty and should be ignored
-                    logger.debug(f"line : {line}")
-                    input = line.split("|")
+                logger.debug(f"line : {line}")
+                input = line.split("|")
 
-                    match self.research_topic.type:
-                        case "Lieu":
-                            # logger.debug(f"query list : {input[5]}")
+                match research_topic.type:
+                    case "Lieu" | "Theme":
+                        # logger.debug(f"query list : {input[5]}")
 
-                            # Exa requests are on the six columns for "lieu"
-                            parsed_research_requests = input[5].split(";;")
+                        # Exa requests are on the six columns for "lieu"
+                        parsed_research_requests = input[5].split(";;")
 
-                            research_requests_list.append({
-                                        "category":input[0],
-                                        "title":input[1],
-                                        "input":input[2], 
-                                        "visual_proof":input[3],
-                                        "confidence":input[4],
-                                        "queries":parsed_research_requests
-                                    })
-                        case "Deep_Dive":
-                            parsed_research_requests = input[2].split(";;")
-                            research_requests_list.append({
-                                        "input":input[0], 
-                                        "confidence":input[1],
-                                        "queries":parsed_research_requests
-                                })
-
-                        
-
+                        research_output.research_topics.append(ResearchOutputLine(
+                                    category=input[0],
+                                    title=input[1],
+                                    input=input[2], 
+                                    visual_proof=input[3],
+                                    confidence=input[4],
+                                    queries=parsed_research_requests
+                        ))
+                    case "Deep_Dive":
+                        parsed_research_requests = input[2].split(";;")
+                        research_output.research_topics.append(ResearchOutputLine(
+                                    input=input[0], 
+                                    confidence=input[1],
+                                    queries=parsed_research_requests
+                            ))
 
             except Exception as e:
-
                 logger.error(f"Cannot be parsed, line: {line} | {e}")
 
-        logger.debug(f"research_requests_list : {research_requests_list}")
-        return research_requests_list 
+        logger.debug(f"research_output : {research_output}")
+        return research_output 

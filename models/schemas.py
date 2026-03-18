@@ -22,8 +22,16 @@ class FilNarratif(BaseModel):
     clos_au: int
     resume: str
 
+class ResearchOutputLine(BaseModel):
+    category: Optional[str] = None
+    title: Optional[str] = None
+    input: Optional[str] = None
+    confidence: Optional[str] = None
+    queries: Optional[List[str]] = None
 
-    
+class ResearchOutput(BaseModel):
+    raw_output: str
+    research_lines: List[ResearchOutputLine] = Field(default_factory=list)
 
 class EtapeParcours(BaseModel):
     numero: int
@@ -43,16 +51,16 @@ class AudioguidePlan(BaseModel):
     parcours: List[EtapeParcours]
     fils_narratifs: List[FilNarratif] = Field(default_factory=list)
     
-class ResearchItem(BaseModel):
-    category: str = Field(..., alias="c")
-    title: str = Field(..., alias="t")
-    analysis: str = Field(..., alias="a")
-    proof: str = Field(..., alias="p")
-    noise_level: str = Field(..., alias="nc")
-    queries: List[str] = Field(..., alias="q")
+# class ResearchItem(BaseModel):
+#     category: str = Field(..., alias="c")
+#     title: str = Field(..., alias="t")
+#     analysis: str = Field(..., alias="a")
+#     proof: str = Field(..., alias="p")
+#     noise_level: str = Field(..., alias="nc")
+#     queries: List[str] = Field(..., alias="q")
 
-class ResearchBlock(RootModel):
-    root: List[ResearchItem]
+# class ResearchBlock(RootModel):
+#     root: List[ResearchItem]
 
 class ReplacementItem(BaseModel):
     expression: str
