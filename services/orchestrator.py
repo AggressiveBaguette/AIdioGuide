@@ -36,14 +36,14 @@ class Orchestration:
             language=user_context.language.code
         )
 
-    def strategy(self, is_simulation=False):
+    async def strategy(self, is_simulation=False):
         """First, define the strategy"""
         if self.registery.storage.does_exist(Category.STRATEGY, self.user_context):
             logger.info("Strategy already created!")
             strategy = self.registery.storage.loads(Category.STRATEGY, self.user_context)
             return self.strategy_service.parse_strategy(strategy)
 
-        strategy = self.strategy_service.define_strategy() 
+        strategy = await self.strategy_service.define_strategy() 
         logger.debug(f"Strategy : {strategy}")
         self.registery.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
         return strategy
@@ -102,7 +102,7 @@ class Orchestration:
         if phase == "phase_1":
             # if phase_1, then we get the research_topic_list from strategy 
             # if phase 2, we get the research_topic_list from the plan
-            research_topic_list = await self.parse_strategy()
+            research_topic_list = strategy.
         else:
             research_topic_list = await self.parse_plan()
 
@@ -284,12 +284,12 @@ async def orchestrator(user_context: UserContext):
 
 
     logger.info("DEBUT DE LA STRATEGIE")
-    strategy = orchestration.strategy(is_simulation=False)
+    strategy = await orchestration.strategy(is_simulation=False)
     logger.info("FIN DE LA STRATEGIE")
 
-    # logger.info("DEBUT DE LA RECHERCHE")
-    # await orchestration.research("phase_1", is_simulation=False)
-    # logger.info("FIN DE LA RECHERCHE")
+    logger.info("DEBUT DE LA RECHERCHE")
+    await orchestration.research("phase_1", is_simulation=False)
+    logger.info("FIN DE LA RECHERCHE")
 
     # logger.info("DEBUT DU PLAN")
     # plan = await orchestration.plan(is_simulation=False)

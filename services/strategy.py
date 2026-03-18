@@ -15,7 +15,7 @@ class StrategyService:
         self.user_context = user_context
         self.registery = registery
 
-    def define_strategy(self):
+    async def define_strategy(self):
         with open("prompt/master_prompt_strategy.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
         content = template_brut.substitute(
