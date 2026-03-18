@@ -2,13 +2,13 @@ import os
 from anthropic import Anthropic
 from utils import save_LLM_output
 import re
-import yaml
 from loguru import logger
 
 
 class Claude:
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    client = Anthropic(api_key=api_key)
+    def __init__(self):
+        self.api_key = os.getenv("ANTHROPIC_API_KEY")
+        self.client = Anthropic(api_key=self.api_key)
 
     def get_system_block(self, system_prompt="", research_block_1="", research_block_2="", plan=""):
         """The order of the different blocks is thought to optimize token usage, using the cache strategy"""
@@ -44,22 +44,6 @@ class Claude:
 
         return system_block
 
-    def get_yaml(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
-
-        logger.debug("get_yaml")
-        match = re.search(r"```(?:yaml|yml)\s*(.*?)\s*(:?```|$)", claude_response, re.DOTALL)
-        yaml_str = match.group(1).strip() if match else claude_response.strip()
-
-        try:
-            raw_data = yaml.safe_load(yaml_str)
-            validated_data = pydantic_schema.model_validate(raw_data)
-            return validated_data
-
-        except Exception as e:
-            logger.error(f"Claude response : {claude_response}")
-            save_LLM_output(claude_response, "Claude_Sonnet_4_6")
-            logger.error(f"[Error]: {e}")
-            return None
 
     def get_json(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
         # synchronous http call, return json matching pydantic classes
@@ -80,7 +64,7 @@ class Claude:
             logger.error(f"Claude response : {claude_response}")
             save_LLM_output(claude_response, "Claude_Sonnet_4_6")
             logger.error(f"[Error]: {e}")
-            return None
+            raise e
 
     def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
         # synchronous http call, wait for the full text to be generated
@@ -106,7 +90,7 @@ class Claude:
                 api_param["cache_control"] = {"type": "ephemeral"}
 
             logger.debug(f"Claude system_block : {system_block}")
-            logger.debug(f"Claude messages_history : {messages_history}")
+            logger.debug(f"Claude messages_history : {messages_history[:100]}")
             response = self.client.messages.create(**api_param)
             logger.info("Après appel claude")
             logger.debug(response)
@@ -114,4 +98,4 @@ class Claude:
             return response.content[0].text
         except Exception as e:
             logger.error(f"Claude [Error]: {e}")
-            save_LLM_output(response, "Claude_Sonnet_4_6")
+            raise

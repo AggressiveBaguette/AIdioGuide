@@ -4,8 +4,7 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import ResearchBlock
-from Poubelle.schemas import Category
+from models.schemas import ResearchBlock, Category
 
 class Research:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
@@ -153,7 +152,7 @@ class Research:
             title = query_name
             ):
 
-            logger.info(f"research | research_topic={self.research_topic["name"]} - {query_name} already done")
+            logger.debug(f"research | research_topic={self.research_topic["name"]} - {query_name} already done")
 
         else:
             try:

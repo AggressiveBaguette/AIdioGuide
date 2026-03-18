@@ -22,23 +22,6 @@ class Gemini:
     def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache_requested = False):
         # synchronous http call, wait for the full text to be generated
 
-        # NOT NEEDED FOR NOW AS CACHE COST MORE THAN WHAT IT WOULD SAVE (not interesting for less than 100k tokens)
-        # 
-        # token_count = self.model.count_tokens(system_prompt).total_tokens
-        # # Verify if doable to have a cache
-        # if token_count >= self.model_min_token_cache and cache_requested: 
-        #     cache = self.client.caches.create(
-        #         model=self.text_model,
-        #         config=types.CreateCachedContentConfig(
-        #         system_instruction=system_prompt,
-        #         contents=[system_prompt],
-        #         )
-        #     )
-        #     contents = [content]
-        # else:
-        #     logger.info("Cache not doable, too short")
-        #     # If cache is not doable/wanted, have to put the system prompt in the content
-        #     contents = [system_prompt, content]
         contents = [system_prompt, content]
 
         try:
@@ -50,7 +33,10 @@ class Gemini:
             logger.debug(f"contenu : {response.candidates[0].content.parts[0].text}")
             return response.candidates[0].content.parts[0].text
         except Exception as e:
-            return f"[Error]: {e}"
+            logger.error(f"[Error]: {e}")
+            if response:
+                save_LLM_output(response, "Gemini Flash 3.0")
+            raise e
 
     async def stream(self):
         sentence_extracted = None

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, RootModel
 from typing import List, Literal, Optional
+from enum import Enum
 
 
 class FaitRetenu(BaseModel):
@@ -49,3 +50,25 @@ class ResearchItem(BaseModel):
 
 class ResearchBlock(RootModel):
     root: List[ResearchItem]
+
+class ReplacementItem(BaseModel):
+    expression: str
+    langue: str
+    phonemes_ipa: str
+    type: str
+    
+class PhonemesList(BaseModel):
+    replacement_list: List[ReplacementItem]
+
+class Category(Enum):
+    PLAN = "plan"
+    STRATEGY = "strategy"
+    RESEARCH = "research"
+    REDACTION = "redaction"
+    PROSPECTOR = "content_prospector"
+    RESEARCH_CONCATENATED = "research_concatenated"
+    VERIFIED_RESEARCH = "verified_research"
+    VERIFIED_RESEARCH_CONCATENATED = "verified_research_concatenated"
+    PHONEMES="phonemes"
+    AUDIO="audio"
+    REDACTION_WITH_SSML="redaction_with_ssml"
