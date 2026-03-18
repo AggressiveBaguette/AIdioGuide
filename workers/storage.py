@@ -158,7 +158,7 @@ class SaveFiles:
             match extension:
                 case ".json":
                     with open(file_name, "r", encoding="utf-8") as f:
-                        file = json.loads(f)
+                        file = json.load(f)
                         if type(file) == str:
                             # Sometime the LLM return json with a double encoding...
                             file = json.loads(file) 

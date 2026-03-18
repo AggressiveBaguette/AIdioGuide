@@ -14,12 +14,12 @@ class WebSearches:
         web_search_result = await self.registery.search_worker.search(query_name)
         return web_search_result 
 
-    def format_all_web_searches(self, research_list):
-        logger.debug(f"web_search_results : {len(research_list)} results")
+    def format_all_web_searches(self, web_searches_list):
+        logger.debug(f"web_search_results : {len(web_searches_list)} results")
 
         """Transform the json into a DSV file with | as column separator and \n as line separator  to save tokens"""
         concatenated_results = ""
-        for queries_result in research_list:
+        for queries_result in web_searches_list:
             logger.debug(f"result : {queries_result}")
             for query in queries_result:
                 logger.debug(f"query result : {query}")

@@ -115,8 +115,8 @@ class Orchestration:
             if research_topic.name in ["La capitale de la rose"]:   
             # if research_topic.name in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
             # if True:        
-                research = ResearchOrchestrator(self.user_context, self.registery)
-                coroutine_search_list.append(research.get_research_results(phase, research_topic, strategy.research_angle))
+                research = ResearchOrchestrator(self.user_context, self.registery, phase)
+                coroutine_search_list.append(research.get_research_results(research_topic, strategy.research_angle))
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
         await asyncio.gather(*coroutine_search_list)

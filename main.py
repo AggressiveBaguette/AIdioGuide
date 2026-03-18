@@ -53,8 +53,8 @@ def custom_filter(record):
         
 
         # Filtering by function
-        # if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:
-        #     return True
+        if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches"]:
+            return True
         
             
     return False

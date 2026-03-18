@@ -4,18 +4,19 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import Category, ResearchOutput
+from models.schemas import Category, ResearchOutput, ResearchTopic
 from services.research.content_prospector import ContentProspector
 from services.research.web_searches import WebSearches
 
 class ResearchOrchestrator:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
 
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry):
+    def __init__(self, user_context: UserContext, registery: WorkerRegistry, phase):
         self.user_context = user_context
         self.registery = registery
+        self.phase = phase
 
-    async def get_research_results(self, phase, research_topic, research_angle):
+    async def get_research_results(self, research_topic: ResearchTopic , research_angle):
         """Prospection by a first LLM with high temperature
            Then, we perform research on the web to fact check it
            Lastly, a low temperature LLM removes hallucination or low quality data
@@ -24,10 +25,10 @@ class ResearchOrchestrator:
         self.web_searches = WebSearches(self.user_context, self.registery)
 
         logger.info(f"get_research_results | topic={research_topic}")
-        prospection = await self._content_prospector(phase, research_topic, research_angle)
+        prospection = await self._content_prospector(research_topic, research_angle)
         logger.info(f"get_research_results | Content Prospector done | topic={research_topic}")   
 
-        await self._perform_web_searches(prospection)
+        await self._perform_web_searches(research_topic, prospection)
         # logger.debug(f"web_search_results : {self.web_search_results}")
         logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
 
@@ -37,12 +38,12 @@ class ResearchOrchestrator:
  
 
 
-    async def _content_prospector(self, phase, research_topic, research_angle):
+    async def _content_prospector(self, research_topic: ResearchTopic, research_angle):
         """Generation of content, with high risk of hallucination, 0.6 temperature to have a good mix between creativity and fiability"""
 
-        if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, phase, research_topic.name):
+        if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name):
             logger.info(f"content_prospector | research_topic={research_topic.name} already done")
-            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, phase, research_topic.name)
+            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name)
             parsed_prospection = self.content_prospector.parse_content_prospector(prospection, research_topic)            
             return parsed_prospection
 
@@ -52,12 +53,12 @@ class ResearchOrchestrator:
             category = Category.PROSPECTOR,
             user_context = self.user_context,
             content = prospection.raw_output,
-            phase = phase,
+            phase = self.phase,
             research_topic = research_topic.name,
             )
         return prospection
 
-    async def _perform_web_searches(self, prospection: ResearchOutput):
+    async def _perform_web_searches(self, research_topic: ResearchTopic, prospection: ResearchOutput):
         """Perform research for the monument"""
         coroutine_search_list = []
 
@@ -65,37 +66,41 @@ class ResearchOrchestrator:
             logger.debug(f"entry: {entry}")
             for query in entry.queries:
                 logger.debug(f"{query} : {query}")
-                new_coroutine_search = self._perform_and_save_web_search(query)
+                new_coroutine_search = self._perform_and_save_web_search(query, research_topic)
                 coroutine_search_list.append(new_coroutine_search)
+        logger.debug(f"coroutine_search_list: {len(coroutine_search_list)} items")
 
-        await asyncio.gather(*coroutine_search_list, return_exceptions=True)
+        web_searches_list = await asyncio.gather(*coroutine_search_list)
+        errors = [r for r in web_searches_list if isinstance(r, Exception)]
+        if errors:
+            logger.error(f"{len(errors)} coroutines crashed! First error : {errors[0]}")
 
         # Create a single document with all researchs results for the given research topic
-        # await self._concatenate_research()
-        research_facts = self.web_searches.format_all_web_searches(coroutine_search_list)
-        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, self.research_topic["name"])
+        research_facts = self.web_searches.format_all_web_searches(web_searches_list)
+        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, research_topic.name)
 
         
 
-    async def _perform_and_save_web_search(self, query_name):
+    async def _perform_and_save_web_search(self, query_name, research_topic: ResearchTopic):
         if self.registery.storage.does_exist_research(
-                category = Category.RESEARCH,
-                user_context = self.user_context, 
-                phase = self.phase, 
-                research_topic = self.research_topic.name,
-                title = query_name
-                ):
-
-            logger.debug(f"research | research_topic={self.research_topic.name} - {query_name} already done")
-            research_results = self.registery.storage.loads_research(Category.RESEARCH, self.user_context, self.phase, self.research_topic.name, query_name)
+            category = Category.RESEARCH,
+            user_context = self.user_context, 
+            phase = self.phase, 
+            research_topic = research_topic.name,
+            title = query_name
+        ):
+            logger.debug(f"research | research_topic={research_topic.name} - {query_name} already done")
+            research_results = self.registery.storage.loads_research(Category.RESEARCH, self.user_context, self.phase, research_topic.name, query_name)
             return research_results
 
+        logger.debug(f"research | research_topic={research_topic.name} - {query_name} not done")
         try:
             search_results = await self.web_searches.search(query_name)
-            self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, self.research_topic.name, query_name)
+            self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, research_topic.name, query_name)
             return search_results 
         except Exception as e:
             logger.error(f"Error searching for {query_name}: {e}")
+            raise
 
     # async def _concatenate_research(self):
     #     """Concatenate all research results for the given research topic"""
