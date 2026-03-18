@@ -63,6 +63,8 @@ Une ligne par fait. **PAS DE HEADER. PAS DE TEXTE INTRODUCTIF.**
 
 * Le `;;` sert UNIQUEMENT à séparer les queries à la toute fin.
 
+* Ne met pas de header, de footer, aucune réflexion autre que l'output demandé. Ton travail sera ensuite parsé.
+
 ### Détails des colonnes
 
 * **CODE_CAT :** F (Forensic/Trace physique), P (Politique/Scandale), S (Social/Victimes), C (Cynisme/Banalisation).
