@@ -6,6 +6,7 @@ from models.context import UserContext
 from models.registry import WorkerRegistry
 from models.schemas import Category
 from services.research.content_prospector import ContentProspector
+from services.research.web_searches import WebSearches
 
 class ResearchOrchestrator:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
@@ -20,6 +21,7 @@ class ResearchOrchestrator:
            Lastly, a low temperature LLM removes hallucination or low quality data
         """
         self.content_prospector = ContentProspector(self.user_context, self.registery)
+        self.web_searches = WebSearches(self.user_context, self.registery)
 
         logger.info(f"get_research_results | topic={research_topic}")
         await self._content_prospector(phase, research_topic, research_angle)
@@ -66,49 +68,55 @@ class ResearchOrchestrator:
                 new_coroutine_search = self._perform_and_save_search(query)
                 coroutine_search_list.append(new_coroutine_search)
 
-        await asyncio.gather(*coroutine_search_list)
+        await asyncio.gather(*coroutine_search_list, return_exceptions=True)
 
         # Create a single document with all researchs results for the given research topic
-        await self._concatenate_research()
+        # await self._concatenate_research()
+        research_facts = self.web_searches.format_all_web_searches(coroutine_search_list)
+        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, self.research_topic["name"])
+
+        
 
     async def _perform_and_save_search(self, query_name):
         if self.registery.storage.does_exist_research(
-            category = Category.RESEARCH,
-            user_context = self.user_context, 
-            phase = self.phase, 
-            research_topic = self.research_topic["name"],
-            title = query_name
-            ):
+                category = Category.RESEARCH,
+                user_context = self.user_context, 
+                phase = self.phase, 
+                research_topic = self.research_topic.name,
+                title = query_name
+                ):
 
-            logger.debug(f"research | research_topic={self.research_topic["name"]} - {query_name} already done")
+            logger.debug(f"research | research_topic={self.research_topic.name} - {query_name} already done")
+            research_results = self.registery.storage.loads_research(Category.RESEARCH, self.user_context, self.phase, self.research_topic.name, query_name)
+            return research_results
 
-        else:
-            try:
-                search_results = await self.registery.search_worker.search(query_name)
-                self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, self.research_topic["name"], query_name)
-            except Exception as e:
-                logger.error(f"Error searching for {query_name}: {e}")
+        try:
+            search_results = await self.web_searches.search(query_name)
+            self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, self.research_topic.name, query_name)
+            return search_results 
+        except Exception as e:
+            logger.error(f"Error searching for {query_name}: {e}")
 
-    async def _concatenate_research(self):
-        """Concatenate all research results for the given research topic"""
-        self.web_search_results = self.registery.storage.loads_all_research(Category.RESEARCH, self.user_context, self.phase, self.research_topic["name"])
-        logger.debug(f"web_search_results : {len(self.web_search_results)} results")
+    # async def _concatenate_research(self):
+    #     """Concatenate all research results for the given research topic"""
+    #     self.web_search_results = self.registery.storage.loads_all_research(Category.RESEARCH, self.user_context, self.phase, self.research_topic["name"])
+    #     logger.debug(f"web_search_results : {len(self.web_search_results)} results")
 
-        """Transform the json to DSV to save tokens"""
-        concatenated_results = ""
-        for queries_result in self.web_search_results:
-            logger.debug(f"result : {queries_result}")
-            for query in queries_result:
-                logger.debug(f"query result : {query}")
-                concatenated_results += f"{query['title']}|"
-                concatenated_results += f"{query['url']}|"
-                for result in query['highlights']:
-                    concatenated_results += f"{result.replace('|', ';').replace('\n', ' ')}" # sanitize for futur parsing on |
-                concatenated_results += "\n"
+    #     """Transform the json to DSV to save tokens"""
+    #     concatenated_results = ""
+    #     for queries_result in self.web_search_results:
+    #         logger.debug(f"result : {queries_result}")
+    #         for query in queries_result:
+    #             logger.debug(f"query result : {query}")
+    #             concatenated_results += f"{query['title']}|"
+    #             concatenated_results += f"{query['url']}|"
+    #             for result in query['highlights']:
+    #                 concatenated_results += f"{result.replace('|', ';').replace('\n', ' ')}" # sanitize for futur parsing on |
+    #             concatenated_results += "\n"
 
-        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, concatenated_results, self.phase, self.research_topic["name"])
-        logger.debug(f"concatenated_results : {concatenated_results[:200]}")
-        self.research_facts = concatenated_results
+    #     self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, concatenated_results, self.phase, self.research_topic["name"])
+    #     logger.debug(f"concatenated_results : {concatenated_results[:200]}")
+    #     self.research_facts = concatenated_results
 
     async def _verify_content(self, is_simulation):
         """Verify content for the monument"""
