@@ -16,9 +16,11 @@ from workers.azureTTS import AzureTTS
 from services.audio_generation import AudioService
 from config import TTS_LANGUAGES_NO_PHONEMES
 from services.strategy import StrategyService
+from services.plan import PlanService
+
 
 class Orchestration:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService):
+    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService, plan_service:PlanService):
         self.user_context = user_context
         self.registery = registery
         self.research_phases = {}
@@ -33,16 +35,17 @@ class Orchestration:
             language=user_context.language.code
         )
 
-    def strategy_agent(self, is_simulation=False):
+    def strategy(self, is_simulation=False):
         """First, define the strategy"""
         if self.registery.storage.does_exist(Category.STRATEGY, self.user_context):
             logger.info("Strategy already created!")
             strategy = self.registery.storage.loads(Category.STRATEGY, self.user_context)
+            return self.strategy_service.parse_strategy(strategy)
 
-        else:
-            strategy = define_strategy() 
-            logger.debug(f"Strategy : {self.strategy}")
-            self.registery.storage.save(Category.STRATEGY, self.user_context, str(self.strategy))
+        strategy = self.strategy_service.define_strategy() 
+        logger.debug(f"Strategy : {strategy}")
+        self.registery.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
+        return strategy
 
     async def plan(self, is_simulation):
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
@@ -91,36 +94,8 @@ class Orchestration:
                     "angle":research_topic.angle
                 })
         return research_topic_list
-            
 
-    async def parse_strategy(self):
-        strategy_line = self.strategy.split("\n")
-        research_topic_list = []
-
-        for line in strategy_line:
-            logger.debug(f"line : {line}")
-            input = line.split("|")
-            match input[0]:
-                case "STRATEGIE":
-                    self.strategy_thinking = input[1]
-                case "ANGLE_RECHERCHE":
-                    self.research_angle = input[1]
-                case "Lieu":
-                    research_topic_list.append({
-                        "type":input[0],
-                        "name":input[1],
-                        "angle":input[2]
-                    })
-                case "Theme":
-                    research_topic_list.append({
-                        "type":input[0],
-                        "name":input[1],
-                        "angle":input[2]
-                    })                  
-
-        return research_topic_list
-
-    async def research(self, phase, is_simulation=False):
+    async def research(self, phase, strategy, plan: AudioguidePlan):
         coroutine_search_list = []
 
         if phase == "phase_1":
@@ -305,12 +280,13 @@ async def orchestrator(user_context: UserContext):
     
     orchestration = Orchestration(user_context, 
         registery,
-        audio_service=audio_service
-        strategy_service=strategy_service)
+        audio_service=audio_service,
+        strategy_service=strategy_service,
+        )
 
 
     logger.info("DEBUT DE LA STRATEGIE")
-    strategy = orchestration.strategy_agent(is_simulation=False)
+    strategy = orchestration.strategy(is_simulation=False)
     logger.info("FIN DE LA STRATEGIE")
 
     logger.info("DEBUT DE LA RECHERCHE")

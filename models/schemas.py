@@ -3,12 +3,15 @@ from typing import List, Literal, Optional
 from enum import Enum
 
 
-class FaitRetenu(BaseModel):
-    # On force les 4 catégories prévues par le prompt Forensic
-    categorie: Literal["F", "P", "S", "C"]
-    titre: str
-    affirmation: str
-    preuve_visuelle: str
+class ResearchTopic(BaseModel):
+    type: Literal["Lieu", "Theme"]
+    name: str
+    angle: str
+
+class Stategy(BaseModel):
+    raw_output: str
+    research_angle: str
+    research_topics: List[ResearchTopic]
 
 class RechercheAdditionnelle(BaseModel):
     name: str
