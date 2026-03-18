@@ -112,9 +112,9 @@ class Orchestration:
             logger.info(f"Recherche on topic : {research_topic.name}")
 
             # if research_topic.name in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            # if research_topic.name in ["Arènes de Lutèce"]:   
+            if research_topic.name in ["La capitale de la rose"]:   
             # if research_topic.name in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
-            if True:        
+            # if True:        
                 research = ResearchOrchestrator(self.user_context, self.registery)
                 coroutine_search_list.append(research.get_research_results(phase, research_topic, strategy.research_angle))
 

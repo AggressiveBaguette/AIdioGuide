@@ -1,7 +1,7 @@
 from loguru import logger
 from string import Template
 from typing import TYPE_CHECKING
-from models.schemas import ResearchTopic, ResearchOutput, ResearchOutputLine
+from models.schemas import ResearchTopic, ResearchOutput, ResearchOutputLinePhase1, ResearchOutputLinePhase2   
 import asyncio
 
 if TYPE_CHECKING:
@@ -60,7 +60,7 @@ class ContentProspector:
                         # Exa requests are on the six columns for "lieu"
                         parsed_research_requests = parts[5].split(";;")
 
-                        research_output.research_lines.append(ResearchOutputLine(
+                        research_output.research_lines.append(ResearchOutputLinePhase1(
                                     category=parts[0],
                                     title=parts[1],
                                     affirmation=parts[2], 
@@ -70,7 +70,7 @@ class ContentProspector:
                         ))
                     case "Deep_Dive":
                         parsed_research_requests = parts[2].split(";;")
-                        research_output.research_topics.append(ResearchOutputLine(
+                        research_output.research_topics.append(ResearchOutputLinePhase2(
                                     affirmation=parts[0], 
                                     confidence=parts[1],
                                     queries=parsed_research_requests

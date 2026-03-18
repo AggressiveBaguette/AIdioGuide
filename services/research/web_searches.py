@@ -1,8 +1,5 @@
 from loguru import logger
-from string import Template
 from typing import TYPE_CHECKING
-from models.schemas import WebResearch
-import asyncio
 
 if TYPE_CHECKING:
     from models.context import UserContext

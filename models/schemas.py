@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, RootModel
-from typing import List, Literal, Optional
+from pydantic import BaseModel, Field
+from typing import List, Literal, Optional, Union
 from enum import Enum
 
 
@@ -22,17 +22,21 @@ class FilNarratif(BaseModel):
     clos_au: int
     resume: str
 
-class ResearchOutputLine(BaseModel):
-    category: Optional[str] = None
-    title: Optional[str] = None
-    affirmation: Optional[str] = None
-    visual_proof: Optional[str] = None
-    confidence: Optional[str] = None
-    queries: Optional[List[str]] = None
+class ResearchOutputLinePhase2(BaseModel):
+    affirmation: str
+    confidence: str
+    queries: List[str]
+
+class ResearchOutputLinePhase1(BaseModel):
+    category: str
+    affirmation: str
+    visual_proof: str
+    confidence: str
+    queries: List[str]
 
 class ResearchOutput(BaseModel):
     raw_output: str
-    research_lines: List[ResearchOutputLine] = Field(default_factory=list)
+    research_lines: List[Union[ResearchOutputLinePhase1, ResearchOutputLinePhase1]] = Field(default_factory=list)
 
 class EtapeParcours(BaseModel):
     numero: int
@@ -84,3 +88,5 @@ class Category(Enum):
     PHONEMES="phonemes"
     AUDIO="audio"
     REDACTION_WITH_SSML="redaction_with_ssml"
+
+ResearchOutput.model_rebuild()

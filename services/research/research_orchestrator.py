@@ -4,7 +4,7 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import Category
+from models.schemas import Category, ResearchOutput
 from services.research.content_prospector import ContentProspector
 from services.research.web_searches import WebSearches
 
@@ -24,10 +24,10 @@ class ResearchOrchestrator:
         self.web_searches = WebSearches(self.user_context, self.registery)
 
         logger.info(f"get_research_results | topic={research_topic}")
-        await self._content_prospector(phase, research_topic, research_angle)
+        prospection = await self._content_prospector(phase, research_topic, research_angle)
         logger.info(f"get_research_results | Content Prospector done | topic={research_topic}")   
 
-        await self._perform_web_searches()
+        await self._perform_web_searches(prospection)
         # logger.debug(f"web_search_results : {self.web_search_results}")
         logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
 
@@ -57,15 +57,15 @@ class ResearchOrchestrator:
             )
         return prospection
 
-    async def _perform_web_searches(self, is_simulation):
+    async def _perform_web_searches(self, prospection: ResearchOutput):
         """Perform research for the monument"""
         coroutine_search_list = []
 
-        for entry in self.prospection:
+        for entry in prospection.research_lines:
             logger.debug(f"entry: {entry}")
-            for query in entry["queries"]:
+            for query in entry.queries:
                 logger.debug(f"{query} : {query}")
-                new_coroutine_search = self._perform_and_save_search(query)
+                new_coroutine_search = self._perform_and_save_web_search(query)
                 coroutine_search_list.append(new_coroutine_search)
 
         await asyncio.gather(*coroutine_search_list, return_exceptions=True)
@@ -77,7 +77,7 @@ class ResearchOrchestrator:
 
         
 
-    async def _perform_and_save_search(self, query_name):
+    async def _perform_and_save_web_search(self, query_name):
         if self.registery.storage.does_exist_research(
                 category = Category.RESEARCH,
                 user_context = self.user_context, 
