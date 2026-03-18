@@ -44,10 +44,13 @@ def custom_filter(record):
     #         return True
         if "gemini.py" in record["file"].name:
             return True
-        if "phonem_detection.py" in record["file"].name:
+        if "azureTTS.py" in record["file"].name:
+            return True
+        if "phonemes_detection.py" in record["file"].name:
             return True
         if "audio_generation.py" in record["file"].name:
             return True
+        
 
         # Filtering by function
         # if record["function"] in ["redaction", "get_facts", "_bundle_all_verified_research", "_verify_content"]:

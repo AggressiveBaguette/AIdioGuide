@@ -35,7 +35,7 @@ class PhonemDetection:
             logger.debug(f"phonemes : {phonemes}")
 
             parsed_phonemes = parse_LLM_output(phonemes, PhonemesList)
-            # Phonemes need to be sorted from largest to smallest to be sure parts of long phonems are not replaced partially. E.g.: "Paris" is replaced first, so "Paris Match" cannot be replaced.
+            # Phonemes need to be sorted from largest to smallest to be sure parts of long phonemes are not replaced partially. E.g.: "Paris" is replaced first, so "Paris Match" cannot be replaced.
         
             parsed_phonemes.replacement_list.sort(key = lambda x: len(x.expression) if x.expression else 0, reverse = True)
             self.registery.storage.save(Category.PHONEMES, self.user_context, parsed_phonemes)

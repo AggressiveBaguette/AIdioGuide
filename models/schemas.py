@@ -55,6 +55,7 @@ class ReplacementItem(BaseModel):
     expression: str
     langue: str
     phonemes_ipa: str
+    type: str
     
 class PhonemesList(BaseModel):
     replacement_list: List[ReplacementItem]
@@ -70,3 +71,4 @@ class Category(Enum):
     VERIFIED_RESEARCH_CONCATENATED = "verified_research_concatenated"
     PHONEMES="phonemes"
     AUDIO="audio"
+    REDACTION_WITH_SSML="redaction_with_ssml"

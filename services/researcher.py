@@ -152,7 +152,7 @@ class Research:
             title = query_name
             ):
 
-            logger.info(f"research | research_topic={self.research_topic["name"]} - {query_name} already done")
+            logger.debug(f"research | research_topic={self.research_topic["name"]} - {query_name} already done")
 
         else:
             try:

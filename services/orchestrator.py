@@ -10,10 +10,11 @@ from workers.storage import SaveFiles
 from workers.simulation import SimulationStrategy, SimulationPlan
 from services.researcher import Research
 from workers.gemini import Gemini
-from services.phonem_detection import PhonemDetection
+from services.phonemes_detection import PhonemDetection
 from models.schemas import Category
 from workers.azureTTS import AzureTTS
 from services.audio_generation import AudioService
+from config import TTS_LANGUAGES_NO_PHONEMES
 
 class Orchestration:
     def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService):
@@ -192,6 +193,9 @@ class Orchestration:
         for stop in self.plan.parcours:
             logger.debug(f"Stop : {stop}")
 
+            # 
+            # A REFACTO L'HISTORY FONCTIONNE PAS AVEC LE CHARGEMENT
+            # 
             if self.registery.storage.does_exist(Category.REDACTION, self.user_context, id = stop.numero):
                 logger.info(f"Redaction {stop.numero} - {stop.titre_etape} already created!")
 
@@ -257,9 +261,9 @@ class Orchestration:
         return phase_1_response, phase_2_response
                 
     
-    async def phonem_detection(self, is_simulation = False):
-        phonem_detection = PhonemDetection(self.user_context, self.registery, self.plan)
-        return await phonem_detection.get_phonemes(is_simulation)
+    async def phonemes_detection(self, is_simulation = False):
+        phonemes_detection = PhonemDetection(self.user_context, self.registery, self.plan)
+        return await phonemes_detection.get_phonemes(is_simulation)
 
     async def audio_generation(self, foreign_terms, plan, is_simulation=False):
         coroutine_list = []
@@ -269,7 +273,7 @@ class Orchestration:
                 continue
 
             content = self.registery.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
-            if stop.numero <= 2:
+            if stop.numero == True:
                 coroutine_list.append(self._audio_single_stop(content, stop, foreign_terms, is_simulation))
         
         await asyncio.gather(*coroutine_list)
@@ -278,8 +282,10 @@ class Orchestration:
 
     async def _audio_single_stop(self, content, stop, foreign_terms, is_simulation=False):
         try:
-            audio = await self.audio_service.generate_audio(content, foreign_terms, is_simulation)
-            self.registery.storage.save(Category.AUDIO, self.user_context, audio)
+            audio, content = await self.audio_service.generate_audio(content, foreign_terms, is_simulation)
+            self.registery.storage.save(Category.AUDIO, self.user_context, audio, id = stop.numero)
+            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content, id = stop.numero)
+            logger.info(f"Audio generated for stop {stop.numero} - {stop.titre_etape}")
         except Exception as e:
             logger.error(f"Error generating audio for stop {stop.numero}: {e}")
             
@@ -305,7 +311,7 @@ async def orchestrator(user_context: UserContext):
     )
 
     # Load all the business classes
-    audio_service = AudioService(user_context, registery)
+    audio_service = AudioService(user_context, registery, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
 
     orchestration = Orchestration(user_context, registery, audio_service=audio_service)
 
@@ -331,9 +337,9 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA REDACTION")
 
     logger.info("DEBUT DE LA GESTION DES PHONEMES")
-    phonems = await orchestration.phonem_detection(is_simulation=False)
+    phonemes = await orchestration.phonemes_detection(is_simulation=False)
     logger.info("FIN DE LA GESTION DES PHONEMES")
 
     logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
-    await orchestration.audio_generation(phonems, plan, is_simulation=False)
+    await orchestration.audio_generation(phonemes, plan, is_simulation=False)
     logger.info("FIN DE LA GENERATION DE l'AUDIO")

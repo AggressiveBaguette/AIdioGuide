@@ -7,8 +7,8 @@ from loguru import logger
 
 class Claude:
     def __init__(self):
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-        client = Anthropic(api_key=api_key)
+        self.api_key = os.getenv("ANTHROPIC_API_KEY")
+        self.client = Anthropic(api_key=self.api_key)
 
     def get_system_block(self, system_prompt="", research_block_1="", research_block_2="", plan=""):
         """The order of the different blocks is thought to optimize token usage, using the cache strategy"""
@@ -90,7 +90,7 @@ class Claude:
                 api_param["cache_control"] = {"type": "ephemeral"}
 
             logger.debug(f"Claude system_block : {system_block}")
-            logger.debug(f"Claude messages_history : {messages_history}")
+            logger.debug(f"Claude messages_history : {messages_history[:100]}")
             response = self.client.messages.create(**api_param)
             logger.info("Après appel claude")
             logger.debug(response)
@@ -98,4 +98,4 @@ class Claude:
             return response.content[0].text
         except Exception as e:
             logger.error(f"Claude [Error]: {e}")
-            save_LLM_output(response, "Claude_Sonnet_4_6")
+            raise

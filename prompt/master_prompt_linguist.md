@@ -10,7 +10,10 @@ Langue de base du texte : $language
 
 ## Instructions d'Extraction
 
-1. Détection : Scanne le texte fourni plus bas et repère TOUS les noms propres, lieux, ou termes spécifiques qui n'appartiennent pas nativement à la langue. Sers-toi du nom de la ville pour comprendre l'origine probable des mots.
+1. Détection : Scanne le texte fourni plus bas. Tu cherches DEUX types de termes :
+   - Les entités étrangères : noms propres, lieux, termes spécifiques n'appartenant pas nativement à la langue de base. 
+   - Les anomalies natives : mots ou noms propres DANS la langue de base dont l'orthographe trompe un moteur TTS (ex: si la langue est l'anglais, des chiffres romains comme "Henry VIII").
+Le "type" sera "foreign_entity" (pour l'étranger) ou "native_anomaly" (pour les pièges natifs).
 2. Précision chirurgicale : [RÈGLE ABSOLUE] Ne prends que les expressions exactes telles qu'elles apparaissent dans le texte. Conserve la casse d'origine.
 3. Attribution (BCP-47) : Associe OBLIGATOIREMENT chaque mot extrait au code langue BCP-47 le plus précis possible (ex: ar-DZ pour l'arabe algérien, it-IT per l'italien, de-DE pour l'allemand). [RÈGLE ABSOLUE] Tu dois déduire ce code toi-même selon le contexte.
 4. Transcription IPA (CRITIQUE) : [RÈGLE ABSOLUE] Pour chaque expression, génère la transcription phonétique exacte en Alphabet Phonétique International (IPA). Base-toi sur la prononciation locale historique ou correcte (ex: pas de prononciation française pour du latin).
@@ -21,20 +24,22 @@ Zéro hallucination : [INTERDICTION ABSOLUE] d'inventer des mots ou de corriger 
 
 Renvoie UNIQUEMENT un tableau JSON d'objets contenant l'expression et sa langue associée. Zéro blabla, zéro explication, zéro markdown ````json`. Juste le tableau.
 
-Exemple de sortie (pour un texte en français sur Alger) :
+Exemple de sortie (pour un texte en anglais) :
 {
 "replacement_list":
 [
+  {
+    "expression": "Schadenfreude",
+    "langue": "de-DE",
+    "phonemes_ipa": "ˈʃaːdənˌfʁɔɪ̯də",
+    "type": "foreign_entity"
+  },
 {
-"expression": "Sahet el Shouhada",
-"langue": "ar-DZ",
-"phonemes_ipa": "saːħat eʃːuːhadaː"
-},
-{
-"expression": "Bab El Oued",
-"langue": "ar-DZ",
-"phonemes_ipa": "bæb ɛl wɛd"
-}
+    "expression": "Charles I",
+    "langue": "en-GB",
+    "phonemes_ipa": "tʃɑːlz ðə fɜːst",
+    "type": "native_anomaly"
+  }
 ]
 }
 

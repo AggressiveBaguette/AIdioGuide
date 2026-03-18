@@ -53,6 +53,7 @@ Tu dois injecter des balises SSML avec une parcimonie extrême. Ce sont des épi
 * Syntaxe SSML : N'utilise QUE la balise <break>. Ferme-la correctement (/>).
 * ❌ "Trois cents morts. <break time="1s"/> Pour quoi ? <break time="1s"/>" (Théâtre ridicule).
 * ✅ "Ils ont été enterrés ici, sous ce parking. <break time="2s"/> En 1348, la logique était déjà financière."
+* ✅ Pour marquer la fin d'un paragraphe, là où une respiration naturelle doit arriver. Tous les sauts de lignes seront supprimés avant envoie au TTS
 
 ## Format de Sortie Exigé
 
