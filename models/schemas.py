@@ -6,17 +6,14 @@ from enum import Enum
 class ResearchTopic(BaseModel):
     type: Literal["Lieu", "Theme"]
     name: str
-    angle: str
+    narrative_pitch: Optional(str) = None
+    angle: Optional(str) = None
 
-class Stategy(BaseModel):
+class Strategy(BaseModel):
     raw_output: str
     research_angle: Optional[str] = None
     strategy_thinking: Optional[str] = None
     research_topics: List[ResearchTopic] = Field(default_factory=list)
-
-class RechercheAdditionnelle(BaseModel):
-    name: str
-    angle: str
 
 class FilNarratif(BaseModel):
     theme: str
@@ -25,6 +22,8 @@ class FilNarratif(BaseModel):
     clos_au: int
     resume: str
 
+
+    
 
 class EtapeParcours(BaseModel):
     numero: int
@@ -36,7 +35,7 @@ class EtapeParcours(BaseModel):
     cible_duree_audio: str
     is_grand_format: bool = False
     faits_retenus: List[str] = Field(default_factory=list)
-    briefs_recherche_additionnelle: List[RechercheAdditionnelle] = Field(default_factory=list)
+    briefs_recherche_additionnelle: List[AdditionalResearchTopic] = Field(default_factory=list)
 
 class AudioguidePlan(BaseModel):
     titre_audioguide: str

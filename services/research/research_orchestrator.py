@@ -6,7 +6,7 @@ from models.context import UserContext
 from models.registry import WorkerRegistry
 from models.schemas import ResearchBlock, Category
 
-class Research:
+class ResearchOrchestrator:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
 
     def __init__(self, user_context: UserContext, research_topic, phase, registery: WorkerRegistry, research_angle):

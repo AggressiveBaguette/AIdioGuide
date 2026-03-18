@@ -96,18 +96,18 @@ class Orchestration:
                 })
         return research_topic_list
 
-    async def research(self, phase, strategy, plan: AudioguidePlan):
+    async def research(self, phase, strategy: Stategy, plan: AudioguidePlan):
         coroutine_search_list = []
 
         if phase == "phase_1":
-            # if phase_1, then we get the research_topic_list from strategy 
-            # if phase 2, we get the research_topic_list from the plan
-            research_topic_list = strategy.
+            # if phase_1, then we get the research_topic from strategy 
+            # if phase 2, we get the research_topic from the plan
+            research_topic_list = strategy.research_topics
+            logger.debug(f"Strategy : {strategy}")
         else:
             research_topic_list = await self.parse_plan()
 
 
-        logger.debug(f"Strategy : {self.strategy}")
         for research_topic in research_topic_list:
             logger.info(f"Recherche pour le monument : {research_topic["name"]}")
 
