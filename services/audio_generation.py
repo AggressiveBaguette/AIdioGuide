@@ -27,14 +27,16 @@ class AudioService:
 
             audio_content = await worker.get_audio(content_with_phonemes, voice = self.user_context.language.voice_id)
             return audio_content, content
-        except 1007 as e: 
-            logger.error(f"Error generating audio due to bad phonemes: {e}")
-            content_without_phonemes = self._add_foreign_tags_but_no_phonemes(content, phonemes_replacement)
-            audio_content = await worker.get_audio(content_without_phonemes, voice = self.user_context.language.voice_id)
-            return audio_content, content
         except Exception as e:
-            logger.error(f"Error generating audio: {e}")
-            raise
+            error_msg = str(e)
+            if "1007" in error_msg:
+                # Issue is with phonemes, we try to generate the audio without them
+                content_without_phonemes = self._add_foreign_tags_but_no_phonemes(content, phonemes_replacement)
+                audio_content = await worker.get_audio(content_without_phonemes, voice = self.user_context.language.voice_id)
+                return audio_content, content_without_phonemes
+            else:
+                logger.error(f"Error generating audio: {e}")
+                raise
 
             
     def _add_phonemes_foreign_tags(self, content: str, phonemes_replacement: PhonemesList) -> str:
