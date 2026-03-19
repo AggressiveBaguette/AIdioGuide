@@ -1,4 +1,3 @@
-from models.schemas import ResearchTopic
 from loguru import logger
 from string import Template
 from typing import TYPE_CHECKING

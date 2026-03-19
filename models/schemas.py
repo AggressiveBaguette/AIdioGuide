@@ -1,10 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Literal, Optional, Union
 from enum import Enum
 
 
 class ResearchTopic(BaseModel):
-    type: Literal["Lieu", "Theme"]
+    type: Literal["Lieu", "Theme", "Deep_Dive"]
     name: str
     narrative_pitch: Optional[str] = None
     angle: Optional[str] = None
@@ -40,19 +40,26 @@ class ResearchOutput(BaseModel):
     research_lines: List[Union[ResearchOutputLinePhase1, ResearchOutputLinePhase2]] = Field(default_factory=list)
 
 class VerifiedResearchOutputLine(BaseModel):
-    category: Optional[str] = None
+    category: str | None = None
     title: str
     affirmation: str
-    visual_proof: Optional[str] = None
+    visual_proof: str | None = None
     confidence: str
 
 class VerifiedResearchOutput(BaseModel):
     raw_output: str
     research_lines: List[VerifiedResearchOutputLine] = Field(default_factory=list)
 
+class VerifiedResearchOutputConcatenatedLine(VerifiedResearchOutputLine):
+    id: str
+
+class VerifiedResearchOutputConcatenated(BaseModel):
+    raw_output: str
+    research_lines: List[VerifiedResearchOutputConcatenatedLine] = Field(default_factory=list)
+
 class EtapeParcours(BaseModel):
     numero: int
-    type: Literal["Vestige_Majeur", "Respiration_Contexte"]
+    type: Literal["Vestige_Majeur", "Respiration_Contexte"] = "Vestige_Majeur"
     titre_etape: str
     localisation: str
     transition_vers_suivant: str | None = None
@@ -61,6 +68,15 @@ class EtapeParcours(BaseModel):
     is_grand_format: bool = False
     faits_retenus: List[str] = Field(default_factory=list)
     briefs_recherche_additionnelle: List[ResearchTopic] = Field(default_factory=list)
+
+    @field_validator('briefs_recherche_additionnelle', mode='before')
+    @classmethod
+    def validate_briefs(cls, v):
+        if isinstance(v, list):
+            for item in v:
+                if isinstance(item, dict) and 'type' not in item:
+                    item['type'] = 'Deep_Dive'
+        return v
 
 class AudioguidePlan(BaseModel):
     titre_audioguide: str

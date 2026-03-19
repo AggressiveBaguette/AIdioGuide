@@ -48,16 +48,15 @@ class Orchestration:
         self.registery.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
         return strategy
 
-    async def plan(self, verified_facts_list: list[VerifiedResearchOutput]) -> AudioguidePlan:
+    async def plan(self, strategy: Strategy, verified_facts_list: list[VerifiedResearchOutput]) -> AudioguidePlan:
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
             logger.info("Plan already created!")
-            plan = self.registery.storage.loads(Category.PLAN, self.user_context)
-            plan = AudioguidePlan.model_validate_json(plan)
+            plan = self.registery.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
             return plan
 
-        plan, research_concatenated = self.plan_service.define_plan(verified_facts_list)
+        plan, research_concatenated = self.plan_service.define_plan(strategy, verified_facts_list)
         self.registery.storage.save(Category.PLAN, self.user_context, plan)
-        self.registery.storage.save(Category.RESEARCH_CONCATENATED, self.user_context, research_concatenated, phase="phase_1")
+        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_concatenated, phase="phase_1")
         plan = AudioguidePlan.model_validate_json(plan)
         logger.info(f"Plan created: {plan[100:]}")
         return plan
@@ -71,7 +70,11 @@ class Orchestration:
             research_topic_list = strategy.research_topics
             logger.debug(f"Strategy : {strategy}")
         else:
-            research_topic_list = plan.parcours.briefs_recherche_additionnelle
+            research_topic_list = [
+                topic
+                for stop in plan.parcours
+                for topic in stop.briefs_recherche_additionnelle
+            ]
             logger.debug(f"Research topic list : {research_topic_list}")
 
 
@@ -250,15 +253,15 @@ async def orchestrator(user_context: UserContext):
 
 
     logger.info("DEBUT DE LA STRATEGIE")
-    strategy = await orchestration.strategy(is_simulation=False)
+    strategy = await orchestration.strategy()
     logger.info("FIN DE LA STRATEGIE")
 
     logger.info("DEBUT DE LA RECHERCHE")
-    await orchestration.research("phase_1", strategy)
+    verified_facts_list = await orchestration.research("phase_1", strategy)
     logger.info("FIN DE LA RECHERCHE")
 
     logger.info("DEBUT DU PLAN")
-    plan = await orchestration.plan()
+    plan = await orchestration.plan(strategy, verified_facts_list)
     logger.info("FIN DU PLAN")
 
     logger.info("DEBUT PHASE RECHERCHE 2")

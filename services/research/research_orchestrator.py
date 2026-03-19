@@ -3,7 +3,7 @@ import asyncio
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import Category, ResearchOutput, ResearchTopic, VerifiedResearchOutput
+from models.schemas import Category, ResearchOutput, ResearchTopic, VerifiedResearchOutput, VerifiedResearchOutputConcatenated, VerifiedResearchOutputConcatenatedLine
 from services.research.content_prospector import ContentProspector
 from services.research.web_searches import WebSearches
 from services.research.content_verifier import ContentVerifier
@@ -146,25 +146,35 @@ class ResearchOrchestrator:
                 logger.error(f"Error verifying content : {research_topic.name}: {e}")
                 raise e
             
-
-    # def _remove_search_requests(self, raw_content):
-    #     """we remove the last column of each line"""
-    #     content = raw_content.strip().split("\n")
-    #     new_line_list = []
-
-    #     for line in content:
-    #         # exa query are in the last colum, so they need to be removed
-    #         if not line:
-    #             continue
-    #         input = line.strip().rsplit('|', 1)
-    #         new_line_list.append(input[0])
-
+    def concatenate_verified_researches(self, verified_facts_list: list[VerifiedResearchOutput]) -> VerifiedResearchOutputConcatenated:
+        # formating a DSV to send the research data to the LLM that is going to perform the planification. DSV is use instead of json to reduce the number of used tokens.
+        raw_output_list = []
+        research_lines_list = []
+        id = 1
         
-    #     new_content = "\n".join(new_line_list)
-    #     logger.debug(f"new_content : {new_content}")
-    #     return new_content
+        for facts in verified_facts_list:
+            block_list = []
+            for fact in facts.research_lines:
+                category = fact.category or ""
+                visual_proof = fact.visual_proof or ""
+                parts = [id, category, fact.title, fact.affirmation, visual_proof, fact.confidence]
+                block_list.append("|".join(parts))
 
-        
+                research_lines_list.append(VerifiedResearchOutputConcatenatedLine(
+                    id = f"ID_{id}",
+                    **fact.model_dump()
+                ))
+
+                id += 1
+            raw_output_list.append("\n".join(block_list))
+        logger.debug(f"concatenate_verified_researches : {raw_output_list}")
+
+        return VerifiedResearchOutputConcatenated(
+            raw_output="\n----\n".join(raw_output_list),
+            research_lines=research_lines_list
+        )
+
+
 
 
 

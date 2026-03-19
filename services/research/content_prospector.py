@@ -66,7 +66,7 @@ class ContentProspector:
                                     queries= parts[5].split(";;")
                         ))
                     case "Deep_Dive":
-                        research_output.research_topics.append(ResearchOutputLinePhase2(
+                        research_output.research_lines.append(ResearchOutputLinePhase2(
                                     affirmation=parts[0], 
                                     confidence=parts[1],
                                     # Exa requests are on the third column for "deep_dive" during phase 2

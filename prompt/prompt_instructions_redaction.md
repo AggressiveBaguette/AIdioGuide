@@ -9,5 +9,4 @@ Instruction de Transition : $transition_vers_suivant (Comment se rendre à la pr
 Cible de Durée : $cible_duree_audio
 
 Faits Bruts à Intégrer : 
-$faits_bruts_phase_1
-$faits_bruts_phase_2
+$faits_bruts
