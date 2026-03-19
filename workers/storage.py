@@ -33,9 +33,14 @@ class SaveFiles:
         sanitize_name = "".join([c if c.isalnum() or c in "_-" else "_" for c in clean_name])
         return sanitize_name
 
-    def _define_path(self, user_context: UserContext, phase="", research_topic=""):
+    def _define_path(self, category: Category, user_context: UserContext, phase="", research_topic=""):
         name = self._sanitize_filename(user_context.name)
-        parts = ["content", name, "intermediate_steps"]
+        # final text and audio are separated. The rest is just saved for idempotence + auditability
+        match category:
+            case Category.REDACTION | Category.AUDIO:
+                parts = ["content", name, "final_results"]
+            case _ :
+                parts = ["content", name, "intermediate_steps"]
 
         if phase:
             parts.append(phase)

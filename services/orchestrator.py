@@ -100,7 +100,7 @@ class Orchestration:
     async def redaction(self, plan: AudioguidePlan, verified_facts_list_phase_1: VerifiedResearchOutputConcatenated, verified_facts_list_phase_2: VerifiedResearchOutputConcatenated) -> AudioguideFinalText:
         # Redaction is sequential because we need the LLM to know what has been written during the first iterations to avoid any major repetition        
         messages_history = []
-        content_list = AudioguideFinalText(stop = [])
+        content_list = AudioguideFinalText(stops = [])
         for stop in plan.parcours:
             logger.debug(f"Stop : {stop}")
 
@@ -116,25 +116,25 @@ class Orchestration:
                 self.registery.storage.save(Category.REDACTION_HISTORY, self.user_context, messages_history, id = stop.numero)
                 logger.info(f"Stop written : {stop.numero} - {stop.titre_etape}")
             
-            content_list.stop.append(ContentStop(id = stop.numero, content = text))
+            content_list.stops.append(ContentStop(id = stop.numero, content = text, title = stop.titre_etape))
 
         return content_list
     
     async def phonemes_detection(self, plan: AudioguidePlan, audioguide_text: AudioguideFinalText) -> PhonemesList:   
         phonemes_detection = PhonemDetection(self.user_context, self.registery)
-        return await phonemes_detection.get_phonemes(plan, audioguide_text)
+        return await phonemes_detection.get_phonemes(audioguide_text)
 
     async def audio_generation(self, phonemes_list: PhonemesList, audioguide_text: AudioguideFinalText):
         coroutine_list = []
         for stop in audioguide_text.stops:
-            if self.registery.storage.does_exist(Category.AUDIO, self.user_context, id = stop.numero):
-                logger.info(f"Audio already generated for stop {stop.numero}")
+            if self.registery.storage.does_exist(Category.AUDIO, self.user_context, id = stop.id):
+                logger.info(f"Audio already generated for stop {stop.id} - {stop.title}")
                 continue
 
             # if stop.numero == 1:
             if True:
                 coroutine_list.append(self._audio_single_stop(stop.content, stop, phonemes_list))
-            logger.info(f"Audio generation for stop {stop.numero} - {stop.titre_etape} added to the queue!")
+            logger.info(f"Audio generation for stop {stop.id} - {stop.title} added to the queue!")
 
         await asyncio.gather(*coroutine_list)
 
@@ -143,11 +143,11 @@ class Orchestration:
     async def _audio_single_stop(self, content, stop, phonemes_list):
         try:
             audio, content_with_ssml = await self.audio_service.generate_audio(content, phonemes_list)
-            self.registery.storage.save(Category.AUDIO, self.user_context, audio, id = stop.numero)
-            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content_with_ssml, id = stop.numero)
-            logger.info(f"Audio generated for stop {stop.numero} - {stop.titre_etape}")
+            self.registery.storage.save(Category.AUDIO, self.user_context, audio, id = stop.id)
+            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content_with_ssml, id = stop.id)
+            logger.info(f"Audio generated for stop {stop.id} - {stop.title}")
         except Exception as e:
-            logger.error(f"Error generating audio for stop {stop.numero}: {e}")
+            logger.error(f"Error generating audio for stop {stop.id}: {e}")
             
 
 async def orchestrator(user_context: UserContext):
@@ -203,5 +203,5 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA GESTION DES PHONEMES")
 
     logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
-    await orchestration.audio_generation(phonemes, audioguide_text)
+    await orchestration.audio_generation(phonemes_list, audioguide_text)
     logger.info("FIN DE LA GENERATION DE l'AUDIO")

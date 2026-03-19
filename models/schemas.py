@@ -106,6 +106,7 @@ class PhonemesList(BaseModel):
 
 class ContentStop(BaseModel):
     id: int
+    title: str
     content: str
 
 class AudioguideFinalText(BaseModel):

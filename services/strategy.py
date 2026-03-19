@@ -48,7 +48,7 @@ class StrategyService:
                     result.research_topics.append(ResearchTopic(
                         type=parts[0],
                         name=parts[1],
-                        angle=parts[2]
+                        narrative_pitch=parts[2]
                     ))
                 case _:
                     logger.warning(f"Line cannot be parsed : {line}")
