@@ -3,7 +3,7 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import AudioguidePlan, Strategy, VerifiedResearchOutputConcatenated, AudioguideFinalText, ContentStop
+from models.schemas import AudioguidePlan, Strategy, VerifiedResearchOutputConcatenated, AudioguideFinalText, ContentStop, PhonemesList
 from workers.exa import ExaSearch
 from workers.claude import Claude
 from workers.storage import SaveFiles
@@ -124,28 +124,27 @@ class Orchestration:
         phonemes_detection = PhonemDetection(self.user_context, self.registery)
         return await phonemes_detection.get_phonemes(plan, audioguide_text)
 
-    async def audio_generation(self, foreign_terms, plan, is_simulation=False):
+    async def audio_generation(self, phonemes_list: PhonemesList, audioguide_text: AudioguideFinalText):
         coroutine_list = []
-        for stop in plan.parcours:
+        for stop in audioguide_text.stops:
             if self.registery.storage.does_exist(Category.AUDIO, self.user_context, id = stop.numero):
                 logger.info(f"Audio already generated for stop {stop.numero}")
                 continue
 
-            content = self.registery.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
             # if stop.numero == 1:
             if True:
-                coroutine_list.append(self._audio_single_stop(content, stop, foreign_terms, is_simulation))
+                coroutine_list.append(self._audio_single_stop(stop.content, stop, phonemes_list))
             logger.info(f"Audio generation for stop {stop.numero} - {stop.titre_etape} added to the queue!")
 
         await asyncio.gather(*coroutine_list)
 
-        logger.info(f"Audio generation completed!")
+        logger.info(f"All audio is now generated!")
 
-    async def _audio_single_stop(self, content, stop, foreign_terms, is_simulation=False):
+    async def _audio_single_stop(self, content, stop, phonemes_list):
         try:
-            audio, content = await self.audio_service.generate_audio(content, foreign_terms, is_simulation)
+            audio, content_with_ssml = await self.audio_service.generate_audio(content, phonemes_list)
             self.registery.storage.save(Category.AUDIO, self.user_context, audio, id = stop.numero)
-            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content, id = stop.numero)
+            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content_with_ssml, id = stop.numero)
             logger.info(f"Audio generated for stop {stop.numero} - {stop.titre_etape}")
         except Exception as e:
             logger.error(f"Error generating audio for stop {stop.numero}: {e}")
@@ -200,9 +199,9 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA REDACTION")
 
     logger.info("DEBUT DE LA GESTION DES PHONEMES")
-    phonemes = await orchestration.phonemes_detection(plan, audioguide_text)
+    phonemes_list = await orchestration.phonemes_detection(plan, audioguide_text)
     logger.info("FIN DE LA GESTION DES PHONEMES")
 
     logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
-    await orchestration.audio_generation(phonemes, plan, is_simulation=False)
+    await orchestration.audio_generation(phonemes, audioguide_text)
     logger.info("FIN DE LA GENERATION DE l'AUDIO")
