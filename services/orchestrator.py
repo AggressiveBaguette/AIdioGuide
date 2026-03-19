@@ -120,9 +120,9 @@ class Orchestration:
 
         return content_list
     
-    async def phonemes_detection(self):
-        phonemes_detection = PhonemDetection(self.user_context, self.registery, self.plan)
-        return await phonemes_detection.get_phonemes()
+    async def phonemes_detection(self, plan: AudioguidePlan, audioguide_text: AudioguideFinalText) -> PhonemesList:   
+        phonemes_detection = PhonemDetection(self.user_context, self.registery)
+        return await phonemes_detection.get_phonemes(plan, audioguide_text)
 
     async def audio_generation(self, foreign_terms, plan, is_simulation=False):
         coroutine_list = []
@@ -199,10 +199,10 @@ async def orchestrator(user_context: UserContext):
     audioguide_text = await orchestration.redaction(plan, verified_facts_list_phase_1, verified_facts_list_phase_2)
     logger.info("FIN DE LA REDACTION")
 
-    # logger.info("DEBUT DE LA GESTION DES PHONEMES")
-    # phonemes = await orchestration.phonemes_detection()
-    # logger.info("FIN DE LA GESTION DES PHONEMES")
+    logger.info("DEBUT DE LA GESTION DES PHONEMES")
+    phonemes = await orchestration.phonemes_detection(plan, audioguide_text)
+    logger.info("FIN DE LA GESTION DES PHONEMES")
 
-    # logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
-    # await orchestration.audio_generation(phonemes, plan, is_simulation=False)
-    # logger.info("FIN DE LA GENERATION DE l'AUDIO")
+    logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
+    await orchestration.audio_generation(phonemes, plan, is_simulation=False)
+    logger.info("FIN DE LA GENERATION DE l'AUDIO")

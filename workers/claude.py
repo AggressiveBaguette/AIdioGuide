@@ -69,7 +69,7 @@ class Claude:
     def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
         # synchronous http call, wait for the full text to be generated
         try:
-            logger.info("Avant appel claude")
+            logger.info("Before Claude API call")
 
             system_block = self.get_system_block(system_prompt, research_block_1, research_block_2, plan)
             # save_LLM_output(system_block, "System_block")
@@ -92,7 +92,7 @@ class Claude:
             logger.debug(f"Claude system_block : {system_block}")
             logger.debug(f"Claude messages_history : {messages_history[:100]}")
             response = self.client.messages.create(**api_param)
-            logger.info("Après appel claude")
+            logger.info("Claude API call done")
             logger.debug(response)
 
             return response.content[0].text

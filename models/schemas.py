@@ -109,7 +109,7 @@ class ContentStop(BaseModel):
     content: str
 
 class AudioguideFinalText(BaseModel):
-    stop: List[ContentStop]
+    stops: List[ContentStop]
 
 class Category(Enum):
     PLAN = "plan"
