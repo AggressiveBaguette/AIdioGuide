@@ -21,9 +21,10 @@ class Gemini:
 
     def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache_requested = False):
         # synchronous http call, wait for the full text to be generated
-
+        # temperature is not use anymore, based on Gemini 3 google guidelines, as gemini is only optimised for a temp of 1. 
+        # 
         contents = [system_prompt, content]
-
+        
         try:
             logger.info(f"Gemini call")            
             response = self.client.models.generate_content(

@@ -27,7 +27,7 @@ class ContentVerifier:
         )
 
         # We remove the exa queries of the paylod to save some token. They do not need to be verified
-        prospection_without_search_requests = self._remove_search_requests(prospection)
+        prospection_without_search_requests = self._format_claims_to_be_verified(prospection)
 
         # We build the content that will be sent for verification
         fragments = []
@@ -37,9 +37,14 @@ class ContentVerifier:
         fragments.append(research_facts)
         content = "".join(fragments)
 
-        verified_claims = await asyncio.to_thread(worker.get_text(content=content, system_prompt=system_prompt, temperature = 0))
+        verified_claims = await asyncio.to_thread(
+            worker.get_text,
+            content=content, 
+            system_prompt=system_prompt,
+            temperature = 0
+        )
         logger.debug(f"verified_claims {research_topic.name}: {verified_claims}")
-        
+
         parsed_verified_claims = self.parse_verified_content(verified_claims, research_topic)
         return parsed_verified_claims
 

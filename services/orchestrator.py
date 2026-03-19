@@ -11,7 +11,7 @@ from workers.simulation import SimulationStrategy, SimulationPlan
 from services.research.research_orchestrator import ResearchOrchestrator
 from workers.gemini import Gemini
 from services.phonemes_detection import PhonemDetection
-from models.schemas import Category
+from models.schemas import Category, VerifiedResearchOutput
 from workers.azureTTS import AzureTTS
 from services.audio_generation import AudioService
 from config import TTS_LANGUAGES_NO_PHONEMES
@@ -112,22 +112,22 @@ class Orchestration:
             logger.info(f"Recherche on topic : {research_topic.name}")
 
             # if research_topic.name in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            if research_topic.name in ["La capitale de la rose"]:   
+            # if research_topic.name in ["La capitale de la rose"]:   
             # if research_topic.name in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
-            # if True:        
+            if True:        
                 research = ResearchOrchestrator(self.user_context, self.registery, phase)
                 coroutine_search_list.append(research.get_research_results(research_topic, strategy.research_angle))
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
-        await asyncio.gather(*coroutine_search_list)
+        verified_facts_list = await asyncio.gather(*coroutine_search_list)
         logger.debug("Orchestration Research: Gather terminé")
 
-        self._bundle_all_verified_research(phase)
+        self._bundle_all_verified_research(phase, verified_facts_list)
 
     def _perform_unit_research():
         pass
 
-    def _bundle_all_verified_research(self, phase):
+    def _bundle_all_verified_research(self, phase: str, verified_facts_list: list[VerifiedResearchOutput]):
         list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
         concatened_research = "\n-----\n".join(list)
         self.registery.storage.save_research(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research, phase)

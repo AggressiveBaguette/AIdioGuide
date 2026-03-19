@@ -3,7 +3,7 @@ import asyncio
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import Category, ResearchOutput, ResearchTopic
+from models.schemas import Category, ResearchOutput, ResearchTopic, VerifiedResearchOutput
 from services.research.content_prospector import ContentProspector
 from services.research.web_searches import WebSearches
 from services.research.content_verifier import ContentVerifier
@@ -16,7 +16,7 @@ class ResearchOrchestrator:
         self.registery = registery
         self.phase = phase
 
-    async def get_research_results(self, research_topic: ResearchTopic , research_angle):
+    async def get_research_results(self, research_topic: ResearchTopic , research_angle: str) -> VerifiedResearchOutput:
         """Prospection by a first LLM with high temperature
            Then, we perform research on the web to fact check it
            Lastly, a low temperature LLM removes hallucination or low quality data
@@ -144,6 +144,7 @@ class ResearchOrchestrator:
                     research_topic.name)
             except Exception as e:
                 logger.error(f"Error verifying content : {research_topic.name}: {e}")
+                raise e
             
 
     # def _remove_search_requests(self, raw_content):
