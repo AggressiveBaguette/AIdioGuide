@@ -169,10 +169,13 @@ class ResearchOrchestrator:
             raw_output_list.append("\n".join(block_list))
         logger.debug(f"concatenate_verified_researches : {raw_output_list}")
 
-        return VerifiedResearchOutputConcatenated(
+        verified_research_concatenated = VerifiedResearchOutputConcatenated(
             raw_output="\n----\n".join(raw_output_list),
             research_lines=research_lines_list
         )
+
+        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, verified_research_concatenated.raw_output, phase=self.phase)
+        return verified_research_concatenated
 
 
 
