@@ -1,5 +1,5 @@
 Mermaid
-
+``` mermaid
 flowchart TD
     %% ── PHASE 0 : EDITORIAL ──
     S0["⚙️ STRATEGIST
@@ -122,3 +122,4 @@ Same workflow as previously"]
     class RESIDU,N,S1,OUT output
     class PHON,TTS audio
     class RELOOP decision
+```
