@@ -29,6 +29,7 @@ class ResearchOutputLinePhase2(BaseModel):
 
 class ResearchOutputLinePhase1(BaseModel):
     category: str
+    title: str
     affirmation: str
     visual_proof: str
     confidence: str
@@ -37,6 +38,17 @@ class ResearchOutputLinePhase1(BaseModel):
 class ResearchOutput(BaseModel):
     raw_output: str
     research_lines: List[Union[ResearchOutputLinePhase1, ResearchOutputLinePhase1]] = Field(default_factory=list)
+
+class VerifiedResearchOutputLine:
+    category: Optional[str] = None
+    title: str
+    affirmation: str
+    visual_proof: Optional[str] = None
+    confidence: str
+
+class VerifiedResearchOutput(BaseModel):
+    raw_output: str
+    research_lines: List[VerifiedResearchOutputLine] = Field(default_factory=list)
 
 class EtapeParcours(BaseModel):
     numero: int

@@ -56,24 +56,21 @@ class ContentProspector:
                 match research_topic.type:
                     case "Lieu" | "Theme":
                         # logger.debug(f"query list : {parts[5]}")
-
-                        # Exa requests are on the six columns for "lieu"
-                        parsed_research_requests = parts[5].split(";;")
-
                         research_output.research_lines.append(ResearchOutputLinePhase1(
                                     category=parts[0],
                                     title=parts[1],
                                     affirmation=parts[2], 
                                     visual_proof=parts[3],
                                     confidence=parts[4],
-                                    queries=parsed_research_requests
+                                    # Exa requests are on the sixth column for "lieu / theme"
+                                    queries= parts[5].split(";;")
                         ))
                     case "Deep_Dive":
-                        parsed_research_requests = parts[2].split(";;")
                         research_output.research_topics.append(ResearchOutputLinePhase2(
                                     affirmation=parts[0], 
                                     confidence=parts[1],
-                                    queries=parsed_research_requests
+                                    # Exa requests are on the third column for "deep_dive" during phase 2
+                                    queries=parts[2].split(";;")
                             ))
 
             except Exception as e:

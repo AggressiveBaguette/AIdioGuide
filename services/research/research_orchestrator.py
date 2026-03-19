@@ -1,12 +1,12 @@
 from sre_constants import CATEGORY
 import asyncio
-from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
 from models.schemas import Category, ResearchOutput, ResearchTopic
 from services.research.content_prospector import ContentProspector
 from services.research.web_searches import WebSearches
+from services.research.content_verifier import ContentVerifier
 
 class ResearchOrchestrator:
     """Note: it is important to manage properly the different research phases to ensure good LLM cache utilisation"""
@@ -23,16 +23,16 @@ class ResearchOrchestrator:
         """
         self.content_prospector = ContentProspector(self.user_context, self.registery)
         self.web_searches = WebSearches(self.user_context, self.registery)
+        self.content_verifier = ContentVerifier(self.user_context, self.registery)
 
         logger.info(f"get_research_results | topic={research_topic}")
         prospection = await self._content_prospector(research_topic, research_angle)
         logger.info(f"get_research_results | Content Prospector done | topic={research_topic}")   
 
-        await self._perform_web_searches(research_topic, prospection)
-        # logger.debug(f"web_search_results : {self.web_search_results}")
+        research_facts = await self._perform_web_searches(research_topic, prospection)
         logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
 
-        await self._verify_content()        
+        await self._verify_content(research_topic, prospection, research_facts)        
         logger.info(f"get_research_results | verify content done | topic={research_topic}")   
 
  
@@ -79,6 +79,7 @@ class ResearchOrchestrator:
         research_facts = self.web_searches.format_all_web_searches(web_searches_list)
         self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, research_topic.name)
 
+        return research_facts
         
 
     async def _perform_and_save_web_search(self, query_name, research_topic: ResearchTopic):
@@ -93,8 +94,8 @@ class ResearchOrchestrator:
             research_results = self.registery.storage.loads_research(Category.RESEARCH, self.user_context, self.phase, research_topic.name, query_name)
             return research_results
 
-        logger.debug(f"research | research_topic={research_topic.name} - {query_name} not done")
         try:
+            logger.debug(f"research | research_topic={research_topic.name} - {query_name} not done")
             search_results = await self.web_searches.search(query_name)
             self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, research_topic.name, query_name)
             return search_results 
@@ -123,47 +124,14 @@ class ResearchOrchestrator:
     #     logger.debug(f"concatenated_results : {concatenated_results[:200]}")
     #     self.research_facts = concatenated_results
 
-    async def _verify_content(self, is_simulation):
+    async def _verify_content(self, research_topic: ResearchTopic, prospection: ResearchOutput, research_facts: str):
         """Verify content for the monument"""
-        if self.registery.storage.does_exist_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, self.research_topic["name"]):
-            logger.info(f"VERIFIED_RESEARCH | research_topic={self.research_topic["name"]} already done")
+        if self.registery.storage.does_exist_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name):
+            logger.info(f"VERIFIED_RESEARCH | research_topic={research_topic.name} already done")
         else:
 
             try:
-
-                if is_simulation:
-                    worker = self.registery.simulation_content_verifier
-                else:
-                    worker = self.registery.gemini_worker
-                
-                with open("prompt/master_prompt_fact_checker.md", "r", encoding="utf-8") as f:
-                    template_brut = Template(f.read())
-                system_prompt = template_brut.substitute(
-                    city_name=self.user_context.city,
-                    monument=self.research_topic["name"]
-                )
-
-                prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, self.research_topic["name"])
-                # We remove the exa queries of the paylod to save some token. They do not need to be verified
-                prospection_without_search_requests = self._remove_search_requests(prospection)
-
-                # We build the content that will be sent for verification
-                fragments = []
-                fragments.append("## CLAIMS \n\n")
-                fragments.append(prospection_without_search_requests)
-                fragments.append("\n\n## CONTEXTE DE RECHERCHE \n\n")
-                fragments.append(self.research_facts)
-                content = "".join(fragments)
-
-                verified_claims = worker.get_text(content=content, system_prompt=system_prompt, temperature = 0) 
-                logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
-
-                if self.phase == "phase_2":
-                    # We need to add the request name in phase_2 as a key, otherwise we won't be able to determine which claims is needed for which stop.
-                    # phase 2 content is a little different than phase 1. Phase 1 is needed as a whole to determine the plan and ID are only managed later, after the plan is done. While pahse 2 is only aimed at a single stop.
-                    verified_claims = "\n".join(f"{self.research_topic['name']}|{line}" for line in verified_claims.split("\n"))
-                    logger.debug(f"verified_claims {self.research_topic['name']}: {verified_claims}")
-
+                verified_claims = await self.content_verifier.verify_content(research_topic=research_topic, prospection=prospection, research_facts=research_facts)
                 self.registery.storage.save_research(
                     Category.VERIFIED_RESEARCH,
                     self.user_context,
@@ -174,22 +142,22 @@ class ResearchOrchestrator:
                 logger.error(f"Error verifying content : {self.research_topic['name']}: {e}")
             
 
-    def _remove_search_requests(self, raw_content):
-        """we remove the last column of each line"""
-        content = raw_content.strip().split("\n")
-        new_line_list = []
+    # def _remove_search_requests(self, raw_content):
+    #     """we remove the last column of each line"""
+    #     content = raw_content.strip().split("\n")
+    #     new_line_list = []
 
-        for line in content:
-            # exa query are in the last colum, so they need to be removed
-            if not line:
-                continue
-            input = line.strip().rsplit('|', 1)
-            new_line_list.append(input[0])
+    #     for line in content:
+    #         # exa query are in the last colum, so they need to be removed
+    #         if not line:
+    #             continue
+    #         input = line.strip().rsplit('|', 1)
+    #         new_line_list.append(input[0])
 
         
-        new_content = "\n".join(new_line_list)
-        logger.debug(f"new_content : {new_content}")
-        return new_content
+    #     new_content = "\n".join(new_line_list)
+    #     logger.debug(f"new_content : {new_content}")
+    #     return new_content
 
         
 
