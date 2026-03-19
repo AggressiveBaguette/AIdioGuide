@@ -60,7 +60,7 @@ class EtapeParcours(BaseModel):
     cible_duree_audio: str
     is_grand_format: bool = False
     faits_retenus: List[str] = Field(default_factory=list)
-    briefs_recherche_additionnelle: List[AdditionalResearchTopic] = Field(default_factory=list)
+    briefs_recherche_additionnelle: List[ResearchTopic] = Field(default_factory=list)
 
 class AudioguidePlan(BaseModel):
     titre_audioguide: str

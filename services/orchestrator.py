@@ -36,7 +36,7 @@ class Orchestration:
             language=user_context.language.code
         )
 
-    async def strategy(self, is_simulation=False):
+    async def strategy(self) -> Strategy:
         """First, define the strategy"""
         if self.registery.storage.does_exist(Category.STRATEGY, self.user_context):
             logger.info("Strategy already created!")
@@ -48,55 +48,21 @@ class Orchestration:
         self.registery.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
         return strategy
 
-    async def plan(self, is_simulation):
+    async def plan(self, verified_facts_list: list[VerifiedResearchOutput]) -> AudioguidePlan:
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
             logger.info("Plan already created!")
             plan = self.registery.storage.loads(Category.PLAN, self.user_context)
-            self.plan = AudioguidePlan.model_validate_json(plan)
-            return self.plan
+            plan = AudioguidePlan.model_validate_json(plan)
+            return plan
 
-        else:
-            with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
-                template_brut = Template(f.read())
-            
-            logger.debug(f"plan_stratege : {self.strategy}")
+        plan, research_concatenated = self.plan_service.define_plan(verified_facts_list)
+        self.registery.storage.save(Category.PLAN, self.user_context, plan)
+        self.registery.storage.save(Category.RESEARCH_CONCATENATED, self.user_context, research_concatenated, phase="phase_1")
+        plan = AudioguidePlan.model_validate_json(plan)
+        logger.info(f"Plan created: {plan[100:]}")
+        return plan
 
-
-            logger.debug(f"template_brut : {template_brut}")
-
-            prompt = template_brut.substitute(
-                city_name=self.user_context.city,
-                angle_recherche=self.research_angle,
-                strategie_globale=self.strategy_thinking,
-                plan_stratege=self.strategy
-        )
-
-            if is_simulation:
-                worker = self.registery.simulation_plan
-            else:
-                worker = self.registery.claude_worker
-
-            plan = worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=self.research_phases["phase_1"], temperature = 0.7)
-            self.registery.storage.save(Category.PLAN, self.user_context, plan)
-            logger.info("Plan created!")
-            logger.debug(f"Plan : {plan}")
-            self.plan = AudioguidePlan.model_validate_json(plan)
-            return self.plan
-
-    async def parse_plan(self):
-        research_topic_list = []
-
-        for stop in self.plan.parcours:
-            logger.debug(f"Parse_plan stop : {stop}")
-            for research_topic in stop.briefs_recherche_additionnelle:
-                research_topic_list.append({
-                    "type":"Deep_Dive",
-                    "name":research_topic.name,
-                    "angle":research_topic.angle
-                })
-        return research_topic_list
-
-    async def research(self, phase, strategy: Strategy, plan: AudioguidePlan = None):
+    async def research(self, phase, strategy: Strategy, plan: AudioguidePlan = None) -> list[VerifiedResearchOutput]:
         coroutine_search_list = []
 
         if phase == "phase_1":
@@ -105,7 +71,8 @@ class Orchestration:
             research_topic_list = strategy.research_topics
             logger.debug(f"Strategy : {strategy}")
         else:
-            research_topic_list = await self.parse_plan()
+            research_topic_list = plan.parcours.briefs_recherche_additionnelle
+            logger.debug(f"Research topic list : {research_topic_list}")
 
 
         for research_topic in research_topic_list:
@@ -120,22 +87,19 @@ class Orchestration:
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
         verified_facts_list = await asyncio.gather(*coroutine_search_list)
-        logger.debug("Orchestration Research: Gather terminé")
+        logger.debug("Orchestration Research: Gather done")
 
-        self._bundle_all_verified_research(phase, verified_facts_list)
+        return verified_facts_list
 
-    def _perform_unit_research():
-        pass
-
-    def _bundle_all_verified_research(self, phase: str, verified_facts_list: list[VerifiedResearchOutput]):
-        list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
-        concatened_research = "\n-----\n".join(list)
-        self.registery.storage.save_research(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research, phase)
+    # def _bundle_all_verified_research(self, phase: str, verified_facts_list: list[VerifiedResearchOutput]):
+    #     list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
+    #     concatened_research = "\n-----\n".join(list)
+    #     self.registery.storage.save_research(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research, phase)
         
-        all_lines = [line for block in list for line in block.split("\n")]
-        self.research_phases[phase] = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
+    #     all_lines = [line for block in list for line in block.split("\n")]
+    #     self.research_phases[phase] = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
 
-        logger.debug(f"research_phases_{phase} : {self.research_phases[phase][:1000]}")
+    #     logger.debug(f"research_phases_{phase} : {self.research_phases[phase][:1000]}")
 
     async def redaction(self, is_simulation=False):
         coroutine_search_list = []
@@ -294,12 +258,12 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA RECHERCHE")
 
     logger.info("DEBUT DU PLAN")
-    plan = await orchestration.plan(is_simulation=False)
-    # logger.info("FIN DU PLAN")
+    plan = await orchestration.plan()
+    logger.info("FIN DU PLAN")
 
-    # logger.info("DEBUT PHASE RECHERCHE 2")
-    # await orchestration.research("phase_2", is_simulation=False)
-    # logger.info("FIN PHASE RECHERCHE 2")
+    logger.info("DEBUT PHASE RECHERCHE 2")
+    await orchestration.research("phase_2", strategy, plan)
+    logger.info("FIN PHASE RECHERCHE 2")
 
     # logger.info("DEBUT DE LA REDACTION")
     # await orchestration.redaction(is_simulation=False)
