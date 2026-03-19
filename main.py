@@ -50,6 +50,8 @@ def custom_filter(record):
             return True
         if "audio_generation.py" in record["file"].name:
             return True
+        if "content_verifier.py" in record["file"].name:
+            return True
         
 
         # Filtering by function

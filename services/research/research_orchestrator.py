@@ -32,9 +32,10 @@ class ResearchOrchestrator:
         research_facts = await self._perform_web_searches(research_topic, prospection)
         logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
 
-        await self._verify_content(research_topic, prospection, research_facts)        
+        verified_facts = await self._verify_content(research_topic, prospection, research_facts)        
         logger.info(f"get_research_results | verify content done | topic={research_topic}")   
 
+        return verified_facts
  
 
 
@@ -128,6 +129,9 @@ class ResearchOrchestrator:
         """Verify content for the monument"""
         if self.registery.storage.does_exist_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name):
             logger.info(f"VERIFIED_RESEARCH | research_topic={research_topic.name} already done")
+            verified_claims = self.registery.storage.loads_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name)
+            verified_claims = self.content_verifier.parse_verified_content(verified_claims, research_topic)
+            return verified_claims
         else:
 
             try:
@@ -135,11 +139,11 @@ class ResearchOrchestrator:
                 self.registery.storage.save_research(
                     Category.VERIFIED_RESEARCH,
                     self.user_context,
-                    verified_claims,
+                    verified_claims.raw_output,
                     self.phase,
-                    self.research_topic["name"])
+                    research_topic.name)
             except Exception as e:
-                logger.error(f"Error verifying content : {self.research_topic['name']}: {e}")
+                logger.error(f"Error verifying content : {research_topic.name}: {e}")
             
 
     # def _remove_search_requests(self, raw_content):

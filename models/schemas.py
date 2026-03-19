@@ -37,9 +37,9 @@ class ResearchOutputLinePhase1(BaseModel):
 
 class ResearchOutput(BaseModel):
     raw_output: str
-    research_lines: List[Union[ResearchOutputLinePhase1, ResearchOutputLinePhase1]] = Field(default_factory=list)
+    research_lines: List[Union[ResearchOutputLinePhase1, ResearchOutputLinePhase2]] = Field(default_factory=list)
 
-class VerifiedResearchOutputLine:
+class VerifiedResearchOutputLine(BaseModel):
     category: Optional[str] = None
     title: str
     affirmation: str
