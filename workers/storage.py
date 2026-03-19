@@ -72,6 +72,8 @@ class SaveFiles:
                 file_name = f"{path}/audio_{id}.mp3"
             case Category.REDACTION_WITH_SSML:
                 file_name = f"{path}/redaction_with_ssml_{id}.txt"
+            case Category.REDACTION_HISTORY:
+                file_name = f"{path}/redaction_history_{id}.json"
             case _:
                 logger.error(f"Category {category} not found!")
                 raise ValueError(f"Category {category} not found!")

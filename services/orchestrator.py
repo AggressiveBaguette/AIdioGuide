@@ -3,7 +3,7 @@ from string import Template
 from loguru import logger
 from models.context import UserContext
 from models.registry import WorkerRegistry
-from models.schemas import AudioguidePlan, Strategy
+from models.schemas import AudioguidePlan, Strategy, VerifiedResearchOutputConcatenated, AudioguideFinalText, ContentStop
 from workers.exa import ExaSearch
 from workers.claude import Claude
 from workers.storage import SaveFiles
@@ -17,16 +17,18 @@ from services.audio_generation import AudioService
 from config import TTS_LANGUAGES_NO_PHONEMES
 from services.strategy import StrategyService
 from services.plan import PlanService
+from services.redaction import RedactionService
 
 
 class Orchestration:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService, plan_service:PlanService):
+    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService, plan_service:PlanService, redaction_service:RedactionService):
         self.user_context = user_context
         self.registery = registery
-        self.research_phases = {}
         self.audio_service = audio_service
         self.strategy_service = strategy_service
         self.plan_service = plan_service
+        self.redaction_service = redaction_service
+        
 
         with open("prompt/master_prompt.txt", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
@@ -54,9 +56,8 @@ class Orchestration:
             plan = self.registery.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
             return plan
 
-        plan, research_concatenated = self.plan_service.define_plan(strategy, verified_facts_list)
+        plan = self.plan_service.define_plan(strategy, verified_facts_list)
         self.registery.storage.save(Category.PLAN, self.user_context, plan)
-        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_concatenated, phase="phase_1")
         plan = AudioguidePlan.model_validate_json(plan)
         logger.info(f"Plan created: {plan[100:]}")
         return plan
@@ -77,125 +78,51 @@ class Orchestration:
             ]
             logger.debug(f"Research topic list : {research_topic_list}")
 
-
+        research = ResearchOrchestrator(self.user_context, self.registery, phase)
         for research_topic in research_topic_list:
             logger.info(f"Recherche on topic : {research_topic.name}")
 
             # if research_topic.name in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            # if research_topic.name in ["La capitale de la rose"]:   
-            # if research_topic.name in ["démolition haussmannienne du tissu médiéval du parvis Notre-Dame"]:   
             if True:        
-                research = ResearchOrchestrator(self.user_context, self.registery, phase)
                 coroutine_search_list.append(research.get_research_results(research_topic, strategy.research_angle))
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
         verified_facts_list = await asyncio.gather(*coroutine_search_list)
         logger.debug("Orchestration Research: Gather done")
 
-        return verified_facts_list
+        research_concatenated = research.concatenate_verified_researches(verified_facts_list)
 
-    # def _bundle_all_verified_research(self, phase: str, verified_facts_list: list[VerifiedResearchOutput]):
-    #     list = self.registery.storage.loads_all_verifed_research(self.user_context, phase)
-    #     concatened_research = "\n-----\n".join(list)
-    #     self.registery.storage.save_research(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, concatened_research, phase)
-        
-    #     all_lines = [line for block in list for line in block.split("\n")]
-    #     self.research_phases[phase] = "\n".join(f"ID_{i}|{line}" for i, line in enumerate(all_lines, 1))
+        return research_concatenated
 
-    #     logger.debug(f"research_phases_{phase} : {self.research_phases[phase][:1000]}")
+    def create_history_redaction(self):
+        pass
 
-    async def redaction(self, is_simulation=False):
-        coroutine_search_list = []
-        with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
-            template_brut = Template(f.read())
-
-        stop_list = "\n".join([f"arrêt {stop.numero} : {stop.titre_etape}" for stop in self.plan.parcours])
-        
-        system_prompt = template_brut.substitute(
-            title_audioguide = self.plan.titre_audioguide,
-            city_name = self.user_context.city,
-            language = self.user_context.language.code,
-            strategie = self.plan.strategie,
-            plan_global = stop_list,
-            fils_narratifs = self.plan.fils_narratifs,
-        )
-        
-        messages_history = []      
-
-        for stop in self.plan.parcours:
+    async def redaction(self, plan: AudioguidePlan, verified_facts_list_phase_1: VerifiedResearchOutputConcatenated, verified_facts_list_phase_2: VerifiedResearchOutputConcatenated) -> AudioguideFinalText:
+        # Redaction is sequential because we need the LLM to know what has been written during the first iterations to avoid any major repetition        
+        messages_history = []
+        content_list = AudioguideFinalText(stop = [])
+        for stop in plan.parcours:
             logger.debug(f"Stop : {stop}")
 
-            # 
-            # A REFACTO L'HISTORY FONCTIONNE PAS AVEC LE CHARGEMENT
-            # 
             if self.registery.storage.does_exist(Category.REDACTION, self.user_context, id = stop.numero):
                 logger.info(f"Redaction {stop.numero} - {stop.titre_etape} already created!")
+                text = self.registery.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
+                messages_history = self.registery.storage.loads(Category.REDACTION_HISTORY, self.user_context, id = stop.numero)
 
             else:
-                # DEBUT V2 AVEC MÉMOIRE
-                facts_phase_1, facts_phase_2 = await self.get_facts(stop)
 
-                logger.debug(f"Content : {system_prompt}")
-                logger.debug(f"Stop name : {stop.numero} - {stop.titre_etape}")
-                if is_simulation:
-                    worker = self.registery.simulation_plan
-                else:
-                    worker = self.registery.claude_worker
+                text, messages_history = self.redaction_service.create_stop_text(plan, stop, verified_facts_list_phase_1, verified_facts_list_phase_2, messages_history)
+                self.registery.storage.save(Category.REDACTION, self.user_context, text, id = stop.numero)
+                self.registery.storage.save(Category.REDACTION_HISTORY, self.user_context, messages_history, id = stop.numero)
+                logger.info(f"Stop written : {stop.numero} - {stop.titre_etape}")
+            
+            content_list.stop.append(ContentStop(id = stop.numero, content = text))
 
-                with open("prompt/prompt_instructions_redaction.md", "r", encoding="utf-8") as f:
-                    template_brut = Template(f.read())
-                prompt = template_brut.substitute(
-                    nom_lieu = stop.localisation,
-                    titre_etape = stop.titre_etape,
-                    consigne_plume = stop.consigne_plume,
-                    transition_vers_suivant = stop.transition_vers_suivant,
-                    cible_duree_audio = stop.cible_duree_audio,
-                    faits_bruts_phase_1 = facts_phase_1,
-                    faits_bruts_phase_2 = facts_phase_2,
-                )
-
-                # if stop.titre_etape == "La Conciergerie : Quand le Palais Devient Cage":
-                if True:
-                    stop_text = worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
-                    self.registery.storage.save(Category.REDACTION, self.user_context, stop_text, id = stop.numero)
-                    messages_history.append({"role": "assistant", "content": stop_text})
-
-                # FIN V2 AVEC MÉMOIRE
-
-
-    async def get_facts_phase_2(self, stop):
-            requested_facts = stop.briefs_recherche_additionnelle
-
-        
-
-
-    async def get_facts(self, stop):
-        # phase 1
-        requested_facts_id = set(stop.faits_retenus)
-        verified_facts_list = self.research_phases["phase_1"].split("\n")
-
-        requested_facts = [fact for fact in verified_facts_list if fact.split("|")[0] in requested_facts_id]
-        logger.debug(f"Requested Facts Id Phase 1: {requested_facts_id}")
-        logger.debug(f"Requested facts Phase 1: {requested_facts}")
-        phase_1_response = "\n".join(requested_facts)
-
-        #phase 2
-        requested_facts_names = {brief.name for brief in stop.briefs_recherche_additionnelle}
-        verified_facts_list = self.research_phases["phase_2"].split("\n")
-        requested_facts = [fact for fact in verified_facts_list if fact.split("|")[1] in requested_facts_names]
-        logger.debug(f"stop.briefs_recherche_additionnelle : {stop.briefs_recherche_additionnelle}")
-
-        logger.debug(f"verified_facts_list : {verified_facts_list}")
-        logger.debug(f"Requested Facts Names Phase 2: {requested_facts_names}")
-        logger.debug(f"Requested facts Phase 2: {requested_facts}")
-        phase_2_response = "\n".join(requested_facts)
-
-        return phase_1_response, phase_2_response
-                
+        return content_list
     
-    async def phonemes_detection(self, is_simulation = False):
+    async def phonemes_detection(self):
         phonemes_detection = PhonemDetection(self.user_context, self.registery, self.plan)
-        return await phonemes_detection.get_phonemes(is_simulation)
+        return await phonemes_detection.get_phonemes()
 
     async def audio_generation(self, foreign_terms, plan, is_simulation=False):
         coroutine_list = []
@@ -224,9 +151,6 @@ class Orchestration:
             logger.error(f"Error generating audio for stop {stop.numero}: {e}")
             
 
-
-
-
 async def orchestrator(user_context: UserContext):
     registery = WorkerRegistry(
         search_worker=ExaSearch(),
@@ -243,12 +167,15 @@ async def orchestrator(user_context: UserContext):
     audio_service = AudioService(user_context, registery, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
     strategy_service = StrategyService(user_context, registery)
     plan_service = PlanService(user_context, registery)
+    redaction_service = RedactionService(user_context, registery)
+    
 
     orchestration = Orchestration(user_context, 
         registery,
         audio_service=audio_service,
         strategy_service=strategy_service,
         plan_service=plan_service,
+        redaction_service=redaction_service,
         )
 
 
@@ -257,23 +184,23 @@ async def orchestrator(user_context: UserContext):
     logger.info("FIN DE LA STRATEGIE")
 
     logger.info("DEBUT DE LA RECHERCHE")
-    verified_facts_list = await orchestration.research("phase_1", strategy)
+    verified_facts_list_phase_1 = await orchestration.research("phase_1", strategy)
     logger.info("FIN DE LA RECHERCHE")
 
     logger.info("DEBUT DU PLAN")
-    plan = await orchestration.plan(strategy, verified_facts_list)
+    plan = await orchestration.plan(strategy, verified_facts_list_phase_1)
     logger.info("FIN DU PLAN")
 
     logger.info("DEBUT PHASE RECHERCHE 2")
-    await orchestration.research("phase_2", strategy, plan)
+    verified_facts_list_phase_2 = await orchestration.research("phase_2", strategy, plan)
     logger.info("FIN PHASE RECHERCHE 2")
 
-    # logger.info("DEBUT DE LA REDACTION")
-    # await orchestration.redaction(is_simulation=False)
-    # logger.info("FIN DE LA REDACTION")
+    logger.info("DEBUT DE LA REDACTION")
+    audioguide_text = await orchestration.redaction(plan, verified_facts_list_phase_1, verified_facts_list_phase_2)
+    logger.info("FIN DE LA REDACTION")
 
     # logger.info("DEBUT DE LA GESTION DES PHONEMES")
-    # phonemes = await orchestration.phonemes_detection(is_simulation=False)
+    # phonemes = await orchestration.phonemes_detection()
     # logger.info("FIN DE LA GESTION DES PHONEMES")
 
     # logger.info("DEBUT DE LA GENERATION DE l'AUDIO")

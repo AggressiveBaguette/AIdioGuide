@@ -157,7 +157,7 @@ class ResearchOrchestrator:
             for fact in facts.research_lines:
                 category = fact.category or ""
                 visual_proof = fact.visual_proof or ""
-                parts = [id, category, fact.title, fact.affirmation, visual_proof, fact.confidence]
+                parts = [f"ID_id", category, fact.title, fact.affirmation, visual_proof, fact.confidence]
                 block_list.append("|".join(parts))
 
                 research_lines_list.append(VerifiedResearchOutputConcatenatedLine(

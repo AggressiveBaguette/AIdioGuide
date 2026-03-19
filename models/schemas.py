@@ -104,6 +104,13 @@ class ReplacementItem(BaseModel):
 class PhonemesList(BaseModel):
     replacement_list: List[ReplacementItem]
 
+class ContentStop(BaseModel):
+    id: int
+    content: str
+
+class AudioguideFinalText(BaseModel):
+    stop: List[ContentStop]
+
 class Category(Enum):
     PLAN = "plan"
     STRATEGY = "strategy"
@@ -116,5 +123,6 @@ class Category(Enum):
     PHONEMES="phonemes"
     AUDIO="audio"
     REDACTION_WITH_SSML="redaction_with_ssml"
+    REDACTION_HISTORY="redaction_history"
 
-ResearchOutput.model_rebuild()
+# ResearchOutput.model_rebuild()

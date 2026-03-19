@@ -55,7 +55,7 @@ def custom_filter(record):
         
 
         # Filtering by function
-        if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches"]:
+        if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches", "_get_relevant_facts"]:
             return True
         
             
