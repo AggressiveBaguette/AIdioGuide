@@ -19,12 +19,22 @@ class AudioService:
     async def generate_audio(self, content: str, phonemes_replacement: PhonemesList) -> tuple[bytes, str]:
         worker = self.registery.azureTTS_worker
 
-        content = self._add_phonemes_foreign_tags(content, phonemes_replacement)
-        content = self._add_phonemes_native_tags(content, phonemes_replacement)
         content = self._add_header_footer_tags(content)
         content = self._remove_useless_linebreak(content)
-        audio_content = await worker.get_audio(content, voice = self.user_context.language.voice_id)
-        return audio_content, content
+        try:
+            content_with_phonemes = self._add_phonemes_foreign_tags(content, phonemes_replacement)
+            content_with_phonemes = self._add_phonemes_native_tags(content, phonemes_replacement)
+
+            audio_content = await worker.get_audio(content_with_phonemes, voice = self.user_context.language.voice_id)
+            return audio_content, content
+        except 1007 as e: 
+            logger.error(f"Error generating audio due to bad phonemes: {e}")
+            content_without_phonemes = self._add_foreign_tags_but_no_phonemes(content, phonemes_replacement)
+            audio_content = await worker.get_audio(content_without_phonemes, voice = self.user_context.language.voice_id)
+            return audio_content, content
+        except Exception as e:
+            logger.error(f"Error generating audio: {e}")
+            raise
 
             
     def _add_phonemes_foreign_tags(self, content: str, phonemes_replacement: PhonemesList) -> str:
@@ -64,4 +74,18 @@ class AudioService:
     def _remove_useless_linebreak(self, content: str) -> str:
         # Remove lines break, to avoid TTS to make long pauses. Pauses are control through SSML tags.
         content = re.sub(r"\n", " ", content)
+        return content
+
+    def _add_foreign_tags_but_no_phonemes(self, content: str, phonemes_replacement: PhonemesList) -> str:
+        # Note: phonemes_replacement need to be sorted witht the longuest epression first. It is normally done by the phonemes_detection service.
+        logger.debug(f"phonemes_replacement : {phonemes_replacement}")
+
+        for term in phonemes_replacement.replacement_list:
+            if term.type == "foreign_entity":
+                pattern = rf"\b{re.escape(term.expression)}\b"
+            
+                #We do not put the phonemes in this case, it is here to handle bad phonemes generation by the LLM and phonemes not managed by the TTS
+                if term.langue in self.languages_no_phonemes_requiered:
+                    replacement = rf"<lang xml:lang='{term.langue}'>\g<0></lang>"
+                content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
         return content
