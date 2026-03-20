@@ -1,0 +1,81 @@
+from loguru import logger
+from string import Template
+from typing import TYPE_CHECKING
+from models.schemas import ResearchTopic, ResearchOutput, ResearchOutputLinePhase1, ResearchOutputLinePhase2   
+import asyncio
+
+if TYPE_CHECKING:
+    from models.context import UserContext
+    from models.registry import WorkerRegistry
+
+
+class ContentProspector:
+    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+        self.user_context = user_context
+        self.registery = registery
+
+    async def content_prospector(self, research_topic: ResearchTopic, research_angle: str):
+        """Generation of content, with high risk of hallucination, 0.6 temperature to have a good mix between creativity and fiability"""
+
+        match research_topic.type:
+            case "Lieu":
+                with open("prompt/master_prompt_content_prospector_lieu.md", "r", encoding="utf-8") as f:
+                    template_brut = Template(f.read())
+
+            case "Theme":
+                with open("prompt/master_prompt_content_prospector_theme.md", "r", encoding="utf-8") as f:
+                    template_brut = Template(f.read())
+
+            case "Deep_Dive":
+                with open("prompt/master_prompt_content_prospector_deep_dive.md", "r", encoding="utf-8") as f:
+                    template_brut = Template(f.read())
+
+        prompt = template_brut.substitute(
+            city_name=self.user_context.city,
+            topic=research_topic.name,
+            angle_narratif=research_angle
+        )
+
+        worker = self.registery.claude_worker
+
+        logger.info(f"content_prospector | location={research_topic.name}")
+        content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
+
+        return self.parse_content_prospector(content, research_topic)
+
+    def parse_content_prospector(self, text, research_topic: ResearchTopic):
+        research_output = ResearchOutput(raw_output = text)
+
+        # We get only the DSV part without the sources
+        raw_content = text.split("===MASTER_INDEX===")[0]
+        for line in (line for line in raw_content.strip().split("\n") if line.strip()): # a lot of lines are empty and should be removed
+            try: 
+                logger.debug(f"line : {line}")
+                parts = [c.strip() for c in line.split("|")]
+
+                match research_topic.type:
+                    case "Lieu" | "Theme":
+                        # logger.debug(f"query list : {parts[5]}")
+                        research_output.research_lines.append(ResearchOutputLinePhase1(
+                                    category=parts[0],
+                                    title=parts[1],
+                                    affirmation=parts[2], 
+                                    visual_proof=parts[3],
+                                    confidence=parts[4],
+                                    # Exa requests are on the sixth column for "lieu / theme"
+                                    queries= parts[5].split(";;")
+                        ))
+                    case "Deep_Dive":
+                        research_output.research_lines.append(ResearchOutputLinePhase2(
+                                    affirmation=parts[0], 
+                                    confidence=parts[1],
+                                    # Exa requests are on the third column for "deep_dive" during phase 2
+                                    queries=parts[2].split(";;")
+                            ))
+
+            except Exception as e:
+                # Often LLM sends bad ouput that need to be remove
+                logger.error(f"Cannot be parsed, line: {line} | {e}")
+
+        logger.debug(f"research_output : {research_output}")
+        return research_output 

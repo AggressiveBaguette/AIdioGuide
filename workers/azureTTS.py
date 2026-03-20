@@ -87,39 +87,43 @@ if __name__ == "__main__":
   # </speak>
   # """
 
-  # # text = """
-  # # <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="fr-FR">
-  # #   <voice name="fr-FR-VivienneMultilingualNeural">
-  # #     La soirée était d'un ennui mortel. 
-  # #     <break time="400ms"/>
-  # #     Le premier à entrer fut Sir Alistair <lang xml:lang='en-GB'><phoneme alphabet="ipa" ph="θɔːn">Thorne</phoneme></lang> ou <lang xml:lang='en-GB'>Thorne</lang>. 
-  # #     Il arrivait de <lang xml:lang='en-GB'><phoneme alphabet="ipa" ph="ˈbʌkɪŋəmʃə">Buckinghamshire</phoneme></lang> ou <lang xml:lang='en-GB'>Buckinghamshire</lang> et ne jurait que par son thé.
-  # #     <break time="300ms"/>
-  # #     Il était avec <lang xml:lang='it-IT'>Alessandra Monteverdi</lang> et ce pauvre <lang xml:lang='it-IT'>Lorenzo Ricci</lang>. 
-  # #     Elle hurlait encore à propos de ses <lang xml:lang='it-IT'>Fettuccine</lang> mal cuites. 
-  # #     <break time="500ms"/>
-  # #     Franchement, quel bordel cosmopolite.
-  # #   </voice>
-  # # </speak>"""
-
-
   text = """
-  <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="fr-FR">
-    <voice name="fr-FR-Vivienne:DragonHDLatestNeural">
-    Le vieux châtelain, Monsieur Lefebvre, avait quitté Chamonix pour rejoindre le duc de La Rochefoucauld du côté de Cassis. C'était un voyage absurde. En chemin, il fit escale à Ploumanac'h, où il mangea des haricots devant le prieuré, observant les poules du couvent qui couvent silencieusement.
+  <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="fr-FR">
+    <voice name="fr-FR-VivienneMultilingualNeural">
+      La soirée était d'un ennui mortel. 
+      <break time="400ms"/>
+      Le premier à entrer fut Sir Alistair <lang xml:lang='en-GB'><phoneme alphabet="ipa" ph="θɔːn">Thorne</phoneme></lang> ou <lang xml:lang='en-GB'>Thorne</lang>. 
+      Il arrivait de <lang xml:lang='en-GB'><phoneme alphabet="ipa" ph="ˈbʌkɪŋəmʃə">Buckinghamshire</phoneme></lang> ou <lang xml:lang='en-GB'>Buckinghamshire</lang> et ne jurait que par son thé.
+      <break time="300ms"/>
+      Il était avec <lang xml:lang='it-IT'>Alessandra Monteverdi</lang> et ce pauvre <lang xml:lang='it-IT'>Lorenzo Ricci</lang>. 
+      Elle hurlait encore à propos de ses <lang xml:lang='it-IT'>Fettuccine</lang> mal cuites. 
+      <break time="500ms"/>
+      Franchement, quel bordel cosmopolite.<phoneme alphabet="ipa" ph="t͡͡§§è °à-)_p">Bug</phoneme><phoneme alphabet="ipa" ph="ǃ ʘ ǂ">Clics</phoneme>
+    </voice>
+  </speak>"""
+
+
+  # text = """
+  # <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="fr-FR">
+  #   <voice name="fr-FR-Vivienne:DragonHDLatestNeural">
+  #   Le vieux châtelain, Monsieur Lefebvre, avait quitté Chamonix pour rejoindre le duc de La Rochefoucauld du côté de Cassis. C'était un voyage absurde. En chemin, il fit escale à Ploumanac'h, où il mangea des haricots devant le prieuré, observant les poules du couvent qui couvent silencieusement.
       
-      La situation dégénéra quand son rival, un certain <lang xml:lang="es-ES">Juan-Pablo de la Cruz</lang>, débarqua d'un vol en provenance du <lang xml:lang="de-DE">Schwarzwald</lang>. L'imbécile prétendait avoir retrouvé les fameux héros de la région, mais il s'était juste bourré la gueule au Cointreau. 
+  #     La situation dégénéra quand son rival, un certain <lang xml:lang="es-ES">Juan-Pablo de la Cruz</lang>, débarqua d'un vol en provenance du <lang xml:lang="de-DE">Schwarzwald</lang>. L'imbécile prétendait avoir retrouvé les fameux héros de la région, mais il s'était juste bourré la gueule au Cointreau. 
       
-      Finalement, Madame de Staël, excédée, les envoya tous chier à Bruxelles.  </voice>
-  </speak>
-  """
+  #     Finalement, Madame de Staël, excédée, les envoya tous chier à Bruxelles.  </voice>
+  # </speak>
+  # """
   # use the default speaker as audio output.
   config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3)
   audio_config = speechsdk.audio.AudioConfig(filename="test.mp3")
   speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=config, audio_config=audio_config)
 
   # result = speech_synthesizer.speak_text_async(text).get()
-  result = speech_synthesizer.speak_ssml_async(text).get()
+  try:  
+    result = speech_synthesizer.speak_ssml_async(text).get()
+  except Exception as e:
+    logger.error(f"Error generating audio: {e}")
+    raise
   # Check result
   if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
       print("Speech synthesized for text [{}]".format(text))
@@ -128,4 +132,5 @@ if __name__ == "__main__":
       print("Speech synthesis canceled: {}".format(cancellation_details.reason))
       if cancellation_details.reason == speechsdk.CancellationReason.Error:
           print("Error details: {}".format(cancellation_details.error_details))
+          logger.warning(f"Error details: {cancellation_details.error_code}")
 
