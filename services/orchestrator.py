@@ -52,13 +52,13 @@ class Orchestration:
 
     async def plan(self, strategy: Strategy, verified_facts_list: list[VerifiedResearchOutput]) -> AudioguidePlan:
         if self.registery.storage.does_exist(Category.PLAN, self.user_context):
-            logger.info("Plan already created!")
             plan = self.registery.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
+            logger.info(f"Plan already created : {plan.titre_audioguide}")
             return plan
 
         plan = await self.plan_service.define_plan(strategy, verified_facts_list)
         self.registery.storage.save(Category.PLAN, self.user_context, plan)
-        logger.info(f"Plan created: {plan[100:]}")
+        logger.info(f"Plan created: {plan.titre_audioguide}")
         return plan
 
     async def research(self, phase, strategy: Strategy, plan: AudioguidePlan = None) -> list[VerifiedResearchOutput]:
