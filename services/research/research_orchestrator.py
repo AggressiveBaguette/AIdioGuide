@@ -103,7 +103,7 @@ class ResearchOrchestrator:
             logger.error(f"Error searching for {query_name}: {e}")
             raise
 
-    async def _verify_content(self, research_topic: ResearchTopic, prospection: ResearchOutput, research_facts: str):
+    async def _verify_content(self, research_topic: ResearchTopic, prospection: ResearchOutput, research_facts: str) -> VerifiedResearchOutput:
         """Verify content for the monument"""
         if self.registery.storage.does_exist(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name):
             logger.info(f"VERIFIED_RESEARCH | research_topic={research_topic.name} already done")
@@ -120,6 +120,7 @@ class ResearchOrchestrator:
                     verified_claims.raw_output,
                     self.phase,
                     research_topic.name)
+                return verified_claims
             except Exception as e:
                 logger.error(f"Error verifying content : {research_topic.name}: {e}")
                 raise e
@@ -131,8 +132,6 @@ class ResearchOrchestrator:
         id = 1
         
         for facts in verified_facts_list:
-            if not facts:
-                continue
             block_list = []
             for fact in facts.research_lines:
                 category = fact.category or ""
