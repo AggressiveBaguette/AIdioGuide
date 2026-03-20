@@ -8,23 +8,9 @@ from models.schemas import Category
 
 
 
-def clean_research_results(text: str) -> str:
-    if not text:
-        return ""
-    # Dégage les pointillés et numéros de pages (Sommaires PDF)
-    text = re.sub(r'\.{2,}\s*[pP]?\.\?\s*\d*', '', text)
-    # Nettoyage final : symboles chelous et normalisation des espaces
-    text = re.sub(r'[#\[\]\{\}\*]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-
 
 class SaveFiles:
     def __init__(self):
-        # main_path = Path(f"content/{name}/intermediate_steps")
-        # self.plan_path = f"{main_path}/plan.json"
-        # self.strategy_path = f"{main_path}/strategy.json"
-        # self.
         pass
 
     def _sanitize_filename(self, name):
@@ -35,12 +21,8 @@ class SaveFiles:
 
     def _define_path(self, category: Category, user_context: UserContext, phase="", research_topic=""):
         name = self._sanitize_filename(user_context.name)
-        # final text and audio are separated. The rest is just saved for idempotence + auditability
-        match category:
-            case Category.REDACTION | Category.AUDIO:
-                parts = ["content", name, "final_results"]
-            case _ :
-                parts = ["content", name, "intermediate_steps"]
+        # Define main path to the audioguide
+        parts = ["content", name, "final_results"]
 
         if phase:
             parts.append(phase)
@@ -53,32 +35,34 @@ class SaveFiles:
     def define_file_name(self, category: Category, user_context: UserContext, phase="", research_topic="", title="", id = None):
         path = self._define_path(user_context, phase, research_topic)
 
+        if research_topic:
+            research_path = self._sanitize_filename(research_topic)
         match category:
-            case Category.PLAN:
-                file_name = f"{path}/plan.json"
             case Category.STRATEGY:
-                file_name = f"{path}/strategy.dsv"
-            case Category.REDACTION:
-                file_name = f"{path}/redaction_{id}.txt"
+                file_name = f"{path}/01_strategy.dsv"
+            case Category.PROSPECTOR:
+                file_name = f"{path}/02_Research/{phase}/{research_path}/02.1_unverified_research.dsv"
             case Category.RESEARCH:
                 title = self._sanitize_filename(title)
-                file_name = f"{path}/{title}.json"
-            case Category.PROSPECTOR:
-                file_name = f"{path}/content_prospector.dsv"
+                file_name = f"{path}/02_Research/{phase}/{research_path}/facts/{title}.json"
             case Category.RESEARCH_CONCATENATED:
-                file_name = f"{path}/research_concatenated_{phase}.dsv"
+                file_name = f"{path}/02_Research/{phase}/{research_path}/02.2_concatenated_facts_{phase}.dsv"
             case Category.VERIFIED_RESEARCH:
-                file_name = f"{path}/verified_research.dsv"
+                file_name = f"{path}/02_Research/{phase}/{research_path}/02.3_verified_research.dsv"
             case Category.VERIFIED_RESEARCH_CONCATENATED:
-                file_name = f"{path}/verified_research_concatenated_{phase}.dsv"
-            case Category.PHONEMES:
-                file_name = f"{path}/phonemes.json"
-            case Category.AUDIO:
-                file_name = f"{path}/audio_{id}.mp3"
-            case Category.REDACTION_WITH_SSML:
-                file_name = f"{path}/redaction_with_ssml_{id}.txt"
+                file_name = f"{path}/02_Research/02.4_concatenated_verified_facts_{phase}.dsv"
+            case Category.PLAN:
+                file_name = f"{path}/03_plan.json"
+            case Category.REDACTION:
+                file_name = f"{path}/04_Scripts/{id}.txt"
             case Category.REDACTION_HISTORY:
-                file_name = f"{path}/redaction_history_{id}.json"
+                file_name = f"{path}/04_Scripts/Conversation_history/{id}.json"
+            case Category.PHONEMES:
+                file_name = f"{path}/05_phonemes.json"
+            case Category.REDACTION_WITH_SSML:
+                file_name = f"{path}/06_Scripts_with_SSML/{id}.txt"
+            case Category.AUDIO:
+                file_name = f"{path}/07_Audio/{id}.mp3"
             case _:
                 logger.error(f"Category {category} not found!")
                 raise ValueError(f"Category {category} not found!")
@@ -184,29 +168,29 @@ class SaveFiles:
         file_name = self.define_file_name(*args)
         return Path(file_name).exists()
 
-    def loads_all_research(self, category: Category, user_context: UserContext, phase, research_topic):
-        """Loads all the json of a given """
-        path = self._define_path(user_context, phase, research_topic)
+    # def loads_all_research(self, category: Category, user_context: UserContext, phase, research_topic):
+    #     """Loads all the json of a given """
+    #     path = self._define_path(user_context, phase, research_topic)
 
-        research_list = []
+    #     research_list = []
 
-        for file in path.rglob("*"):
-            extension = Path(file).suffix
-            if extension == ".json":
-                with open(file, "r", encoding="utf-8") as f:
-                    loaded_file = json.load(f)
-                    research_list.append(loaded_file)
-        return research_list
+    #     for file in path.rglob("*"):
+    #         extension = Path(file).suffix
+    #         if extension == ".json":
+    #             with open(file, "r", encoding="utf-8") as f:
+    #                 loaded_file = json.load(f)
+    #                 research_list.append(loaded_file)
+    #     return research_list
 
-    def loads_all_verifed_research(self, user_context: UserContext, phase):
-        path = self._define_path(user_context, phase)
-        list = []
+    # def loads_all_verifed_research(self, user_context: UserContext, phase):
+    #     path = self._define_path(user_context, phase)
+    #     list = []
 
-        for file in path.rglob("*"):
-            name = file.name
-            if name == f"verified_research.dsv":
-                with open(file, "r", encoding="utf-8") as f:
-                    list.append(f.read())   
-        return list
+    #     for file in path.rglob("*"):
+    #         name = file.name
+    #         if name == f"verified_research.dsv":
+    #             with open(file, "r", encoding="utf-8") as f:
+    #                 list.append(f.read())   
+    #     return list
 
                 
