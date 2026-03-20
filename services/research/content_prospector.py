@@ -74,7 +74,7 @@ class ContentProspector:
                             ))
 
             except Exception as e:
-                # Often LLM sends bad ouput that need to be remove
+                # Often LLM sends bad ouput that need to be removed
                 logger.error(f"Cannot be parsed, line: {line} | {e}")
 
         logger.debug(f"research_output : {research_output}")
