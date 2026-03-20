@@ -5,6 +5,7 @@ import os
 from services.orchestrator import orchestrator
 from config import Languages
 from loguru import logger
+import sys
 
 logger.remove() 
 
@@ -41,6 +42,9 @@ def custom_filter(record):
         
             
     return False
+
+logger.add(sys.stdout, filter=custom_filter, level="DEBUG")
+
 
 async def generate_audio_guide():
     user_context = UserContext(

@@ -24,15 +24,15 @@ class ResearchOrchestrator:
         self.web_searches = WebSearches(self.user_context, self.registery)
         self.content_verifier = ContentVerifier(self.user_context, self.registery)
 
-        logger.info(f"get_research_results | topic={research_topic}")
+        logger.debug(f"get_research_results | topic={research_topic}")
         prospection = await self._content_prospector(research_topic, research_angle)
-        logger.info(f"get_research_results | Content Prospector done | topic={research_topic}")   
+        logger.debug(f"get_research_results | Content Prospector done | topic={research_topic}")   
 
         research_facts = await self._perform_web_searches(research_topic, prospection)
-        logger.info(f"get_research_results | Web Searches done | topic={research_topic}")   
+        logger.debug(f"get_research_results | Web Searches done | topic={research_topic}")   
 
         verified_facts = await self._verify_content(research_topic, prospection, research_facts)        
-        logger.info(f"get_research_results | verify content done | topic={research_topic}")   
+        logger.debug(f"get_research_results | verify content done | topic={research_topic}")   
 
         return verified_facts
  

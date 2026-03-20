@@ -1,9 +1,9 @@
 import os
-from anthropic import AsyncAnthropic
+from anthropic import AsyncAnthropic, RateLimitError
 from utils import save_LLM_output
 import re
 from loguru import logger
-
+from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
 
 class Claude:
     def __init__(self):
@@ -66,6 +66,11 @@ class Claude:
             logger.error(f"[Error]: {e}")
             raise e
 
+    @retry(
+        wait=wait_random_exponential(min=1, max=60), 
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(RateLimitError)
+    )
     async def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
         # async http call, wait for the full text to be generated
         try:

@@ -17,3 +17,6 @@ pyyaml
 
 # Logging
 loguru
+
+#retrier
+tenacity

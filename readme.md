@@ -248,6 +248,9 @@ The injection itself is deterministic Python — regex replacements applied to t
 
 If Azure returns error 1007 (invalid phoneme), the pipeline automatically retries without phonemes, falling back to `<lang>` tags only. The listener gets slightly degraded pronunciation rather than no audio.
 
+## Stack
+
+Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 2.0 · Exa · Azure Speech Studio
 
 ## Known Limitations
 
