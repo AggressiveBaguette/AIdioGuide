@@ -12,7 +12,7 @@ class PlanService:
         self.user_context = user_context
         self.registery = registery
 
-    def define_plan(self, strategy: Strategy, verified_facts: VerifiedResearchOutputConcatenated) -> AudioguidePlan:
+    async def define_plan(self, strategy: Strategy, verified_facts: VerifiedResearchOutputConcatenated) -> AudioguidePlan:
         with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
         
@@ -29,7 +29,7 @@ class PlanService:
         research_concatenated = self._prepare_research_for_plan(verified_facts)
 
         worker = self.registery.claude_worker
-        plan = worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=research_concatenated, temperature = 0.7)
+        plan = await worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=research_concatenated, temperature = 0.7)
         return plan
 
     def _prepare_strategy_for_plan(self, strategy: Strategy) -> str:

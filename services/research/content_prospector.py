@@ -39,7 +39,7 @@ class ContentProspector:
         worker = self.registery.claude_worker
 
         logger.info(f"content_prospector | location={research_topic.name}")
-        content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
+        content = await worker.get_text(prompt, temperature=0.6)
 
         return self.parse_content_prospector(content, research_topic)
 

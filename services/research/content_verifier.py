@@ -37,11 +37,10 @@ class ContentVerifier:
         fragments.append(research_facts)
         content = "".join(fragments)
 
-        verified_claims = await asyncio.to_thread(
-            worker.get_text,
+        verified_claims = await worker.get_text(
             content=content, 
             system_prompt=system_prompt,
-            temperature = 0
+            temperature=0
         )
         logger.debug(f"verified_claims {research_topic.name}: {verified_claims}")
 

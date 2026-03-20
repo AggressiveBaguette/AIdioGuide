@@ -1,5 +1,5 @@
 import os
-from anthropic import Anthropic
+from anthropic import AsyncAnthropic
 from utils import save_LLM_output
 import re
 from loguru import logger
@@ -8,7 +8,7 @@ from loguru import logger
 class Claude:
     def __init__(self):
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
-        self.client = Anthropic(api_key=self.api_key)
+        self.client = AsyncAnthropic(api_key=self.api_key)
 
     def get_system_block(self, system_prompt="", research_block_1="", research_block_2="", plan=""):
         """The order of the different blocks is thought to optimize token usage, using the cache strategy"""
@@ -45,9 +45,9 @@ class Claude:
         return system_block
 
 
-    def get_json(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
-        # synchronous http call, return json matching pydantic classes
-        claude_response = self.get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature)
+    async def get_json(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
+        # async http call, return json matching pydantic classes
+        claude_response = await self.get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature)
 
         logger.debug("get_json")
         
@@ -66,8 +66,8 @@ class Claude:
             logger.error(f"[Error]: {e}")
             raise e
 
-    def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
-        # synchronous http call, wait for the full text to be generated
+    async def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
+        # async http call, wait for the full text to be generated
         try:
             logger.info("Before Claude API call")
 
@@ -91,7 +91,7 @@ class Claude:
 
             logger.debug(f"Claude system_block : {system_block}")
             logger.debug(f"Claude messages_history : {messages_history[:100]}")
-            response = self.client.messages.create(**api_param)
+            response = await self.client.messages.create(**api_param)
             logger.info("Claude API call done")
             logger.debug(response)
 

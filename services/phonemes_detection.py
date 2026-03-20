@@ -30,7 +30,7 @@ class PhonemDetection:
             )
             logger.debug(f"content : {content[:10000]}")
 
-            phonemes = self.registery.gemini_worker.get_text(content=content)
+            phonemes = await self.registery.gemini_worker.get_text(content=content)
 
             logger.debug(f"phonemes : {phonemes}")
 

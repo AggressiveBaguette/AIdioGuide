@@ -56,7 +56,7 @@ class Orchestration:
             plan = self.registery.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
             return plan
 
-        plan = self.plan_service.define_plan(strategy, verified_facts_list)
+        plan = await self.plan_service.define_plan(strategy, verified_facts_list)
         self.registery.storage.save(Category.PLAN, self.user_context, plan)
         logger.info(f"Plan created: {plan[100:]}")
         return plan
@@ -110,7 +110,7 @@ class Orchestration:
 
             else:
 
-                text, messages_history = self.redaction_service.create_stop_text(plan, stop, verified_facts_list_phase_1, verified_facts_list_phase_2, messages_history)
+                text, messages_history = await self.redaction_service.create_stop_text(plan, stop, verified_facts_list_phase_1, verified_facts_list_phase_2, messages_history)
                 self.registery.storage.save(Category.REDACTION, self.user_context, text, id = stop.numero)
                 self.registery.storage.save(Category.REDACTION_HISTORY, self.user_context, messages_history, id = stop.numero)
                 logger.info(f"Stop written : {stop.numero} - {stop.titre_etape}")

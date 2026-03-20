@@ -19,7 +19,7 @@ class RedactionService:
             self.template_prompt_instructions = Template(f.read())
 
 
-    def create_stop_text(self, plan: AudioguidePlan, stop: EtapeParcours, facts_phase_1: VerifiedResearchOutputConcatenated, facts_phase_2: VerifiedResearchOutputConcatenated, messages_history: list[dict[str, str]]) -> str:
+    async def create_stop_text(self, plan: AudioguidePlan, stop: EtapeParcours, facts_phase_1: VerifiedResearchOutputConcatenated, facts_phase_2: VerifiedResearchOutputConcatenated, messages_history: list[dict[str, str]]) -> str:
 
         stop_list = "\n".join([f"arrêt {stop.numero} : {stop.titre_etape}" for stop in plan.parcours])
         
@@ -45,7 +45,7 @@ class RedactionService:
         )
 
         worker = self.registery.claude_worker
-        stop_text = worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
+        stop_text = await worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
 
         new_history = list(messages_history)
         new_history.append({"role": "user", "content": prompt})

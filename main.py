@@ -13,31 +13,31 @@ def custom_filter(record):
     if record["level"].no >= logger.level("INFO").no:
         return True
     
-    if record["level"].name == "DEBUG":
-    #     # Filtering by file
-        if record["name"] == "__main__":
-            return True
+    # if record["level"].name == "DEBUG":
+    # #     # Filtering by file
+    #     if record["name"] == "__main__":
+    #         return True
         if "claude.py" in record["file"].name:
             return True
-        # if "researcher.py" in record["file"].name:
-        #     return True
-    #     if "exa.py" in record["file"].name:
-    #         return True
+    #     # if "researcher.py" in record["file"].name:
+    #     #     return True
+    # #     if "exa.py" in record["file"].name:
+    # #         return True
         if "gemini.py" in record["file"].name:
             return True
-        if "azureTTS.py" in record["file"].name:
-            return True
-        if "phonemes_detection.py" in record["file"].name:
-            return True
-        if "audio_generation.py" in record["file"].name:
-            return True
-        if "content_verifier.py" in record["file"].name:
-            return True
+    #     if "azureTTS.py" in record["file"].name:
+    #         return True
+    #     if "phonemes_detection.py" in record["file"].name:
+    #         return True
+    #     if "audio_generation.py" in record["file"].name:
+    #         return True
+    #     if "content_verifier.py" in record["file"].name:
+    #         return True
         
 
-        # Filtering by function
-        if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches", "_get_relevant_facts"]:
-            return True
+    #     # Filtering by function
+    #     if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches", "_get_relevant_facts"]:
+    #         return True
         
             
     return False
@@ -60,10 +60,14 @@ async def generate_audio_guide():
         # language=Languages.fr_FR,
         # name = "FaR-001",        
         # comment = "Audioguide très court, 5-6 arrêts max. 15' d'audio max."
-        city="Sceaux",
+        # city="Sceaux",
+        # language=Languages.fr_FR,
+        # name = "Sceaux-001",        
+        # comment = "Audioguide très court, 4-5 arrêts max. 10' d'audio max."
+        city="Paris",
         language=Languages.fr_FR,
-        name = "Sceaux-001",        
-        comment = "Audioguide très court, 4-5 arrêts max. 10' d'audio max."
+        name = "Paris-004",        
+        comment = "J'ai d'excellente connaissance en histoire et je connais parfaitement Paris. Je veux un tour uniquement focus sur le Paris médiéval."
 
 
     )

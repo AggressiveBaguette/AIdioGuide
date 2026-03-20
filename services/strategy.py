@@ -26,7 +26,7 @@ class StrategyService:
         logger.debug(f"content : {content}")
         worker = self.registery.claude_worker
 
-        strategy = worker.get_text(content = content, temperature = 1)
+        strategy = await worker.get_text(content = content, temperature = 1)
         parsed_strategy = self.parse_strategy(strategy)
         logger.debug(f"Strategy : {strategy}")
         return parsed_strategy
