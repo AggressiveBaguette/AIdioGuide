@@ -124,7 +124,7 @@ class ResearchOrchestrator:
                 logger.error(f"Error verifying content : {research_topic.name}: {e}")
                 raise e
             
-    def concatenate_verified_researches(self, research_topic: ResearchTopic, verified_facts_list: list[VerifiedResearchOutput]) -> VerifiedResearchOutputConcatenated:
+    def concatenate_verified_researches(self, verified_facts_list: list[VerifiedResearchOutput]) -> VerifiedResearchOutputConcatenated:
         # formating a DSV to send the research data to the LLM that is going to perform the planification. DSV is use instead of json to reduce the number of used tokens.
         raw_output_list = []
         research_lines_list = []
@@ -152,7 +152,7 @@ class ResearchOrchestrator:
             research_lines=research_lines_list
         )
 
-        self.registery.storage.save(Category.RESEARCH_CONCATENATED, self.user_context, verified_research_concatenated.raw_output, phase=self.phase, research_topic=research_topic.name)
+        self.registery.storage.save(Category.VERIFIED_RESEARCH_CONCATENATED, self.user_context, verified_research_concatenated.raw_output, phase=self.phase)
         return verified_research_concatenated
 
 

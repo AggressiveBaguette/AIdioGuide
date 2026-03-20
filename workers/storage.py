@@ -45,7 +45,7 @@ class SaveFiles:
             case Category.VERIFIED_RESEARCH:
                 file_name = f"{path}/02_Research/{phase}/{research_path}/02.3_verified_research.dsv"
             case Category.VERIFIED_RESEARCH_CONCATENATED:
-                file_name = f"{path}/02_Research/02.4_concatenated_verified_facts_{phase}.dsv"
+                file_name = f"{path}/02_Research/{phase}/02.4_concatenated_verified_facts_{phase}.dsv"
             case Category.PLAN:
                 file_name = f"{path}/03_plan.json"
             case Category.REDACTION:

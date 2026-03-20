@@ -89,7 +89,7 @@ class Orchestration:
         verified_facts_list = await asyncio.gather(*coroutine_search_list)
         logger.debug("Orchestration Research: Gather done")
 
-        research_concatenated = research.concatenate_verified_researches(research_topic, verified_facts_list)
+        research_concatenated = research.concatenate_verified_researches(verified_facts_list)
 
         return research_concatenated
 
