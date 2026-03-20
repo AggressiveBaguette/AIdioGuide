@@ -23,7 +23,7 @@ class AudioService:
         content = self._remove_useless_linebreak(content)
         try:
             content_with_phonemes = self._add_phonemes_foreign_tags(content, phonemes_replacement)
-            content_with_phonemes = self._add_phonemes_native_tags(content, phonemes_replacement)
+            content_with_phonemes = self._add_phonemes_native_tags(content_with_phonemes, phonemes_replacement)
 
             audio_content = await worker.get_audio(content_with_phonemes, voice = self.user_context.language.voice_id)
             return audio_content, content
@@ -89,5 +89,5 @@ class AudioService:
                 #We do not put the phonemes in this case, it is here to handle bad phonemes generation by the LLM and phonemes not managed by the TTS
                 if term.langue in self.languages_no_phonemes_requiered:
                     replacement = rf"<lang xml:lang='{term.langue}'>\g<0></lang>"
-                content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+                    content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
         return content

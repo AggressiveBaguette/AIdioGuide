@@ -37,9 +37,8 @@ class PlanService:
         response_list = []
         for topic in strategy.research_topics:
             pitch = topic.narrative_pitch or ""
-            angle = topic.angle or ""
 
-            parts = [topic.type, topic.name, pitch, angle]
+            parts = [topic.type, topic.name, pitch]
             response_list.append("|".join(parts))
         return "\n".join(response_list)
         

@@ -58,7 +58,6 @@ class Orchestration:
 
         plan = self.plan_service.define_plan(strategy, verified_facts_list)
         self.registery.storage.save(Category.PLAN, self.user_context, plan)
-        plan = AudioguidePlan.model_validate_json(plan)
         logger.info(f"Plan created: {plan[100:]}")
         return plan
 
@@ -90,7 +89,7 @@ class Orchestration:
         verified_facts_list = await asyncio.gather(*coroutine_search_list)
         logger.debug("Orchestration Research: Gather done")
 
-        research_concatenated = research.concatenate_verified_researches(verified_facts_list)
+        research_concatenated = research.concatenate_verified_researches(research_topic, verified_facts_list)
 
         return research_concatenated
 

@@ -1,13 +1,12 @@
 from dotenv import load_dotenv
 load_dotenv('.env')
 
-import asyncio
 import time
 from utils import extract_first_sentence
 
 from google import genai
-from google.genai import types
 from loguru import logger
+from utils import save_LLM_output
 
 
 
@@ -38,30 +37,4 @@ class Gemini:
             if response:
                 save_LLM_output(response, "Gemini Flash 3.0")
             raise e
-
-    async def stream(self):
-        sentence_extracted = None
-
-        # stream answer from llm
-        response_stream = self.client.aio.models.generate_content_stream(
-            model=self.text_model, 
-            contents=self.content,
-        )
-
-        sentence_buffer = ""
-
-        start = time.perf_counter()
-        async for chunk in response_stream:
-            text_part = chunk.text
-            sentence_buffer += text_part
-            end = time.perf_counter()
-
-            # print(f"chunk - {end - start}: {text_part}\n", end="", flush=True)
-            # print(text_part)
-
-            sentence_buffer, sentence_extracted = extract_first_sentence(sentence_buffer)
-
-            if sentence_extracted:
-                self.queue.put_nowait(sentence_extracted)
-
 

@@ -7,7 +7,6 @@ class ResearchTopic(BaseModel):
     type: Literal["Lieu", "Theme", "Deep_Dive"]
     name: str
     narrative_pitch: Optional[str] = None
-    angle: Optional[str] = None
 
 class Strategy(BaseModel):
     raw_output: str

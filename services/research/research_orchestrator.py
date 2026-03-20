@@ -1,4 +1,3 @@
-from sre_constants import CATEGORY
 import asyncio
 from loguru import logger
 from models.context import UserContext
@@ -42,15 +41,15 @@ class ResearchOrchestrator:
     async def _content_prospector(self, research_topic: ResearchTopic, research_angle):
         """Generation of content, with high risk of hallucination, 0.6 temperature to have a good mix between creativity and fiability"""
 
-        if self.registery.storage.does_exist_research(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name):
+        if self.registery.storage.does_exist(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name):
             logger.info(f"content_prospector | research_topic={research_topic.name} already done")
-            prospection = self.registery.storage.loads_research(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name)
+            prospection = self.registery.storage.loads(Category.PROSPECTOR, self.user_context, self.phase, research_topic.name)
             parsed_prospection = self.content_prospector.parse_content_prospector(prospection, research_topic)            
             return parsed_prospection
 
         
         prospection = await self.content_prospector.content_prospector(research_topic, research_angle)
-        self.registery.storage.save_research(
+        self.registery.storage.save(
             category = Category.PROSPECTOR,
             user_context = self.user_context,
             content = prospection.raw_output,
@@ -78,13 +77,13 @@ class ResearchOrchestrator:
 
         # Create a single document with all researchs results for the given research topic
         research_facts = self.web_searches.format_all_web_searches(web_searches_list)
-        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, research_topic.name)
+        self.registery.storage.save(Category.RESEARCH_CONCATENATED, self.user_context, research_facts, self.phase, research_topic.name)
 
         return research_facts
         
 
-    async def _perform_and_save_web_search(self, query_name, research_topic: ResearchTopic):
-        if self.registery.storage.does_exist_research(
+    async def _perform_and_save_web_search(self, query_name, research_topic: ResearchTopic) -> dict:
+        if self.registery.storage.does_exist(
             category = Category.RESEARCH,
             user_context = self.user_context, 
             phase = self.phase, 
@@ -92,51 +91,30 @@ class ResearchOrchestrator:
             title = query_name
         ):
             logger.debug(f"research | research_topic={research_topic.name} - {query_name} already done")
-            research_results = self.registery.storage.loads_research(Category.RESEARCH, self.user_context, self.phase, research_topic.name, query_name)
+            research_results = self.registery.storage.loads(Category.RESEARCH, self.user_context, self.phase, research_topic.name, query_name)
             return research_results
 
         try:
             logger.debug(f"research | research_topic={research_topic.name} - {query_name} not done")
             search_results = await self.web_searches.search(query_name)
-            self.registery.storage.save_research(Category.RESEARCH, self.user_context, search_results, self.phase, research_topic.name, query_name)
+            self.registery.storage.save(Category.RESEARCH, self.user_context, search_results, self.phase, research_topic.name, query_name)
             return search_results 
         except Exception as e:
             logger.error(f"Error searching for {query_name}: {e}")
             raise
 
-    # async def _concatenate_research(self):
-    #     """Concatenate all research results for the given research topic"""
-    #     self.web_search_results = self.registery.storage.loads_all_research(Category.RESEARCH, self.user_context, self.phase, self.research_topic["name"])
-    #     logger.debug(f"web_search_results : {len(self.web_search_results)} results")
-
-    #     """Transform the json to DSV to save tokens"""
-    #     concatenated_results = ""
-    #     for queries_result in self.web_search_results:
-    #         logger.debug(f"result : {queries_result}")
-    #         for query in queries_result:
-    #             logger.debug(f"query result : {query}")
-    #             concatenated_results += f"{query['title']}|"
-    #             concatenated_results += f"{query['url']}|"
-    #             for result in query['highlights']:
-    #                 concatenated_results += f"{result.replace('|', ';').replace('\n', ' ')}" # sanitize for futur parsing on |
-    #             concatenated_results += "\n"
-
-    #     self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, concatenated_results, self.phase, self.research_topic["name"])
-    #     logger.debug(f"concatenated_results : {concatenated_results[:200]}")
-    #     self.research_facts = concatenated_results
-
     async def _verify_content(self, research_topic: ResearchTopic, prospection: ResearchOutput, research_facts: str):
         """Verify content for the monument"""
-        if self.registery.storage.does_exist_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name):
+        if self.registery.storage.does_exist(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name):
             logger.info(f"VERIFIED_RESEARCH | research_topic={research_topic.name} already done")
-            verified_claims = self.registery.storage.loads_research(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name)
+            verified_claims = self.registery.storage.loads(Category.VERIFIED_RESEARCH, self.user_context, self.phase, research_topic.name)
             verified_claims = self.content_verifier.parse_verified_content(verified_claims, research_topic)
             return verified_claims
         else:
 
             try:
                 verified_claims = await self.content_verifier.verify_content(research_topic=research_topic, prospection=prospection, research_facts=research_facts)
-                self.registery.storage.save_research(
+                self.registery.storage.save(
                     Category.VERIFIED_RESEARCH,
                     self.user_context,
                     verified_claims.raw_output,
@@ -146,7 +124,7 @@ class ResearchOrchestrator:
                 logger.error(f"Error verifying content : {research_topic.name}: {e}")
                 raise e
             
-    def concatenate_verified_researches(self, verified_facts_list: list[VerifiedResearchOutput]) -> VerifiedResearchOutputConcatenated:
+    def concatenate_verified_researches(self, research_topic: ResearchTopic, verified_facts_list: list[VerifiedResearchOutput]) -> VerifiedResearchOutputConcatenated:
         # formating a DSV to send the research data to the LLM that is going to perform the planification. DSV is use instead of json to reduce the number of used tokens.
         raw_output_list = []
         research_lines_list = []
@@ -157,7 +135,7 @@ class ResearchOrchestrator:
             for fact in facts.research_lines:
                 category = fact.category or ""
                 visual_proof = fact.visual_proof or ""
-                parts = [f"ID_id", category, fact.title, fact.affirmation, visual_proof, fact.confidence]
+                parts = [f"ID_{id}", category, fact.title, fact.affirmation, visual_proof, fact.confidence]
                 block_list.append("|".join(parts))
 
                 research_lines_list.append(VerifiedResearchOutputConcatenatedLine(
@@ -174,7 +152,7 @@ class ResearchOrchestrator:
             research_lines=research_lines_list
         )
 
-        self.registery.storage.save_research(Category.RESEARCH_CONCATENATED, self.user_context, verified_research_concatenated.raw_output, phase=self.phase)
+        self.registery.storage.save(Category.RESEARCH_CONCATENATED, self.user_context, verified_research_concatenated.raw_output, phase=self.phase, research_topic=research_topic.name)
         return verified_research_concatenated
 
 
