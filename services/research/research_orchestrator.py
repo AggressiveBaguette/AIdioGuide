@@ -131,6 +131,8 @@ class ResearchOrchestrator:
         id = 1
         
         for facts in verified_facts_list:
+            if not facts:
+                continue
             block_list = []
             for fact in facts.research_lines:
                 category = fact.category or ""
