@@ -40,8 +40,7 @@ python main.py generate --city "Paris" --lang "en" --comment "Very good knowledg
 
 ## Architecture & Workflow
 
-```
-mermaid
+```mermaid
 flowchart LR
     classDef io fill:#f3e8ff,stroke:#9333ea,stroke-width:2px
     classDef agent fill:#d1e7dd,stroke:#0f5132,stroke-width:2px
@@ -115,7 +114,7 @@ flowchart LR
 This separation is intentional. Sonnet is better at generating rich, narratively interesting claims. Gemini Flash is faster and cheaper on structured verification tasks. 
 Using the same model for both generation and verification would create a closed loop with no external grounding.
 
-The verification workflow can be used at two distincts moments: after the strategy phase and after the planification phase if futher elements are needed.
+The verification workflow can be used at two distinct moments: after the strategy phase and after the planification phase if more elements are needed.
 
 #### What this costs
 
@@ -252,7 +251,7 @@ If Azure returns error 1007 (invalid phoneme), the pipeline automatically retrie
 
 Each model is chosen for a specific task, not used uniformly:
 
-**Sonnet 4.6** handles everything requiring reasoning, narrative judgment, or editorial decisions — claim generation, planning, narration. Temperature is tuned per task: strategy at 1 (backup is present with the planification), planning at 0.6 (precision matters), narration at 0.8 (voice matters). 
+**Sonnet 4.6** handles everything requiring reasoning, narrative judgment, or editorial decisions — claim generation, planning, narration. Temperature is tuned per task: strategy at 1.0 (the Planner acts as a downstream correction layer), planning at 0.6 (structural precision matters), narration at 0.8 (voice and stylistic variation matter).
 
 **Gemini Flash 3.0** handles structured verification and phoneme detection. Faster and cheaper on deterministic tasks. Per Google's recommendation for Gemini 3.0, temperature is left at default — the model's internal calibration is more reliable than manual tuning on this generation.
 
@@ -261,7 +260,7 @@ Using a single model for the entire pipeline would mean either overpaying for ve
 
 ## Stack
 
-Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 2.0 · Exa · Azure Speech Studio
+Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 3.0 · Exa · Azure Speech Studio
 
 ## Exploring the examples
 
