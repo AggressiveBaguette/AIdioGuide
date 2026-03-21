@@ -14,12 +14,7 @@ def custom_filter(record):
     # Define custom filters to only show logs 
     if record["level"].no >= logger.level("INFO").no:
         return True
-    
-    if "claude.py" in record["file"].name:
-        return True
-    if "gemini.py" in record["file"].name:
-            return True        
-            
+                
     return False
 
 logger.add(sys.stdout, filter=custom_filter, level="DEBUG")
