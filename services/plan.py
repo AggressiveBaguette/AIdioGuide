@@ -33,7 +33,8 @@ class PlanService:
         return plan
 
     def _prepare_strategy_for_plan(self, strategy: Strategy) -> str:
-        # formating a DSV to send the initial strategy to the LLM that is going to perform the planification
+        """formating a DSV to send the initial strategy to the LLM that is going to perform the planification"""
+        """ expected output : "type|name|narrative_pitch"""
         response_list = []
         for topic in strategy.research_topics:
             pitch = topic.narrative_pitch or ""

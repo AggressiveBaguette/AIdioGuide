@@ -169,30 +169,30 @@ async def orchestrator(user_context: UserContext):
         )
 
 
-    logger.info("DEBUT DE LA STRATEGIE")
+    logger.info("STRATEGY: START")
     strategy = await orchestration.strategy()
-    logger.info("FIN DE LA STRATEGIE")
+    logger.info("STRATEGY: END")
 
-    logger.info("DEBUT DE LA RECHERCHE")
+    logger.info("RESEARCH PHASE 1: START")
     verified_facts_list_phase_1 = await orchestration.research("phase_1", strategy)
-    logger.info("FIN DE LA RECHERCHE")
+    logger.info("RESEARCH PHASE 1: END")
 
-    logger.info("DEBUT DU PLAN")
+    logger.info("PLAN: START")
     plan = await orchestration.plan(strategy, verified_facts_list_phase_1)
-    logger.info("FIN DU PLAN")
+    logger.info("PLAN: END")
 
-    logger.info("DEBUT PHASE RECHERCHE 2")
+    logger.info("RESEARCH PHASE 2: START")
     verified_facts_list_phase_2 = await orchestration.research("phase_2", strategy, plan)
-    logger.info("FIN PHASE RECHERCHE 2")
+    logger.info("RESEARCH PHASE 2: END")
 
-    logger.info("DEBUT DE LA REDACTION")
+    logger.info("REDACTION: START")
     audioguide_text = await orchestration.redaction(plan, verified_facts_list_phase_1, verified_facts_list_phase_2)
-    logger.info("FIN DE LA REDACTION")
+    logger.info("REDACTION: END")
 
-    logger.info("DEBUT DE LA GESTION DES PHONEMES")
+    logger.info("PHONEMES DETECTION: START")
     phonemes_list = await orchestration.phonemes_detection(plan, audioguide_text)
-    logger.info("FIN DE LA GESTION DES PHONEMES")
+    logger.info("PHONEMES DETECTION: END")
 
-    logger.info("DEBUT DE LA GENERATION DE l'AUDIO")
+    logger.info("AUDIO GENERATION: START")
     await orchestration.audio_generation(phonemes_list, audioguide_text)
-    logger.info("FIN DE LA GENERATION DE l'AUDIO")
+    logger.info("AUDIO GENERATION: END")

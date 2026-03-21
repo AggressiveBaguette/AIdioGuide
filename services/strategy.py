@@ -15,7 +15,7 @@ class StrategyService:
         self.user_context = user_context
         self.registry = registry
 
-    async def define_strategy(self):
+    async def define_strategy(self) -> Strategy:
         with open("prompt/master_prompt_strategy.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
         content = template_brut.substitute(
@@ -31,7 +31,13 @@ class StrategyService:
         logger.debug(f"Strategy : {strategy}")
         return parsed_strategy
 
-    def parse_strategy(self, raw_output):
+    def parse_strategy(self, raw_output: str) -> Strategy:
+        """Parse the raw output of the LLM to extract the strategy
+        Expected:
+        First line:         STRATEGIE|strategy_thinking
+        Second line :       ANGLE_RECHERCHE|research_angle
+        Third and after :   type|name|narrative_pitch
+        """
         result = Strategy(raw_output=raw_output)
 
         strategy_line = raw_output.strip().split("\n")
