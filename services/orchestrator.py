@@ -150,11 +150,8 @@ async def orchestrator(user_context: UserContext):
         search_worker=ExaSearch(),
         claude_worker=Claude(),
         storage=SaveFiles(),
-        simulation_strategy=SimulationStrategy(),
-        simulation_plan=SimulationPlan(),
         gemini_worker=Gemini(),
         azureTTS_worker=AzureTTS(),
-        # simulation_content_prospector=SimulationContentProspector(),
     )
 
     # Load all the business classes
