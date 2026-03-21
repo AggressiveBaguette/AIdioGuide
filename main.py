@@ -6,6 +6,7 @@ from services.orchestrator import orchestrator
 from config import Languages
 from loguru import logger
 import sys
+import argparse
 
 logger.remove() 
 
@@ -40,7 +41,7 @@ def verify_secrets():
         logger.error(f"Missing keys: {missing_keys}")
         raise ValueError(f"Missing keys: {missing_keys}")
 
-async def generate_audio_guide():
+async def generate_audio_guide(city, language, name, comment):
     user_context = UserContext(
         # city="Paris, Quartier Latin",
         # language="Français",
@@ -62,18 +63,59 @@ async def generate_audio_guide():
         # language=Languages.fr_FR,
         # name = "Sceaux-001",        
         # comment = "Audioguide très court, 4-5 arrêts max. 10' d'audio max."
-        city="Paris",
-        language=Languages.fr_FR,
-        name = "Paris-004",        
-        comment = "J'ai d'excellente connaissance en histoire et je connais parfaitement Paris. Je veux un tour uniquement focus sur le Paris médiéval."
+        # city="Paris",
+        # language=Languages.fr_FR,
+        # name = "Paris-004",        
+        # comment = "J'ai d'excellente connaissance en histoire et je connais parfaitement Paris. Je veux un tour uniquement focus sur le Paris médiéval."
 
 
     )
     await orchestrator(user_context)
 
+def debug_audio_guide():
+    city="Paris",
+    language=Languages.fr_FR,
+    name = "Paris-004",        
+    comment = "J'ai d'excellente connaissance en histoire et je connais parfaitement Paris. Je veux un tour uniquement focus sur le Paris médiéval."
+    return city, language, name, comment
+
+
+def main():
+    verify_secrets()
+    parser = argparse.ArgumentParser(description="AIdioguide Generator CLI")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # Generate
+    generate_parser = subparsers.add_parser("generate", help="Generate a new audioguide")
+    generate_parser.add_argument("--city", type=str, required=True, help="City name")
+    generate_parser.add_argument(
+        "--language",
+        type=Languages.get_by_code,
+        required=True,
+        help=f"Language code (available: {', '.join(Languages.list_all_codes())})"
+    )
+    generate_parser.add_argument("--name", type=str, required=True, help="Audioguide name")
+    generate_parser.add_argument(
+        "--comment",
+        type=str,
+        required=False,
+        help="Optional comment to tailor the audioguide",
+        default="Aim for a 40-50' audio in total. Consider the user as someone who is eductaed but do not know the city."
+    )
+    generate_parser = subparsers.add_parser("debug", help="Generate an audioguide with some hardcoded values")
+
+    args = parser.parse_args()
+    if args.command == "generate":
+        asyncio.run(generate_audio_guide(args.city, args.language, args.name, args.comment))
+    if args.command == "debug":
+        city, language, name, comment = debug_audio_guide()
+        asyncio.run(generate_audio_guide(city, language, name, comment))
+
+
+
+
 if __name__ == "__main__":
     try:
-        verify_secrets()
         asyncio.run(generate_audio_guide())
 
     except KeyboardInterrupt:
