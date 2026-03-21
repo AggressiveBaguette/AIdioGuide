@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 
 
 class StrategyService:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
     async def define_strategy(self):
         with open("prompt/master_prompt_strategy.md", "r", encoding="utf-8") as f:
@@ -24,7 +24,7 @@ class StrategyService:
             user_profile=self.user_context.comment
         )
         logger.debug(f"content : {content}")
-        worker = self.registery.claude_worker
+        worker = self.registry.claude_worker
 
         strategy = await worker.get_text(content = content, temperature = 1)
         parsed_strategy = self.parse_strategy(strategy)

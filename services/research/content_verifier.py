@@ -9,15 +9,15 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class ContentVerifier:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry: WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery  
+        self.registry = registry  
 
 
     async def verify_content(self, research_topic: ResearchTopic, prospection: ResearchOutput, research_facts: str):
         """Verify content for the monument"""
         logger.debug(f"Verify content started: {research_topic.name}")
-        worker = self.registery.gemini_worker
+        worker = self.registry.gemini_worker
         
         with open("prompt/master_prompt_fact_checker.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())

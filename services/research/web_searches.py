@@ -6,12 +6,12 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class WebSearches:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
     
     async def search(self, query_name):
-        web_search_result = await self.registery.search_worker.search(query_name)
+        web_search_result = await self.registry.search_worker.search(query_name)
         return web_search_result 
 
     def format_all_web_searches(self, web_searches_list):

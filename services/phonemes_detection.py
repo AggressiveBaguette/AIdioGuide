@@ -11,14 +11,14 @@ if TYPE_CHECKING:
 
 
 class PhonemDetection:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry: WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
     async def get_phonemes(self, audioguide_text: AudioguideFinalText) -> PhonemesList:
-        if self.registery.storage.does_exist(Category.PHONEMES, self.user_context):
+        if self.registry.storage.does_exist(Category.PHONEMES, self.user_context):
             logger.info(f"Phonemes already created!")
-            return self.registery.storage.loads(Category.PHONEMES, self.user_context, pydantic_model = PhonemesList)
+            return self.registry.storage.loads(Category.PHONEMES, self.user_context, pydantic_model = PhonemesList)
         else:
             concatenated_text = self._concatenate_all_stop_text(audioguide_text)
             with open("prompt/master_prompt_linguist.md", "r", encoding="utf-8") as f:
@@ -30,7 +30,7 @@ class PhonemDetection:
             )
             logger.debug(f"content : {content[:10000]}")
 
-            phonemes = await self.registery.gemini_worker.get_text(content=content)
+            phonemes = await self.registry.gemini_worker.get_text(content=content)
 
             logger.debug(f"phonemes : {phonemes}")
 
@@ -38,7 +38,7 @@ class PhonemDetection:
             # Phonemes need to be sorted from largest to smallest to be sure parts of long phonemes are not replaced partially. We want to avoid cases like "Paris" is replaced first, so "Paris Match" cannot be replaced.
         
             parsed_phonemes.replacement_list.sort(key = lambda x: len(x.expression) if x.expression else 0, reverse = True)
-            self.registery.storage.save(Category.PHONEMES, self.user_context, parsed_phonemes)
+            self.registry.storage.save(Category.PHONEMES, self.user_context, parsed_phonemes)
             logger.info(f"Phonemes created!")
             return parsed_phonemes
 

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.context import UserContext
-    from models.registery import WorkerRegistry
+    from models.registry import WorkerRegistry
     from models.schemas import Category
 
 

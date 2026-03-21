@@ -7,7 +7,6 @@ from models.schemas import AudioguidePlan, Strategy, VerifiedResearchOutputConca
 from workers.exa import ExaSearch
 from workers.claude import Claude
 from workers.storage import SaveFiles
-from workers.simulation import SimulationStrategy, SimulationPlan
 from services.research.research_orchestrator import ResearchOrchestrator
 from workers.gemini import Gemini
 from services.phonemes_detection import PhonemDetection
@@ -21,9 +20,9 @@ from services.redaction import RedactionService
 
 
 class Orchestration:
-    def __init__(self, user_context: UserContext, registery: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService, plan_service:PlanService, redaction_service:RedactionService):
+    def __init__(self, user_context: UserContext, registry: WorkerRegistry, audio_service: AudioService, strategy_service:StrategyService, plan_service:PlanService, redaction_service:RedactionService):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
         self.audio_service = audio_service
         self.strategy_service = strategy_service
         self.plan_service = plan_service
@@ -40,24 +39,24 @@ class Orchestration:
 
     async def strategy(self) -> Strategy:
         """First, define the strategy"""
-        if self.registery.storage.does_exist(Category.STRATEGY, self.user_context):
+        if self.registry.storage.does_exist(Category.STRATEGY, self.user_context):
             logger.info("Strategy already created!")
-            strategy = self.registery.storage.loads(Category.STRATEGY, self.user_context)
+            strategy = self.registry.storage.loads(Category.STRATEGY, self.user_context)
             return self.strategy_service.parse_strategy(strategy)
 
         strategy = await self.strategy_service.define_strategy() 
         logger.debug(f"Strategy : {strategy}")
-        self.registery.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
+        self.registry.storage.save(Category.STRATEGY, self.user_context, strategy.raw_output)
         return strategy
 
     async def plan(self, strategy: Strategy, verified_facts_list: list[VerifiedResearchOutput]) -> AudioguidePlan:
-        if self.registery.storage.does_exist(Category.PLAN, self.user_context):
-            plan = self.registery.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
+        if self.registry.storage.does_exist(Category.PLAN, self.user_context):
+            plan = self.registry.storage.loads(Category.PLAN, self.user_context, pydantic_model=AudioguidePlan)
             logger.info(f"Plan already created : {plan.titre_audioguide}")
             return plan
 
         plan = await self.plan_service.define_plan(strategy, verified_facts_list)
-        self.registery.storage.save(Category.PLAN, self.user_context, plan)
+        self.registry.storage.save(Category.PLAN, self.user_context, plan)
         logger.info(f"Plan created: {plan.titre_audioguide}")
         return plan
 
@@ -77,7 +76,7 @@ class Orchestration:
             ]
             logger.debug(f"Research topic list : {research_topic_list}")
 
-        research = ResearchOrchestrator(self.user_context, self.registery, phase)
+        research = ResearchOrchestrator(self.user_context, self.registry, phase)
         for research_topic in research_topic_list:
             logger.info(f"Recherche on topic : {research_topic.name}")
 
@@ -101,16 +100,16 @@ class Orchestration:
         for stop in plan.parcours:
             logger.debug(f"Stop : {stop}")
 
-            if self.registery.storage.does_exist(Category.REDACTION, self.user_context, id = stop.numero):
+            if self.registry.storage.does_exist(Category.REDACTION, self.user_context, id = stop.numero):
                 logger.info(f"Redaction {stop.numero} - {stop.titre_etape} already created!")
-                text = self.registery.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
-                messages_history = self.registery.storage.loads(Category.REDACTION_HISTORY, self.user_context, id = stop.numero)
+                text = self.registry.storage.loads(Category.REDACTION, self.user_context, id = stop.numero)
+                messages_history = self.registry.storage.loads(Category.REDACTION_HISTORY, self.user_context, id = stop.numero)
 
             else:
 
                 text, messages_history = await self.redaction_service.create_stop_text(plan, stop, verified_facts_list_phase_1, verified_facts_list_phase_2, messages_history)
-                self.registery.storage.save(Category.REDACTION, self.user_context, text, id = stop.numero)
-                self.registery.storage.save(Category.REDACTION_HISTORY, self.user_context, messages_history, id = stop.numero)
+                self.registry.storage.save(Category.REDACTION, self.user_context, text, id = stop.numero)
+                self.registry.storage.save(Category.REDACTION_HISTORY, self.user_context, messages_history, id = stop.numero)
                 logger.info(f"Stop written : {stop.numero} - {stop.titre_etape}")
             
             content_list.stops.append(ContentStop(id = stop.numero, content = text, title = stop.titre_etape))
@@ -118,13 +117,13 @@ class Orchestration:
         return content_list
     
     async def phonemes_detection(self, plan: AudioguidePlan, audioguide_text: AudioguideFinalText) -> PhonemesList:   
-        phonemes_detection = PhonemDetection(self.user_context, self.registery)
+        phonemes_detection = PhonemDetection(self.user_context, self.registry)
         return await phonemes_detection.get_phonemes(audioguide_text)
 
     async def audio_generation(self, phonemes_list: PhonemesList, audioguide_text: AudioguideFinalText):
         coroutine_list = []
         for stop in audioguide_text.stops:
-            if self.registery.storage.does_exist(Category.AUDIO, self.user_context, id = stop.id):
+            if self.registry.storage.does_exist(Category.AUDIO, self.user_context, id = stop.id):
                 logger.info(f"Audio already generated for stop {stop.id} - {stop.title}")
                 continue
 
@@ -138,15 +137,15 @@ class Orchestration:
     async def _audio_single_stop(self, content, stop, phonemes_list):
         try:
             audio, content_with_ssml = await self.audio_service.generate_audio(content, phonemes_list)
-            self.registery.storage.save(Category.AUDIO, self.user_context, audio, id = stop.id)
-            self.registery.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content_with_ssml, id = stop.id)
+            self.registry.storage.save(Category.AUDIO, self.user_context, audio, id = stop.id)
+            self.registry.storage.save(Category.REDACTION_WITH_SSML, self.user_context, content_with_ssml, id = stop.id)
             logger.info(f"Audio generated for stop {stop.id} - {stop.title}")
         except Exception as e:
             logger.error(f"Error generating audio for stop {stop.id}: {e}")
             
 
 async def orchestrator(user_context: UserContext):
-    registery = WorkerRegistry(
+    registry = WorkerRegistry(
         search_worker=ExaSearch(),
         claude_worker=Claude(),
         storage=SaveFiles(),
@@ -155,14 +154,14 @@ async def orchestrator(user_context: UserContext):
     )
 
     # Load all the business classes
-    audio_service = AudioService(user_context, registery, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
-    strategy_service = StrategyService(user_context, registery)
-    plan_service = PlanService(user_context, registery)
-    redaction_service = RedactionService(user_context, registery)
+    audio_service = AudioService(user_context, registry, languages_no_phonemes_requiered=TTS_LANGUAGES_NO_PHONEMES)
+    strategy_service = StrategyService(user_context, registry)
+    plan_service = PlanService(user_context, registry)
+    redaction_service = RedactionService(user_context, registry)
     
 
     orchestration = Orchestration(user_context, 
-        registery,
+        registry,
         audio_service=audio_service,
         strategy_service=strategy_service,
         plan_service=plan_service,

@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class PlanService:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
     async def define_plan(self, strategy: Strategy, verified_facts: VerifiedResearchOutputConcatenated) -> AudioguidePlan:
         with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
@@ -28,7 +28,7 @@ class PlanService:
 
         research_concatenated = self._prepare_research_for_plan(verified_facts)
 
-        worker = self.registery.claude_worker
+        worker = self.registry.claude_worker
         plan = await worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=research_concatenated, temperature = 0.7)
         return plan
 
