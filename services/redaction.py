@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class RedactionService:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
         with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
             self.template_system_prompt = Template(f.read())
@@ -44,7 +44,7 @@ class RedactionService:
             faits_bruts = facts
         )
 
-        worker = self.registery.claude_worker
+        worker = self.registry.claude_worker
         stop_text = await worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
 
         new_history = list(messages_history)

@@ -254,4 +254,54 @@ Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 2.0
 
 ## Known Limitations
 
-## Exploring the outputs
+## Exploring the examples
+
+The `examples/paris_medieval_fr/` folder contains the complete pipeline 
+output for a medieval Paris audioguide — every intermediate artifact, 
+from raw research to final audio.
+
+**Recommended reading path**
+
+**Start at the very beginning — the Strategist's output:**
+- `01_strategy.dsv`  
+  The research directive and stop list that launched the entire pipeline.  
+  Compare it against `03_plan.json` to see what the Planner kept, 
+  reorganized, added, and killed.
+
+**Then — the fact-checker in action:**
+- `02_Research/phase_1/cimetière_des_innocents_.../02.1_unverified_research.dsv`  
+  vs `02.3_verified_research.dsv`  
+  15 claims in, 6 out. ~60% rejection rate on a well-documented subject.
+  Every rejected claim had insufficient or contradictory Exa evidence.
+
+**Then — the Planner's editorial work:**
+- `03_plan.json`  
+  13 stops, 3 narrative threads, 1 Grand Format (stop 2 — Sainte-Chapelle, 
+  8 minutes). Compare against `01_strategy.dsv` to see what the Planner 
+  kept, added, and killed.
+
+**Then — narration to audio:**
+- `04_Scripts/2.txt` → `06_Scripts_with_SSML/2.txt`  
+  The Sainte-Chapelle Grand Format script before and after SSML injection.  
+  Note: medieval Paris is a near-monolingual corpus — SSML phoneme 
+  injection is minimal here. See the Angkor example for a more 
+  representative case (Khmer proper nouns, Sanskrit terms, multilingual 
+  sources).
+
+**Finally — the audio:**
+- `07_Audio/2.mp3` — Sainte-Chapelle, 8 minutes  
+- `07_Audio/11.mp3` — Square des Innocents, 4 minutes  
+
+**Full structure**
+```
+examples/paris_medieval_fr/
+├── 01_strategy.dsv
+├── 02_Research/
+│   ├── phase_1/          ← 13 subjects, each with raw + verified DSV
+│   └── phase_2/          ← 2 deep dives commissioned by the Planner
+├── 03_plan.json
+├── 04_Scripts/           ← narration scripts + conversation history
+├── 05_phonemes.json
+├── 06_Scripts_with_SSML/ ← scripts with injected SSML tags
+└── 07_Audio/             ← 13 MP3 files
+```

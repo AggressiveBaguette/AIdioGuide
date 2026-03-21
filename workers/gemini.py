@@ -34,7 +34,5 @@ class Gemini:
             return response.candidates[0].content.parts[0].text
         except Exception as e:
             logger.error(f"[Error]: {e}")
-            if response:
-                save_LLM_output(response, "Gemini Flash 3.0")
             raise e
 
