@@ -2,7 +2,7 @@
 
 AIdioguide is a multi-agent pipeline designed to generate immersive historical audio guides that sound flawless. It combines contextual research, scriptwriting (tailored for spoken delivery), and precision phonetic processing to ensure that finicky TTS engines (such as Azure) pronounce foreign names, exonyms and historical anomalies correctly.
 
-Tech Stack: Python 3.10+, Anthropic (Claude Sonnet 4.6 / Gemini Flase 3.0), Exa, Azure TTS (Neural Multilingual), SSML.
+Tech Stack: Python 3.10+, Anthropic (Claude Sonnet 4.6 / Gemini Flash 3.0), Exa, Azure TTS (Neural Multilingual), SSML.
 
 **[Listen to an example here: Florence Grand Format (8 min)](#)**
 
@@ -248,11 +248,20 @@ The injection itself is deterministic Python — regex replacements applied to t
 
 If Azure returns error 1007 (invalid phoneme), the pipeline automatically retries without phonemes, falling back to `<lang>` tags only. The listener gets slightly degraded pronunciation rather than no audio.
 
+### Multi-model routing — right model for the right task
+
+Each model is chosen for a specific task, not used uniformly:
+
+**Sonnet 4.6** handles everything requiring reasoning, narrative judgment, or editorial decisions — claim generation, planning, narration. Temperature is tuned per task: strategy at 1 (backup is present with the planification), planning at 0.6 (precision matters), narration at 0.8 (voice matters). 
+
+**Gemini Flash 3.0** handles structured verification and phoneme detection. Faster and cheaper on deterministic tasks. Per Google's recommendation for Gemini 3.0, temperature is left at default — the model's internal calibration is more reliable than manual tuning on this generation.
+
+Using a single model for the entire pipeline would mean either overpaying for verification tasks or under-powering narration. The routing reflects the actual cost/performance profile of each step.
+
+
 ## Stack
 
 Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 2.0 · Exa · Azure Speech Studio
-
-## Known Limitations
 
 ## Exploring the examples
 
@@ -305,3 +314,18 @@ examples/paris_medieval_fr/
 ├── 06_Scripts_with_SSML/ ← scripts with injected SSML tags
 └── 07_Audio/             ← 13 MP3 files
 ```
+
+## Known Limitations & Tech Debt
+
+This is a functional prototype, not a production system. Here's what doesn't scale and what would need to change.
+
+### Functional Limitations
+* **One-shot generation:** The pipeline runs start to finish with no interaction. There's no way to review the Strategist's output, amend the Planner's stop list, or iterate on the narration before audio generation. A production version would need a human-in-the-loop review between phases.
+* **Audio-only output:** The pipeline produces narration scripts and MP3 files, but not a deployable audioguide. A production front-end would additionally need geographic coordinates, stop descriptions, cover images, and structured metadata per stop — none of which are currently generated.
+* **Fixed voice and TTS provider:** Azure Speech Studio with Vivienne DragonHD is hardcoded. Voice selection, TTS provider switching, and language-to-voice routing would need to be configurable.
+* **Time to first audio (15–20 minutes):** The sequential narration step is the bottleneck — 13 stops written one after another. The architecture currently waits for all narration to complete before starting phoneme detection and audio generation. 
+  * *The fix:* A streaming architecture. Stream each narration stop as it's written, run phoneme detection inline, and push to TTS via WebSocket. Estimated time to first audio under this model: under 5 minutes. Not implemented.
+
+### Technical Limitations
+* **No tests:** The DSV parser, Pydantic validation logic, and phoneme injection are untested. The system is validated empirically across multiple cities (with 10–20 research calls per audioguide), but there are zero unit or integration tests.
+* **Naive Rate Limiting & Scale:** Claude is protected by basic exponential backoff (`tenacity`) for 429 errors, but Gemini relies on raw API calls. The system is idempotent by design (a failed run can be resumed from the last saved checkpoint), but at a larger scale, this in-memory async architecture would melt. A true production system would require a robust message broker (e.g., Celery or RabbitMQ) to manage API queues.
