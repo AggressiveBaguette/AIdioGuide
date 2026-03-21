@@ -26,11 +26,12 @@ class AudioService:
             content_with_phonemes = self._add_phonemes_native_tags(content_with_phonemes, phonemes_replacement)
 
             audio_content = await worker.get_audio(content_with_phonemes, voice = self.user_context.language.voice_id)
-            return audio_content, content
+            return audio_content, content_with_phonemes
         except Exception as e:
             error_msg = str(e)
             if "1007" in error_msg:
                 # Issue is with phonemes, we try to generate the audio without them
+                logger.warning("Issue with phonemes, content is generated without them")
                 content_without_phonemes = self._add_foreign_tags_but_no_phonemes(content, phonemes_replacement)
                 audio_content = await worker.get_audio(content_without_phonemes, voice = self.user_context.language.voice_id)
                 return audio_content, content_without_phonemes

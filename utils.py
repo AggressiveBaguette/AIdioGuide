@@ -1,4 +1,4 @@
-from asyncio.log import logger
+from loguru import logger
 import time
 import re
 from pathlib import Path
@@ -37,7 +37,7 @@ def parse_LLM_output(llm_response, pydantic_schema):
     json_str = match.group(1).strip() if match else llm_response.strip()
 
     try:
-        validated_data = pydantic_schema.parse_raw(json_str)
+        validated_data = pydantic_schema.model_validate_json(json_str)
         return validated_data
 
     except Exception as e:

@@ -1,5 +1,5 @@
 from models.context import UserContext
-import asyncio
+from dotenv import load_dotenv
 import asyncio
 import os
 from services.orchestrator import orchestrator
@@ -9,42 +9,36 @@ import sys
 
 logger.remove() 
 
-
 def custom_filter(record):
+    # Define custom filters to only show logs 
     if record["level"].no >= logger.level("INFO").no:
         return True
     
-    # if record["level"].name == "DEBUG":
-    # #     # Filtering by file
-    #     if record["name"] == "__main__":
-    #         return True
-        if "claude.py" in record["file"].name:
-            return True
-    #     # if "researcher.py" in record["file"].name:
-    #     #     return True
-    # #     if "exa.py" in record["file"].name:
-    # #         return True
-        if "gemini.py" in record["file"].name:
-            return True
-    #     if "azureTTS.py" in record["file"].name:
-    #         return True
-    #     if "phonemes_detection.py" in record["file"].name:
-    #         return True
-    #     if "audio_generation.py" in record["file"].name:
-    #         return True
-    #     if "content_verifier.py" in record["file"].name:
-    #         return True
-        
-
-    #     # Filtering by function
-    #     if record["function"] in ["_perform_and_save_web_search", "_perform_web_searches", "_get_relevant_facts"]:
-    #         return True
-        
+    if "claude.py" in record["file"].name:
+        return True
+    if "gemini.py" in record["file"].name:
+            return True        
             
     return False
 
 logger.add(sys.stdout, filter=custom_filter, level="DEBUG")
 
+def verify_secrets():
+    load_dotenv()
+
+    requiered_keys = [
+        "GOOGLE_API_KEY",
+        "EXA_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "AZURE_API_KEY",
+        "AZURE_REGION"
+    ]
+
+    missing_keys = [key for key in requiered_keys if not os.getenv(key)]
+
+    if missing_keys:
+        logger.error(f"Missing keys: {missing_keys}")
+        raise ValueError(f"Missing keys: {missing_keys}")
 
 async def generate_audio_guide():
     user_context = UserContext(
@@ -79,15 +73,8 @@ async def generate_audio_guide():
 
 if __name__ == "__main__":
     try:
-        # 1. On vire tout le bordel précédent
-
-        # asyncio.run(main())
+        verify_secrets()
         asyncio.run(generate_audio_guide())
-        # asyncio.run(generate_exa("Cour des Miracles faubourg Saint-Marcel rue Mouffetard emplacement exact XVIIe siècle sources historiques"))
-        # asyncio.run(generate_exa("La Reynie rafle Cour des Miracles 1667 Louis XIV résultats dispersion populations"))
-        # asyncio.run(generate_exa("Victor Hugo Notre-Dame de Paris Cour des Miracles sources historiques inspiration faubourg Saint-Marcel"))
-
-        # asyncio.run(test())
 
     except KeyboardInterrupt:
         print("Interrupted by user.")

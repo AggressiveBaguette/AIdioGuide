@@ -81,9 +81,7 @@ class Orchestration:
         for research_topic in research_topic_list:
             logger.info(f"Recherche on topic : {research_topic.name}")
 
-            # if research_topic.name in ["Arènes de Lutèce", "Les murailles médiévales - de Philippe Auguste à Charles V",  "Île de la Cité - Palais de la Cité", "Les Juifs de Paris et les expulsions capétiennes", "Les Templiers à Paris - Le Temple et sa fin"]:  #
-            if True:        
-                coroutine_search_list.append(research.get_research_results(research_topic, strategy.research_angle))
+            coroutine_search_list.append(research.get_research_results(research_topic, strategy.research_angle))
 
         logger.debug(f"coroutine_search_list : {coroutine_search_list}")
         verified_facts_list = await asyncio.gather(*coroutine_search_list)
@@ -130,9 +128,7 @@ class Orchestration:
                 logger.info(f"Audio already generated for stop {stop.id} - {stop.title}")
                 continue
 
-            # if stop.numero == 1:
-            if True:
-                coroutine_list.append(self._audio_single_stop(stop.content, stop, phonemes_list))
+            coroutine_list.append(self._audio_single_stop(stop.content, stop, phonemes_list))
             logger.info(f"Audio generation for stop {stop.id} - {stop.title} added to the queue!")
 
         await asyncio.gather(*coroutine_list)

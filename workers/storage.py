@@ -114,30 +114,3 @@ class SaveFiles:
     def does_exist(self, category: Category, user_context: UserContext, phase="", research_topic="", title="", id=None):
         file_name = self.define_file_name(category, user_context, phase=phase, research_topic=research_topic, title=title, id=id)
         return Path(file_name).exists()
-
-    # def loads_all_research(self, category: Category, user_context: UserContext, phase, research_topic):
-    #     """Loads all the json of a given """
-    #     path = self._define_path(user_context, phase, research_topic)
-
-    #     research_list = []
-
-    #     for file in path.rglob("*"):
-    #         extension = Path(file).suffix
-    #         if extension == ".json":
-    #             with open(file, "r", encoding="utf-8") as f:
-    #                 loaded_file = json.load(f)
-    #                 research_list.append(loaded_file)
-    #     return research_list
-
-    # def loads_all_verifed_research(self, user_context: UserContext, phase):
-    #     path = self._define_path(user_context, phase)
-    #     list = []
-
-    #     for file in path.rglob("*"):
-    #         name = file.name
-    #         if name == f"verified_research.dsv":
-    #             with open(file, "r", encoding="utf-8") as f:
-    #                 list.append(f.read())   
-    #     return list
-
-                

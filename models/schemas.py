@@ -83,17 +83,6 @@ class AudioguidePlan(BaseModel):
     parcours: List[EtapeParcours]
     fils_narratifs: List[FilNarratif] = Field(default_factory=list)
     
-# class ResearchItem(BaseModel):
-#     category: str = Field(..., alias="c")
-#     title: str = Field(..., alias="t")
-#     analysis: str = Field(..., alias="a")
-#     proof: str = Field(..., alias="p")
-#     noise_level: str = Field(..., alias="nc")
-#     queries: List[str] = Field(..., alias="q")
-
-# class ResearchBlock(RootModel):
-#     root: List[ResearchItem]
-
 class ReplacementItem(BaseModel):
     expression: str
     langue: str
@@ -125,4 +114,3 @@ class Category(Enum):
     REDACTION_WITH_SSML="redaction_with_ssml"
     REDACTION_HISTORY="redaction_history"
 
-# ResearchOutput.model_rebuild()

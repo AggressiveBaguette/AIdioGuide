@@ -57,7 +57,7 @@ class Claude:
         json_str = match.group(1).strip() if match else claude_response.strip()
 
         try:
-            validated_data = pydantic_schema.parse_raw(json_str)
+            validated_data = pydantic_schema.model_validate_json(json_str)
             return validated_data
 
         except Exception as e:
