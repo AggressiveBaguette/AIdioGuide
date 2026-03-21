@@ -67,7 +67,10 @@ async def generate_audio_guide(city, language, name, comment):
         # language=Languages.fr_FR,
         # name = "Paris-004",        
         # comment = "J'ai d'excellente connaissance en histoire et je connais parfaitement Paris. Je veux un tour uniquement focus sur le Paris médiéval."
-
+        city = city,
+        language = language,
+        name = name,
+        comment = comment
 
     )
     await orchestrator(user_context)
@@ -116,7 +119,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        asyncio.run(generate_audio_guide())
+        main()
 
     except KeyboardInterrupt:
         print("Interrupted by user.")

@@ -3,6 +3,8 @@ import os
 import asyncio
 import time
 from loguru import logger
+from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
+from utils import is_rate_limit_error
 
 
 class ExaSearch:
@@ -13,6 +15,14 @@ class ExaSearch:
         # Exa rate limit is 10 requests per second, so we make sure there is at least 0.15 seconds between requests
         self.min_interval = 0.2
 
+    @retry(
+        wait=wait_random_exponential(min=1, max=10), 
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(is_rate_limit_error),
+        before_sleep=lambda retry_state: logger.warning(
+            f"Rate limit Exa. Tentative {retry_state.attempt_number}..."
+        )
+    )
     async def search(self, query):
         # Rate limit management
         async with self.lock:
@@ -61,3 +71,4 @@ class ExaSearch:
         logger.debug(f"Exa result : {clean_results}")
 
         return clean_results
+

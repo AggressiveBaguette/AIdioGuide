@@ -35,7 +35,7 @@ pip install -r requirements.txt
 # Required keys: ANTHROPIC_API_KEY, GEMINI_API_KEY, EXA_API_KEY, AZURE_TTS_KEY
 
 # Run a full generation pipeline
-python main.py generate --city "Paris" --lang "en" --comment "Very good knowledge of the city. Focus on medieval Paris, ignore anything later than the XVIe century".
+python main.py generate --city "Paris" --lang "en" --comment "Very good knowledge of the city. Focus on medieval Paris, ignore anything later than the XVIe century". --name "my-first-audioguide"
 ```
 
 ## Architecture & Workflow

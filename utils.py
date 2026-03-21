@@ -44,3 +44,6 @@ def parse_LLM_output(llm_response, pydantic_schema):
         logger.error(f"LLM response : {llm_response}")
         logger.error(f"[Error]: {e}")
         raise e
+        
+def is_rate_limit_error(exception):
+    return getattr(exception, "status_code", None) == 429
