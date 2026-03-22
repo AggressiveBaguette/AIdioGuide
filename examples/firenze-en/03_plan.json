@@ -1,0 +1,402 @@
+{
+    "titre_audioguide": "Florence: La Ville Qui a Inventé le Monde Moderne",
+    "strategie": "Un parcours de 20 arrêts dans les rues, palais et églises où des dynasties bancaires ont weaponisé la beauté, où des artistes ont réinventé la perception humaine, et où l'âme tumultueuse de la Toscane a été forgée. Le fil conducteur : le pouvoir laisse toujours une cicatrice dans la pierre — et Florence en est couverte.",
+    "parcours": [
+        {
+            "numero": 1,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Piazza della Repubblica : Le Sol des Effacés",
+            "localisation": "Piazza della Repubblica, 50123 Florence. Placez-vous sous l'arco trionfale côté nord, face à l'inscription.",
+            "transition_vers_suivant": "Tournez le dos à l'arche et marchez plein est sur la Via dei Calzaiuoli — la rue piétonne principale. En cinq minutes, le baptistère octogonal apparaît au bout de la rue, flanqué de la masse de la cathédrale.",
+            "consigne_plume": "Levez les yeux vers l'inscription gravée au sommet de l'arche nord : lisez-la à voix haute à l'auditeur, mot pour mot. Puis expliquez ce que cette phrase célèbre — et ce qu'elle efface délibérément : six mille habitants, une communauté juive, un ghetto rasé au nom du 'décor' — la plus ancienne forme de gentrification documentée d'Europe.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_3",
+                "ID_2",
+                "ID_5",
+                "ID_7"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 2,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Battistero di San Giovanni : Le Sport Civique de l'Art",
+            "localisation": "Piazza San Giovanni, 50122 Florence. Arrêtez-vous devant les portes est — les 'Portes du Paradis' — côté façade de la cathédrale.",
+            "transition_vers_suivant": "Les portes que vous regardez sont des copies. Faites le tour du baptistère par la gauche et entrez si vous avez un pass — cherchez sur le mur intérieur nord-ouest le monument funèbre de l'antipape Jean XXIII. Ensuite, ressortez et tournez-vous vers la façade de la cathédrale : vous y êtes déjà.",
+            "consigne_plume": "Pointez les portes dorées devant vous et annoncez immédiatement qu'elles sont fausses — les originales sont au musée depuis 1990. Puis racontez 1401 : le moment où une corporation de marchands de tissu a organisé un concours artistique comme d'autres organisent un appel d'offres, et où les Médicis n'étaient que l'un des trente-quatre jurés.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_11",
+                "ID_12",
+                "ID_13",
+                "ID_16",
+                "ID_10"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 3,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Cattedrale di Santa Maria del Fiore : La Couronne du Pouvoir",
+            "localisation": "Piazza del Duomo, 50122 Florence. Placez-vous sur le flanc nord de la cathédrale, à mi-hauteur, là où les bandes de marbre vert de Prato sont les plus visibles.",
+            "transition_vers_suivant": "Restez dans la même piazza — le campanile est à dix mètres sur votre gauche.",
+            "consigne_plume": "Passez votre main sur les bandes de marbre vert foncé et dites à l'auditeur d'où elles viennent : les carrières de Prato, une ville que Florence a achetée pour 17 500 florins en 1351 — le marbre de la façade est littéralement de la domination territoriale taillée en tranches. Élargissez sur la logique de la cathédrale comme machine de propagande : une ville qui s'est ruinée pour se construire une couronne visible à des kilomètres.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_26",
+                "ID_19",
+                "ID_24",
+                "ID_27"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 4,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Campanile di Giotto : Le Manifeste en Marbre",
+            "localisation": "Piazza del Duomo, 50122 Florence. Placez-vous au pied du campanile, face au registre inférieur avec les bas-reliefs en hexagones.",
+            "transition_vers_suivant": "null",
+            "consigne_plume": "Accroupissez-vous au niveau du registre inférieur du campanile et cherchez l'hexagone représentant l'astronomie — un homme regardant les étoiles, sculpté sur une église. Racontez le paradoxe : c'est la Commune de Florence, pas l'Église, qui a commandé cette tour, et elle a choisi d'y graver le savoir laïc comme un pamphlet politique en plein air.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_30",
+                "ID_31",
+                "ID_29"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 5,
+            "type": "Respiration_Contexte",
+            "titre_etape": "Orsanmichele : La Bourse des Saints",
+            "localisation": "Via dell'Arte della Lana 1, 50123 Florence. Arrêtez-vous devant la façade extérieure côté Via dei Calzaiuoli, face aux niches avec les statues de bronze.",
+            "transition_vers_suivant": "Continuez tout droit vers le sud sur la Via dei Calzaiuoli. En deux minutes, la Piazza della Signoria s'ouvre devant vous — impossible de la manquer.",
+            "consigne_plume": "Désignez les niches extérieures du bâtiment : chaque corporation de métier a dû financer sa propre statue de saint patron, en bronze, dans un délai imposé par la ville. C'est le moment d'expliquer le système des guildes florentines — l'architecture financière invisible qui précède et rend possible tout le reste : la laine, le change, le crédit international.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_64",
+                "ID_38"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 6,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Piazza della Signoria : Le Théâtre de la Violence Civique",
+            "localisation": "Piazza della Signoria, 50122 Florence. Cherchez la plaque circulaire en marbre dans le pavé, devant la fontaine de Neptune — c'est le point exact du bûcher de Savonarole.",
+            "transition_vers_suivant": "La plaque est à cinq mètres de la fontaine. Levez les yeux vers la façade du Palazzo Vecchio : les fenêtres du piano nobile au-dessus de vous sont celles où l'archevêque Salviati a été pendu en 1478. Vous entrez dans le palazzo dans un instant.",
+            "consigne_plume": "Demandez à l'auditeur de trouver la plaque dans le sol — elle est souvent piétinée par les touristes, parfois couverte de tréteaux de marché. C'est intentionnel ou presque. Racontez que cette même place a servi de scène au Bûcher des Vanités en 1497 et au bûcher de Savonarole en 1498 : la ville a brûlé d'abord les livres, puis le moine qui les avait fait brûler.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_40",
+                "ID_45",
+                "ID_139",
+                "ID_133"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 7,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Palazzo Vecchio : Forteresse, Prison, Scène de Crime",
+            "localisation": "Piazza della Signoria 1, 50122 Florence. Entrez dans le palazzo et montez jusqu'au Salone dei Cinquecento. Placez-vous au centre de la salle, face à la paroi est.",
+            "transition_vers_suivant": "Redescendez et ressortez par l'entrée principale. La Loggia dei Lanzi est sur votre droite immédiat — regardez le Persée de Cellini depuis le niveau de la piazza, depuis le bas.",
+            "consigne_plume": "Dis à l'auditeur de trouver un endroit pour s'asseoir et écouter. Pointez le plafond du Salone : les fresques de Vasari célébrant la conquête de Sienne par Cosimo I recouvrent littéralement la salle créée en 1494 pour le Grand Conseil républicain de Savonarole — le même Cosimo qui fait afficher la devise 'Rex Regum' sur la porte d'entrée d'un bâtiment municipal. Déroulez ensuite l'arc complet du bâtiment : la prison de Cosimo le Vieux en 1433, le Studiolo de Francesco I sans fenêtres, la pendaison de l'archevêque Salviati aux fenêtres du piano nobile après la Conjuration des Pazzi — chaque mètre carré de ce palais est une couche de violence institutionnalisée.",
+            "cible_duree_audio": "8 minutes",
+            "is_grand_format": true,
+            "faits_retenus": [
+                "ID_50",
+                "ID_52",
+                "ID_51",
+                "ID_47",
+                "ID_54",
+                "ID_121",
+                "ID_93"
+            ],
+            "briefs_recherche_additionnelle": [
+                {
+                    "type": "Deep_Dive",
+                    "name": "Salone dei Cinquecento : histoire politique complète",
+                    "narrative_pitch": null
+                },
+                {
+                    "type": "Deep_Dive",
+                    "name": "Studiolo de Francesco I : programme iconographique et mort mystérieuse",
+                    "narrative_pitch": null
+                }
+            ]
+        },
+        {
+            "numero": 8,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Loggia dei Lanzi et Uffizi : L'Entonnoir du Pouvoir",
+            "localisation": "Piazzale degli Uffizi, 50122 Florence. Placez-vous au centre de la cour en U des Uffizi, dos à l'Arno, face au Palazzo Vecchio au bout de l'axe visuel.",
+            "transition_vers_suivant": "Marchez vers l'Arno jusqu'au bout de la cour des Uffizi. Le Ponte Vecchio est visible à votre gauche en longeant le Lungarno — cinq minutes à pied.",
+            "consigne_plume": "Demandez à l'auditeur de regarder la forme en U du bâtiment : l'entonnoir architectural pointe directement vers le Palazzo Vecchio. Ce n'est pas un accident — c'est Cosimo I qui place toute la bureaucratie florentine sous son toit et dans son axe de vision. Puis regardez le Persée de Cellini dans la Loggia : Méduse décapitée sous son pied est un message codé aux opposants politiques, installé en 1554 à hauteur des yeux des citoyens.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_55",
+                "ID_56",
+                "ID_60",
+                "ID_61"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 9,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Ponte Vecchio : La Route Privée du Duc",
+            "localisation": "Ponte Vecchio, 50125 Florence. Arrêtez-vous à l'extrémité sud du pont, côté Oltrarno, et regardez la Tour Mannelli sur votre droite.",
+            "transition_vers_suivant": "Traversez le pont et continuez tout droit sur la Via Guicciardini. En cinq minutes, la façade massive du Palazzo Pitti apparaît au bout de la rue.",
+            "consigne_plume": "Pointez la tour Mannelli à l'angle du pont : le corridor de Vasari fait un détour visible sur des consoles en porte-à-faux pour contourner cette tour, parce que la famille Mannelli a refusé l'expropriation. Racontez ensuite pourquoi les bouchers ont été chassés du pont en 1593 — l'odeur offensait le corridor privé du duc — et remplacés par des orfèvres dont les loyers étaient plus élevés.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_68",
+                "ID_69",
+                "ID_71",
+                "ID_130"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 10,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Palazzo Pitti : Le Rival Racheté",
+            "localisation": "Piazza de' Pitti 1, 50125 Florence. Placez-vous face à la façade principale, au centre de la piazza, pour voir l'intégralité de l'axe de symétrie.",
+            "transition_vers_suivant": "Entrez dans le jardin de Boboli par la billetterie à droite de la façade. Montez vers la Grotta del Buontalenti — suivez les panneaux, elle est à cinq minutes à pied dans le jardin.",
+            "consigne_plume": "Comptez les fenêtres de la façade et repérez la discontinuité entre le bloc central et les ailes latérales — c'est la couture entre le palais de Luca Pitti, ruiné en 1464, et les extensions médicéennes. Racontez l'ironie : le bâtiment construit pour rivaliser avec les Médicis est devenu leur résidence principale, et ils l'ont gardé sous le nom de leur ennemi.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_74",
+                "ID_79",
+                "ID_76",
+                "ID_75"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 11,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Grotta del Buontalenti et Jardins de Boboli : Le Jardin comme Machine",
+            "localisation": "Giardino di Boboli, entrée par Palazzo Pitti, 50125 Florence. Cherchez la Grotta Grande di Buontalenti — panneau indiqué depuis l'entrée principale.",
+            "transition_vers_suivant": "Ressortez des jardins de Boboli et revenez sur la Via Guicciardini vers l'Arno. Traversez le pont Santa Trinita — regardez les piliers : ce pont a été dynamité en 1944 et reconstruit pierre par pierre. Continuez vers le nord jusqu'à la Basilica di Santa Croce — vingt minutes à pied en longeant le centre.",
+            "consigne_plume": "Dans la première chambre de la Grotte, montrez les quatre niches murales : elles contenaient les 'Prisonniers' de Michel-Ange jusqu'en 1908 — les sculptures inachevées d'hommes qui semblent se dégager du marbre. Les calches blancs froids qui les remplacent aujourd'hui disent tout sur ce que la muséification fait à l'art. Élargissez sur le jardin comme instrument de domination : démolition d'un quartier médiéval pour planter des ifs, esclaves ottomans utilisés comme main-d'œuvre.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_78",
+                "ID_77",
+                "ID_80",
+                "ID_83"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 12,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Basilica di Santa Croce : Le Panthéon des Comptes",
+            "localisation": "Piazza di Santa Croce 16, 50122 Florence. Entrez dans la basilique et placez-vous d'abord devant le cénotaphe de Dante, nef droite, puis devant la tombe de Galilée, nef gauche.",
+            "transition_vers_suivant": "Sortez par le cloître et cherchez la Cappella dei Pazzi au fond — la façade inachevée est visible depuis l'entrée du cloître.",
+            "consigne_plume": "Placez l'auditeur devant la tombe de Galilée et demandez-lui de compter les mètres qui la séparent du cénotaphe de Dante : deux génies de Florence, l'un mort en exil à Ravenne, l'autre interdit de sépulture honorable pendant 95 ans — les deux tombes sont des reconstructions tardives, des actes de récupération symbolique, pas des hommages sincères. Santa Croce est le registre comptable des dynasties marchandes qui ont acheté leur éternité en marbre.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_87",
+                "ID_90",
+                "ID_85",
+                "ID_88",
+                "ID_89",
+                "ID_91"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 13,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Cappella dei Pazzi : La Cicatrice de la Conjuration",
+            "localisation": "Chiostro di Santa Croce, Piazza di Santa Croce 16, 50122 Florence. Placez-vous devant la façade de la Cappella dei Pazzi, au fond du premier cloître.",
+            "transition_vers_suivant": "Revenez sur la Piazza di Santa Croce et regardez l'espace de la place devant vous. Restez ici pour l'étape suivante.",
+            "consigne_plume": "Regardez la façade de la chapelle : elle est inachevée. Ce n'est pas un manque de moyens — c'est une confiscation. Racontez la Conjuration des Pazzi du 26 avril 1478 : le meurtre de Giuliano de' Medici pendant la messe de Pâques, la fuite de Lorenzo dans la sacristie, la porte en bronze de Luca della Robbia fermée contre les assassins. Puis la répression : 80 pendaisons, les armoiries des Pazzi scalpellées sur tous les bâtiments de Florence par décret.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_94",
+                "ID_95",
+                "ID_97",
+                "ID_92",
+                "ID_96"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 14,
+            "type": "Respiration_Contexte",
+            "titre_etape": "Piazza Santa Croce : La Violence Sous le Vernis",
+            "localisation": "Piazza di Santa Croce, 50122 Florence. Restez au centre de la place, face à la façade de la basilique.",
+            "transition_vers_suivant": "Marchez vers le nord en remontant vers le centre. Prenez la Via dei Servi ou la Via dell'Oriuolo vers la Piazza San Marco, puis continuez vers la Via Cavour. Le Palazzo Medici Riccardi est au numéro 3 — quinze minutes à pied.",
+            "consigne_plume": "Regardez les dimensions de cette place et expliquez pourquoi elle est aussi grande pour un quartier médiéval dense : c'est ici que se jouait le calcio storico, l'ancêtre du football en armure complète, organisé par quartiers rivaux. La violence populaire comme spectacle toléré — la soupape de sécurité d'une ville qui brûlait ses dissidents sur la place d'à côté.",
+            "cible_duree_audio": "1 minute 30",
+            "is_grand_format": false,
+            "faits_retenus": [],
+            "briefs_recherche_additionnelle": [
+                {
+                    "type": "Deep_Dive",
+                    "name": "Calcio storico fiorentino : origines et fonction sociale",
+                    "narrative_pitch": null
+                }
+            ]
+        },
+        {
+            "numero": 15,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Palazzo Medici Riccardi : L'Architecture du Pouvoir Discret",
+            "localisation": "Via Cavour 3, 50129 Florence. Arrêtez-vous devant la façade principale, côté Via Cavour, pour observer le traitement de la pierre.",
+            "transition_vers_suivant": "La Basilica di San Lorenzo est à cinquante mètres — tournez à gauche en sortant du palazzo, puis encore à gauche sur la Piazza San Lorenzo.",
+            "consigne_plume": "Passez la main sur la pierre de la façade basse — les bossages rugueux du rez-de-chaussée, la surface de plus en plus lisse vers le haut. Cosimo le Vieux a refusé le projet de Brunelleschi jugé 'trop royal' et choisi Michelozzo : l'humilité calculée comme stratégie politique dans une république qui exilait les ambitieux. Puis entrez dans la Chapelle des Mages : chaque visage dans la procession de Gozzoli est un portrait de la famille Médicis déguisée en roi mage.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_62",
+                "ID_63",
+                "ID_134"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 16,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Basilica di San Lorenzo et Cappelle Medicee : Le Mausolée de la Légitimité",
+            "localisation": "Piazza di San Lorenzo, 50123 Florence. Commencez devant la façade brute de la basilique, puis entrez dans les Cappelle Medicee par l'entrée séparée, Piazza Madonna degli Aldobrandini 6.",
+            "transition_vers_suivant": "Ressortez des Cappelle Medicee et traversez la Piazza San Lorenzo — les étals du marché sont devant vous. L'entrée du Mercato Centrale est à deux minutes à pied, Via dell'Ariento.",
+            "consigne_plume": "Montrez la façade de San Lorenzo : de la pierre brute, sans revêtement. Michel-Ange a signé un contrat en 1518, extrait des marbres, et le projet a été annulé en 1520 — la façade inachevée est la cicatrice d'une commande politique abandonnée. Dans la Sacristie Nouvelle, demandez à l'auditeur de regarder les tombeaux de Giuliano et Lorenzo : les proportions sont délibérément écrasantes — conçues pour vous faire sentir petit.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_101",
+                "ID_103",
+                "ID_105",
+                "ID_110",
+                "ID_106",
+                "ID_113"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 17,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Mercato Centrale : De la Laine au Food Court",
+            "localisation": "Via dell'Ariento, Piazza del Mercato Centrale, 50123 Florence. Entrez dans le marché et montez à l'étage supérieur.",
+            "transition_vers_suivant": "Redescendez et sortez du marché. Prenez la Via Nazionale vers l'ouest, puis descendez vers l'Arno et traversez sur le Ponte alla Carraia ou le Ponte Amerigo Vespucci. Remontez vers le Borgo Santo Spirito — la Piazza Santo Spirito est à vingt minutes à pied.",
+            "consigne_plume": "Regardez depuis l'étage supérieur rénové en 2014 — comptoirs gastronomiques premium, école de cuisine, 500 places assises — puis regardez en bas : les étals traditionnels de légumes, de tripes, de fromages. C'est la même transformation que Florence a appliquée à tout son centre depuis vingt ans. Racontez la continuité : le commerce de la laine, le change bancaire, les étals médiévaux, la gentrification alimentaire — même logique, acteurs différents.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_119",
+                "ID_118",
+                "ID_108"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 18,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Oltrarno — Santo Spirito et la Chapelle Brancacci : Florence Sans Fard",
+            "localisation": "Piazza Santo Spirito, 50125 Florence pour Santo Spirito. Cappella Brancacci : Piazza del Carmine 14, 50124 Florence — cinq minutes à pied vers l'ouest.",
+            "transition_vers_suivant": "De la Piazza del Carmine, remontez vers le nord par la Via de' Serragli jusqu'au Lungarno, puis traversez l'Arno. Prenez le Lungarno vers l'est jusqu'au Museo Galileo — Piazza dei Giudici 1, dix minutes à pied.",
+            "consigne_plume": "Dans la Chapelle Brancacci, regardez la ligne de fracture stylistique entre les fresques de Masaccio et celles de Filippino Lippi — couleurs différentes, anatomies différentes : c'est la couture entre 1428 et 1483, l'exil du commanditaire Brancacci chassé par Cosimo le Vieux. Puis montrez les zones où les visages ont été grattés : la damnatio memoriae s'applique aussi aux fresques.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_127",
+                "ID_128"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 19,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Museo Galileo : Le Doigt Dressé Vers Rome",
+            "localisation": "Piazza dei Giudici 1, 50122 Florence. Cherchez la vitrine permanente contenant le doigt de Galilée — salle au premier étage.",
+            "transition_vers_suivant": "Sortez du musée et longez l'Arno vers l'est sur le Lungarno Serristori. Traversez le Ponte San Niccolò et montez par la Via dei Bastioni ou le Viale Michelangelo jusqu'au Piazzale Michelangelo — trente minutes à pied ou bus 13 depuis la Piazza Ferrucci.",
+            "consigne_plume": "Pointez le doigt médius de Galilée dans sa vitrine de cristal : prélevé en 1737 lors du transfert de sa dépouille vers Santa Croce, 95 ans après sa mort en résidence surveillée à Arcetri. Ce geste — conserver le doigt d'un hérétique comme une relique de saint — est l'ironie la plus florentine qui soit. Racontez la mécanique : les Médicis ont financé Galilée, puis ont cédé à Rome quand ça devenait dangereux.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_124",
+                "ID_125",
+                "ID_122"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 20,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Piazzale Michelangelo : La Ville Vue d'En Haut",
+            "localisation": "Piazzale Michelangelo, 50125 Florence. Placez-vous à la balustrade face au panorama, au coucher du soleil si possible.",
+            "transition_vers_suivant": null,
+            "consigne_plume": "Demandez à l'auditeur de localiser un par un les points du parcours dans le panorama : le dôme, le campanile, la tour du Palazzo Vecchio, le ruban de l'Arno, le Ponte Vecchio. Puis dites-lui ce que la vue ne montre pas : les 6 000 expulsés de la Piazza della Repubblica, les fresques grattées, les armoiries scalpellées, les corps pendus aux fenêtres. Florence a toujours su comment présenter son meilleur profil — c'est peut-être la chose la plus florentine de toutes.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_144",
+                "ID_147",
+                "ID_143"
+            ],
+            "briefs_recherche_additionnelle": []
+        }
+    ],
+    "fils_narratifs": [
+        {
+            "theme": "La Conjuration des Pazzi et ses conséquences",
+            "introduit_au": 6,
+            "developpe_aux": [
+                7,
+                12
+            ],
+            "clos_au": 13,
+            "resume": "Bûcher de Savonarole en Piazza della Signoria comme avertissement public -> Palazzo Vecchio comme instrument de répression (pendaison de Salviati aux fenêtres) -> Santa Croce comme lieu de sépulture refusée et de récupération symbolique -> Cappella dei Pazzi : façade inachevée, armoiries scalpellées, damnatio memoriae complète."
+        },
+        {
+            "theme": "Les Médicis : du comptoir bancaire à la monarchie absolue",
+            "introduit_au": 2,
+            "developpe_aux": [
+                7,
+                10,
+                15,
+                16
+            ],
+            "clos_au": 17,
+            "resume": "Cosimo le Vieux comme simple juge parmi 34 en 1401 -> financement stratégique de la tombe d'un antipape -> Palazzo Vecchio transformé en instrument de contrôle bureaucratique -> Palazzo Pitti acheté à un rival ruiné -> Palazzo Medici comme manifeste d'humilité calculée -> San Lorenzo comme mausolée dynastique -> le marché San Lorenzo comme dernier avatar de la logique commerciale médicéenne."
+        },
+        {
+            "theme": "Galilée : le génie instrumentalisé puis abandonné",
+            "introduit_au": 12,
+            "developpe_aux": [
+                18
+            ],
+            "clos_au": 19,
+            "resume": "Sépulture refusée 95 ans à Santa Croce -> exil en résidence surveillée à Arcetri -> doigt prélevé comme relique ironique au Museo Galileo : les Médicis ont financé la science et cédé à Rome quand elle devenait dangereuse."
+        },
+        {
+            "theme": "L'effacement comme politique urbaine",
+            "introduit_au": 1,
+            "developpe_aux": [
+                3,
+                6,
+                13
+            ],
+            "clos_au": 20,
+            "resume": "Ghetto rasé et 6 000 expulsés célébrés comme 'risanamento' -> marbre de Prato comme domination territoriale gravée dans la façade -> armoiries des Pazzi scalpellées par décret -> panorama depuis le Piazzale : la ville montre son meilleur profil et cache ses cicatrices."
+        }
+    ]
+}

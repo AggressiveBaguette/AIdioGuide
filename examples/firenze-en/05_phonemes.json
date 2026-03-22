@@ -1,0 +1,568 @@
+{
+    "replacement_list": [
+        {
+            "expression": "L'ANTICO CENTRO DELLA CITTÀ DA SECOLARE SQUALLORE A NUOVA VITA RESTITUITO",
+            "langue": "it-IT",
+            "phonemes_ipa": "lanˈtiːko ˈtʃɛntro ˈdella tʃitˈta da sekoˈlaːre skwalˈloːre a ˈnwɔːva ˈviːta restituˈiːto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ammannato, Ammannato, quanto marmo hai sciupato",
+            "langue": "it-IT",
+            "phonemes_ipa": "ammanˈnaːto ammanˈnaːto ˈkwanto ˈmarmo ai ʃʃuˈpaːto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "COSIMUS MEDICES DVX FLORENTINORUM",
+            "langue": "la-LA",
+            "phonemes_ipa": "ˈkɔsimus ˈmɛditʃes duks florenˈtiːnorum",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Giovanni di Bicci de' Medici",
+            "langue": "it-IT",
+            "phonemes_ipa": "dʒoˈvanni di ˈbittʃi de ˈmɛːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Anna Maria Luisa de' Medici",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈanna maˈriːa luˈiːza de ˈmɛːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Museo dell'Opera del Duomo",
+            "langue": "it-IT",
+            "phonemes_ipa": "muˈzɛːo delˈlɔːpera del ˈdwɔːmo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ioannes quondam papa XXIII",
+            "langue": "la-LA",
+            "phonemes_ipa": "joˈannes ˈkwondam ˈpaːpa viˈdʒɛsimus ˈtɛrtsius",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Palazzo Medici Riccardi",
+            "langue": "it-IT",
+            "phonemes_ipa": "paˈlattso ˈmɛːditʃi rikˈkardi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Salone dei Cinquecento",
+            "langue": "it-IT",
+            "phonemes_ipa": "saˈloːne dei tʃinkweˈtʃɛnto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Grotta del Buontalenti",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈɡrɔtta del bwontaˈlɛnti",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Alessandro de' Medici",
+            "langue": "it-IT",
+            "phonemes_ipa": "alesˈsandro de ˈmɛːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Piazzale Michelangelo",
+            "langue": "it-IT",
+            "phonemes_ipa": "pjatˈtsaːle mikeˈlandʒelo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Girolamo Savonarola",
+            "langue": "it-IT",
+            "phonemes_ipa": "dʒiˈrɔːlamo savonaˈrɔːla",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ponte Santa Trinita",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈponte ˈsanta triˈnita",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Giuliano de' Medici",
+            "langue": "it-IT",
+            "phonemes_ipa": "dʒuˈljaːno de ˈmɛːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Camerata fiorentina",
+            "langue": "it-IT",
+            "phonemes_ipa": "kameˈraːta fjorenˈtiːna",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via dei Calzaiuoli",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa dei kaltsaiˈwɔːli",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Eleonora di Toledo",
+            "langue": "it-IT",
+            "phonemes_ipa": "eleoˈnɔːra di toˈleːdo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Cappella dei Pazzi",
+            "langue": "it-IT",
+            "phonemes_ipa": "kapˈpɛlla dei ˈpattsi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Piazza del Carmine",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpjattsa del karˈmiːne",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Piazza dei Giudici",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpjattsa dei ˈdʒuːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Baldassarre Cossa",
+            "langue": "it-IT",
+            "phonemes_ipa": "baldasˈsarre ˈkɔssa",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Cosimo de' Medici",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈkɔːzimo de ˈmɛːditʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Maurizio Seracini",
+            "langue": "it-IT",
+            "phonemes_ipa": "mauˈrittsjo seraˈtʃiːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Vincenzo Borghini",
+            "langue": "it-IT",
+            "phonemes_ipa": "vinˈtʃɛntso borˈɡiːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "damnatio memoriae",
+            "langue": "la-LA",
+            "phonemes_ipa": "damˈnaːtsio meˈmɔːriae",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Benvenuto Cellini",
+            "langue": "it-IT",
+            "phonemes_ipa": "benveˈnuːto tʃelˈliːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Luca della Robbia",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈluːka ˈdella ˈrɔbbja",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "pittura infamante",
+            "langue": "it-IT",
+            "phonemes_ipa": "pitˈtuːra infaˈmante",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Cappella dei Magi",
+            "langue": "it-IT",
+            "phonemes_ipa": "kapˈpɛlla dei ˈmaːdʒi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Villa il Gioiello",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈvilla il dʒoˈjɛllo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Arte di Calimala",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈarte di kaliˈmaːla",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Figline di Prato",
+            "langue": "it-IT",
+            "phonemes_ipa": "fiʎˈʎiːne di ˈpraːto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Loggia dei Lanzi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈlɔddʒa dei ˈlantsi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via Guicciardini",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa ɡwittʃarˈdiːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Cappelle Medicee",
+            "langue": "it-IT",
+            "phonemes_ipa": "kapˈpɛlle mediˈtʃɛːe",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Mercato Centrale",
+            "langue": "it-IT",
+            "phonemes_ipa": "merˈkaːto tʃenˈtraːle",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via dell'Ariento",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa delˈlarjento",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Felice Brancacci",
+            "langue": "it-IT",
+            "phonemes_ipa": "feˈliːtʃe branˈkattʃi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via de' Serragli",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa de serˈraʎʎi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Arte della Lana",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈarte ˈdella ˈlaːna",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Arte del Cambio",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈarte del ˈkambjo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Palazzo Vecchio",
+            "langue": "it-IT",
+            "phonemes_ipa": "paˈlattso ˈvɛkkjo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Poggio a Caiano",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpoddʒo a kaˈjaːno",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Bianca Cappello",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈbjanka kapˈpɛllo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Niccolò Tribolo",
+            "langue": "it-IT",
+            "phonemes_ipa": "nikkoˈlɔ ˈtriːbolo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Benozzo Gozzoli",
+            "langue": "it-IT",
+            "phonemes_ipa": "beˈnɔttso ˈɡɔttsoli",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Filippino Lippi",
+            "langue": "it-IT",
+            "phonemes_ipa": "filipˈpiːno ˈlippi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Santa Reparata",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈsanta repaˈraːta",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Torre Mannelli",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈtorre manˈnɛlli",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "calcio storico",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈkaltʃo ˈstɔːriko",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Palazzo Pitti",
+            "langue": "it-IT",
+            "phonemes_ipa": "paˈlattso ˈpitti",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Pater Patriae",
+            "langue": "la-LA",
+            "phonemes_ipa": "ˈpater ˈpatriae",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "pietra serena",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpjɛːtra seˈreːna",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Museo Galileo",
+            "langue": "it-IT",
+            "phonemes_ipa": "muˈzɛːo ɡaliˈlɛːo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Viale Galileo",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈvjaːle ɡaliˈlɛːo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Brunelleschi",
+            "langue": "it-IT",
+            "phonemes_ipa": "brunelˈleski",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Orsanmichele",
+            "langue": "it-IT",
+            "phonemes_ipa": "orsanmiˈkɛːle",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "piano nobile",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpjaːno ˈnɔːbile",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ferdinando I",
+            "langue": "it-IT",
+            "phonemes_ipa": "ferdiˈnando ˈpriːmo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "risanamento",
+            "langue": "it-IT",
+            "phonemes_ipa": "rizanaˈmento",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Francesco I",
+            "langue": "it-IT",
+            "phonemes_ipa": "franˈtʃesko ˈpriːmo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Il Biancone",
+            "langue": "it-IT",
+            "phonemes_ipa": "il bjanˈkoːne",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "cerca trova",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈtʃerka ˈtrɔːva",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Santa Croce",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈsanta ˈkroːtʃe",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "pietra dure",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpjɛːtra ˈduːre",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "via Farini",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa faˈriːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Michelozzo",
+            "langue": "it-IT",
+            "phonemes_ipa": "mikeˈlɔttso",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Luca Pitti",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈluːka ˈpitti",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via Cavour",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviːa kaˈvur",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Urban VIII",
+            "langue": "en-US",
+            "phonemes_ipa": "ˈɜːrbən ðə eɪtθ",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Donatello",
+            "langue": "it-IT",
+            "phonemes_ipa": "donaˈtɛllo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Julius II",
+            "langue": "en-US",
+            "phonemes_ipa": "ˈdʒuːliəs ðə ˈsɛkənd",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Sixtus IV",
+            "langue": "en-US",
+            "phonemes_ipa": "ˈsɪkstəs ðə fɔːrθ",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Poliziano",
+            "langue": "it-IT",
+            "phonemes_ipa": "politsˈjaːno",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ghiberti",
+            "langue": "it-IT",
+            "phonemes_ipa": "ɡiˈberti",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Bargello",
+            "langue": "it-IT",
+            "phonemes_ipa": "barˈdʒɛllo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Gionitus",
+            "langue": "la-LA",
+            "phonemes_ipa": "dʒiˈonitus",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Linaioli",
+            "langue": "it-IT",
+            "phonemes_ipa": "linaˈjɔːli",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Piagnoni",
+            "langue": "it-IT",
+            "phonemes_ipa": "pjaɲˈɲoːni",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Cosimo I",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈkɔːzimo ˈpriːmo",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Oltrarno",
+            "langue": "it-IT",
+            "phonemes_ipa": "olˈtrarno",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Peruzzi",
+            "langue": "it-IT",
+            "phonemes_ipa": "peˈruttsi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Orcagna",
+            "langue": "it-IT",
+            "phonemes_ipa": "orˈkaɲɲa",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Albizzi",
+            "langue": "it-IT",
+            "phonemes_ipa": "alˈbittsi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Arcetri",
+            "langue": "it-IT",
+            "phonemes_ipa": "arˈtʃɛːtri",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Vasari",
+            "langue": "it-IT",
+            "phonemes_ipa": "vaˈzaːri",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Giotto",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈdʒɔtto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Uffizi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ufˈfittsi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Boboli",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈbɔːboli",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Turchi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈturki",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ciompi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈtʃompi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Bardi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈbardi",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Pazzi",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈpattsi",
+            "type": "foreign_entity"
+        }
+    ]
+}

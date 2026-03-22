@@ -1,0 +1,230 @@
+{
+    "titre_audioguide": "Angkor : La Rome des Dieux-Rois",
+    "strategie": "Un Français du XXIe siècle face à une civilisation qui a construit le plus grand complexe religieux du monde pour des dieux qu'il ne connaît pas encore. Chaque pierre est une cosmologie, chaque temple est un univers miniature, et bâtir ici n'était pas de l'architecture mais de la théologie en béton de latérite.",
+    "parcours": [
+        {
+            "numero": 1,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Chaussée des Dieux — Premier Pas dans un Autre Univers",
+            "localisation": "Angkor Wat, chaussée principale Ouest, depuis la gopura Ouest (tour-portail d'entrée). Coordonnées GPS : 13.4125° N, 103.8670° E. Stationnez le scooter au parking principal côté Ouest.",
+            "transition_vers_suivant": "Continuez à pied vers l'intérieur du temple. Les galeries couvertes s'ouvrent immédiatement à gauche et à droite dès que vous franchissez la première enceinte.",
+            "consigne_plume": "Pointez les balustrades latérales de la chaussée : regardez les corps serpentins continus qui se terminent en têtes évasées en éventail — ou plutôt en moignons, parce que la majorité de ces têtes ont été sciées et revendues. Élargissez sur ce que ça dit d'une civilisation que le premier geste du visiteur moderne soit de contempler le résultat d'un pillage organisé par des réseaux d'antiquaires occidentaux dans les années 1970-1990.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_1",
+                "ID_2",
+                "ID_6",
+                "ID_4"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 2,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Les Galeries de Bas-Reliefs — La Bible Sculptée des Khmers",
+            "localisation": "Angkor Wat, galeries intérieures du 1er niveau. Entrez par la gopura Ouest et longez la galerie Sud vers l'Est. Le panneau de Kurukshetra est dans la galerie Ouest, section Sud. Le panneau du Barattage est dans la galerie Est. GPS : 13.4124° N, 103.8678° E.",
+            "transition_vers_suivant": "Depuis la galerie Est, remontez vers le centre du temple. Les escaliers qui mènent aux niveaux supérieurs sont visibles depuis la cour intérieure.",
+            "consigne_plume": "Arrêtez-vous devant la frise de la galerie Est : 49 mètres de pierre où 88 dieux et 92 démons tirent un serpent géant pour faire tourner l'océan primordial et en extraire l'élixir d'immortalité. Dites à l'auditeur que ce mythe — le Barattage de la Mer de Lait — est l'équivalent khmer de la Genèse, de l'Iliade et de l'Apocalypse réunis en une seule image.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_13",
+                "ID_18",
+                "ID_47",
+                "ID_100",
+                "ID_22"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 3,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Tour Centrale — Le Mont Meru en Pierre",
+            "localisation": "Angkor Wat, sanctuaire central (Bakan), 3e niveau. Accès par les escaliers à 70° de pente, équipés de rampes en bois. Capacité limitée à 100 personnes simultanément. GPS : 13.4124° N, 103.8690° E.",
+            "transition_vers_suivant": null,
+            "consigne_plume": "Dis à l'auditeur de trouver un endroit pour s'asseoir et écouter. Depuis ici, pointez les quatre tours secondaires qui encadrent la tour centrale : ces cinq pics sont le Mont Meru — l'Olympe, le Sinaï et l'axe du monde réunis en un seul monument. Élargissez sur le concept qui rend tout cela radicalement étranger à un regard européen : le roi qui a commandé ce temple ne représentait pas Dieu, il était Dieu — et ce n'est pas une métaphore.",
+            "cible_duree_audio": "8 minutes",
+            "is_grand_format": true,
+            "faits_retenus": [
+                "ID_15",
+                "ID_16",
+                "ID_3",
+                "ID_28",
+                "ID_32",
+                "ID_33",
+                "ID_35",
+                "ID_40",
+                "ID_12",
+                "ID_24"
+            ],
+            "briefs_recherche_additionnelle": [
+                {
+                    "type": "Deep_Dive",
+                    "name": "Devaraja : mécanique rituelle du dieu-roi khmer",
+                    "narrative_pitch": null
+                },
+                {
+                    "type": "Deep_Dive",
+                    "name": "Cosmologie hindoue pour non-hindous : Mont Meru, Vishnou, dharma",
+                    "narrative_pitch": null
+                }
+            ]
+        },
+        {
+            "numero": 4,
+            "type": "Respiration_Contexte",
+            "titre_etape": "Les Apsaras — 1796 Femmes Divines Qui Vous Regardent",
+            "localisation": "Angkor Wat, galeries intérieures du 1er et 2e niveau, colonnes et murs. Particulièrement visibles en redescendant du Bakan vers la cour intérieure Sud. GPS : 13.4122° N, 103.8685° E.",
+            "transition_vers_suivant": "Rejoignez votre scooter au parking Ouest. Prenez la route principale vers le Nord (route Charles de Gaulle) sur environ 1,5 km, puis tournez à gauche vers Angkor Thom. La Porte Sud est à 4 km d'Angkor Wat.",
+            "consigne_plume": "Pointez une apsara à hauteur de main sur un pilier : regardez la surface du grès autour de ses seins et de son visage — elle est anormalement lisse, polie par des millions de contacts depuis 2010. Élargissez sur ce que ça révèle : le sacré khmer est aujourd'hui consommé comme un selfie, et ce fantasme du corps divin féminin n'a pas changé depuis les photographes coloniaux français de 1866.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_45",
+                "ID_46",
+                "ID_29",
+                "ID_38",
+                "ID_50"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 5,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Porte Sud d'Angkor Thom — 108 Géants et le Barattage du Monde",
+            "localisation": "Porte Sud d'Angkor Thom. Stationnez le scooter sur le bas-côté avant le pont. La rangée de dieux est côté Est du pont, les démons côté Ouest. GPS : 13.4270° N, 103.8591° E.",
+            "transition_vers_suivant": "Franchissez la porte à scooter et suivez l'axe principal vers le Nord sur 1,5 km jusqu'au Bayon, visible au centre de la ville. Garez-vous sur l'esplanade.",
+            "consigne_plume": "Pointez les rangées de géants de pierre qui tirent un serpent-naga de chaque côté du pont : 54 dieux d'un côté, 54 démons de l'autre — c'est le mythe du Barattage rendu colossal, une frontière cosmique matérialisée en pierre que vous franchissez physiquement. Élargissez sur ce que signifie entrer dans une ville qui n'est pas une ville mais un mandala : 9 km² conçus comme une carte de l'univers habitable.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_53",
+                "ID_52",
+                "ID_64",
+                "ID_57"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 6,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Le Bayon — 216 Visages Qui Vous Regardent Tous à la Fois",
+            "localisation": "Le Bayon, centre d'Angkor Thom. GPS : 13.4414° N, 103.8590° E. Entrez par l'Est, montez au niveau 2 pour voir les visages de près.",
+            "transition_vers_suivant": "Sortez par le côté Nord du Bayon et marchez 200 mètres vers le Nord-Ouest : la Terrasse des Éléphants et la Terrasse du Roi Lépreux sont visibles depuis le Bayon.",
+            "consigne_plume": "Choisissez un visage et restez devant lui : ce sourire est reproduit 216 fois à l'échelle d'une ville entière — c'est soit le visage du roi Jayavarman VII, soit celui du Bodhisattva Avalokiteshvara, soit les deux délibérément confondus. Élargissez sur ce que cette ambiguïté révèle : dans le bouddhisme mahayana de Jayavarman VII, le roi ne représente pas le divin, il en est la manifestation — et graver votre propre visage sur 216 tours, c'est la propagande d'État la plus monumentale de l'histoire de l'Asie du Sud-Est.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_58",
+                "ID_65",
+                "ID_67",
+                "ID_77",
+                "ID_70",
+                "ID_60",
+                "ID_82"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 7,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Terrasse des Éléphants et la Terrasse du Roi Lépreux — Le Théâtre du Pouvoir Sacré",
+            "localisation": "Terrasse des Éléphants : le long de la Place de la Victoire, face au Bayon vers l'Est. GPS : 13.4437° N, 103.8581° E. La Terrasse du Roi Lépreux est à l'angle Nord-Ouest de la terrasse principale.",
+            "transition_vers_suivant": "Reprenez le scooter vers l'Est par la route qui longe le mur Nord d'Angkor Thom, puis continuez vers Ta Prohm à environ 1,5 km au Sud-Est. Suivez les panneaux depuis la sortie Est d'Angkor Thom.",
+            "consigne_plume": "Pointez les éléphants à trois têtes sculptés sur la façade de la terrasse : Airavata, la monture du dieu hindou Indra, sculptée par un roi bouddhiste — un syncrétisme théologique gravé dans la pierre, visible en façade. Élargissez sur la galerie intérieure cachée de la Terrasse du Roi Lépreux : une salle enfouie, jamais exposée au regard, remplie de sculptures de nagas à sept têtes superposés — un espace rituel interdit que vous pouvez entrer aujourd'hui avec une lampe.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_88",
+                "ID_89",
+                "ID_90",
+                "ID_91",
+                "ID_92",
+                "ID_103",
+                "ID_96"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 8,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Ta Prohm — Le Temple que la Forêt a Décidé de Garder",
+            "localisation": "Ta Prohm, entrée Ouest. GPS : 13.4350° N, 103.8890° E. Stationnez au parking Ouest, entrez par la gopura Ouest et traversez vers la cour centrale.",
+            "transition_vers_suivant": "Depuis Ta Prohm, reprenez le scooter vers le Nord sur environ 2 km. Preah Khan est au Nord d'Angkor Thom, accessible par la route qui longe le Baray du Nord.",
+            "consigne_plume": "Pointez les racines d'un fromager qui traversent un linteau sculpté : l'arbre soutient physiquement le mur qu'il est en train de détruire. Élargissez sur la décision qui rend Ta Prohm unique : en 1908, des archéologues français ont choisi de laisser les arbres — non pas par philosophie bouddhiste de l'impermanence, mais par goût colonial pour la ruine romantique — et ce choix esthétique d'un fonctionnaire de l'EFEO est aujourd'hui présenté comme une sagesse universelle.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_105",
+                "ID_107",
+                "ID_108",
+                "ID_109",
+                "ID_110",
+                "ID_117",
+                "ID_113",
+                "ID_116"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 9,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Preah Khan — Le Temple-Université où 97 840 Personnes Travaillaient pour un Dieu",
+            "localisation": "Preah Khan, entrée Sud. GPS : 13.4600° N, 103.8580° E. Stationnez au parking Sud, entrez par la gopura Sud et traversez vers le sanctuaire central.",
+            "transition_vers_suivant": "Depuis Preah Khan, prenez la route vers le Sud en longeant le Baray du Nord. Après 3 km, vous apercevrez les dépressions linéaires dans la végétation — les cicatrices des anciens canaux révélés par LiDAR. C'est votre dernière étape : arrêtez-vous sur le bas-côté.",
+            "consigne_plume": "Pointez la salle aux colonnes cylindriques — unique à Angkor, toutes les autres galeries ont des piliers carrés : cette anomalie structurelle est toujours sans explication définitive. Élargissez sur la stèle de fondation de 1191 qui liste 97 840 personnes assignées au service de ce seul temple : cuisiniers, danseurs, enseignants, prêtres — tous \"offerts\" au dieu, statut héréditaire, zéro mention de salaire.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_121",
+                "ID_122",
+                "ID_123",
+                "ID_124",
+                "ID_125",
+                "ID_129",
+                "ID_127"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 10,
+            "type": "Respiration_Contexte",
+            "titre_etape": "Les Cicatrices du LiDAR — Quand l'Empire s'est Effondré",
+            "localisation": "Route entre Preah Khan et Angkor Thom, côté Nord. Arrêtez-vous sur le bas-côté de la route, face aux dépressions linéaires visibles dans la végétation basse en saison sèche. GPS approximatif : 13.4500° N, 103.8585° E.",
+            "transition_vers_suivant": null,
+            "consigne_plume": "Regardez les dépressions linéaires dans la végétation devant vous : ce sont les fantômes des canaux d'Angkor, révélés par satellite LiDAR en 2012, colmatés depuis le XIVe siècle. Élargissez sur la question qui conclut tout ce que vous avez vu aujourd'hui : comment une civilisation qui croyait que son roi était dieu a-t-elle interprété sa propre chute — non pas comme une défaite politique, mais comme la rupture du contrat cosmique entre le ciel et la terre.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_132",
+                "ID_135"
+            ],
+            "briefs_recherche_additionnelle": []
+        }
+    ],
+    "fils_narratifs": [
+        {
+            "theme": "Jayavarman VII — Le Roi Bouddhiste qui a Réécrit l'Empire",
+            "introduit_au": 5,
+            "developpe_aux": [
+                6,
+                7,
+                8,
+                9
+            ],
+            "clos_au": 10,
+            "resume": "Arrivée au pouvoir en 1181 après le sac d'Angkor par les Chams -> conversion bouddhiste mahayana imposée sur un empire hindou -> construction d'Angkor Thom, du Bayon, de Ta Prohm et de Preah Khan -> 97 840 personnes assignées à un seul temple -> visage gravé 216 fois à l'échelle d'une ville -> successeurs martelleront ses Bouddhas et effaceront son œuvre -> l'empire s'effondre deux siècles plus tard."
+        },
+        {
+            "theme": "Le Pillage Colonial — De l'EFEO aux Réseaux d'Antiquaires",
+            "introduit_au": 1,
+            "developpe_aux": [
+                4,
+                8
+            ],
+            "clos_au": 9,
+            "resume": "Têtes de nagas sciées sur les chaussées d'Angkor dans les années 1970-1990 -> apsaras photographiées comme curiosité érotique dès 1866 puis moulées pour Paris -> EFEO contrôle le site de 1907 à 1953, choisit quoi restaurer et quoi laisser en ruine romantique -> linteaux de Ta Prohm identifiés au Met de New York, restitutions en cours en 2024."
+        }
+    ]
+}

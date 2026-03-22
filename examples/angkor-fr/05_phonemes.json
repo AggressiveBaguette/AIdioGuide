@@ -1,0 +1,196 @@
+{
+    "replacement_list": [
+        {
+            "expression": "Metropolitan Museum",
+            "langue": "en-US",
+            "phonemes_ipa": "ˌmɛtrəˈpɒlɪtən mjuˈziːəm",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Douglas Latchford",
+            "langue": "en-GB",
+            "phonemes_ipa": "ˈdʌɡ.ləs ˈlætʃ.fəd",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Samudra Manthan",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "sɐ.mʊd̪.rɐ mɐn.t̪ʰɐ.nɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Avalokiteshvara",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ɐ.vɐ.loː.kɪ.t̪eː.ɕvɐ.rɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Jayavarman VIII",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʒa.ja.vaʁ.man ɥit",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Suryavarman II",
+            "langue": "fr-FR",
+            "phonemes_ipa": "sy.ʁja.vaʁ.man dø",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Jayavarman VII",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʒa.ja.vaʁ.man sɛt",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Prajnaparamita",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "pɾɐdʑ.ɲaː.paː.ɾɐ.mɪ.t̪aː",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Angelina Jolie",
+            "langue": "en-US",
+            "phonemes_ipa": "ˌændʒəˈliːnə dʒoʊˈliː",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Kurukshetra",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ku.ruk.ʂeː.trɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Mahabharata",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "mɐ.ɦaː.bʱaː.rɐ.tɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Angkor Thom",
+            "langue": "km-KH",
+            "phonemes_ipa": "ʔɑŋ.kɔː tʰom",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Zhou Daguan",
+            "langue": "zh-CN",
+            "phonemes_ipa": "ʈʂóu tâ.kwân",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Tomb Raider",
+            "langue": "en-US",
+            "phonemes_ipa": "tuːm ˈreɪdər",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "khñum vraḥ",
+            "langue": "okz",
+            "phonemes_ipa": "kɲom βrah",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Preah Khan",
+            "langue": "km-KH",
+            "phonemes_ipa": "preəh kʰan",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Louis XIV",
+            "langue": "fr-FR",
+            "phonemes_ipa": "lwi ka.tɔʁz",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Tonlé Sap",
+            "langue": "km-KH",
+            "phonemes_ipa": "tɔn.leː sap",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Lokesvara",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "loː.keː.ɕvɐ.rɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Devaraja",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "d̪eː.vɐ.raː.dʒɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Airavata",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "aɪ̯.raː.vɐ.t̪ɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Ta Prohm",
+            "langue": "km-KH",
+            "phonemes_ipa": "taː proːm",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "devatas",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "d̪eː.vɐ.t̪aː",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Thomson",
+            "langue": "en-GB",
+            "phonemes_ipa": "ˈtɒm.sən",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "garudas",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ɡɐ.ru.ɖɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Vasuki",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ˈvaː.su.ki",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "amrita",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ɐm.rɪ.tɐ",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Bayon",
+            "langue": "km-KH",
+            "phonemes_ipa": "baː.jɔn",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Baray",
+            "langue": "km-KH",
+            "phonemes_ipa": "baː.raːj",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "nāga",
+            "langue": "km-KH",
+            "phonemes_ipa": "naː.ɡaː",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Meru",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ˈmeː.ru",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Yama",
+            "langue": "sa-Latn",
+            "phonemes_ipa": "ˈjɐ.mɐ",
+            "type": "foreign_entity"
+        }
+    ]
+}

@@ -15,7 +15,7 @@ A good audioguide doesn't recite facts. It starts from something you can see rig
 The problem: ask an LLM directly for precise architectural details and anecdotes and it hallucinates. Confidently. Early tests showed ~80% hallucination rate on specific claims — the gargoyle that "represents medieval medicine", the inscription that "dates from the original construction". The narration sounded great. Google Maps showed a 
 1960s apartment building.
 
-Grounding the narration in verifiable facts without losing the narrative thread requires a pipeline that separates concern: 
+Grounding the narration in verifiable facts without losing the narrative thread requires a pipeline that separates concerns: 
 **research and fact-checking first, storytelling second.**
 That's what this system is.
 
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 # Required keys: ANTHROPIC_API_KEY, GEMINI_API_KEY, EXA_API_KEY, AZURE_TTS_KEY
 
 # Run a full generation pipeline
-python main.py generate --city "Paris" --lang "en" --comment "Very good knowledge of the city. Focus on medieval Paris, ignore anything later than the XVIe century". --name "my-first-audioguide"
+python main.py generate --city "Paris" --lang "en" --comment "Very good knowledge of the city. Focus on medieval Paris, ignore anything later than the 16th century". --name "my-first-audioguide"
 ```
 
 ## Architecture & Workflow
@@ -151,7 +151,7 @@ The research phase is the most expensive part of the pipeline — 20 LLM calls f
 
 JSON structure is expensive. Quotes, brackets, colons, key names repeated on every row — all tokens that carry zero semantic value for the model. Switching to pipe-separated values eliminates that overhead entirely.
 
-To futher reduce the tokens usage, LLM are instructed to use a telegraphic style, suppressing articles, pronouns, conjugated verbs. Symbols replace prose: `->` for consequence, `@` for location, `~` for approximation. Every tokens represents an idea. 
+To further reduce the token usage, LLM are instructed to use a telegraphic style, suppressing articles, pronouns, conjugated verbs. Symbols replace prose: `->` for consequence, `@` for location, `~` for approximation. Every tokens represents an idea. 
 
 ```
 P|Bouchers vs Cabochiens 1413|Bouchers Paris -> acteurs majeurs révolte cabochienne [1413]. Simon Caboche = écorcheur Grande Boucherie -> alliance armée avec faction bourguignonne contre Couronne [3].|Aucun vestige physique direct. Trace @ Archives nationales (registres du Parlement de Paris).|H|révolte cabochienne 1413 bouchers Paris Simon Caboche;;cabochiens ordonnance cabochienne 1413 sources primaires
@@ -264,9 +264,12 @@ Python · asyncio · Pydantic · Loguru · Claude Sonnet 4.6 · Gemini Flash 3.0
 
 ## Exploring the examples
 
-The `examples/paris_medieval_fr/` folder contains the complete pipeline 
-output for a medieval Paris audioguide — every intermediate artifact, 
-from raw research to final audio.
+The `examples/` folder contains the complete pipeline output for three 
+audioguides — every intermediate artifact, from raw research to final audio.
+
+---
+
+### Paris médiéval (French) — `examples/paris_medieval_fr/`
 
 **Recommended reading path**
 
@@ -314,6 +317,37 @@ examples/paris_medieval_fr/
 └── 07_Audio/             ← 13 MP3 files
 ```
 
+---
+
+### Angkor (French) — `examples/angkor_fr/`
+
+- `02_Research/phase_1/porte_sud_dangkor_thom.../02.1_unverified_research.dsv`  
+  vs `02.3_verified_research.dsv`  
+  The fact-checker on a subject with sources across French, English, 
+  Khmer and Chinese — including a Zhou Daguan 1296 eyewitness account.
+
+- `04_Scripts/9.txt` → `06_Scripts_with_SSML/9.txt`  
+  The most phoneme-dense stop in the corpus: Preah Khan, with Khmer 
+  proper nouns (`Preah Khan`, `Jayavarman VII`, `Lokesvara`, `Bayon`, 
+  `khñum vraḥ`) and Sanskrit terms handled by IPA injection. Compare 
+  the plain script with the SSML version to see the phoneme layer in 
+  action.
+
+- `07_Audio/9.mp3` — Preah Khan, phoneme showcase (3 min)
+
+---
+
+### Florence (English) — `examples/florence_en/`
+
+- `04_Scripts/1.txt` → `06_Scripts_with_SSML/1.txt`  
+  Stop 1 — Piazza della Repubblica. The plain English narration vs the 
+  SSML version with `<lang xml:lang='it-IT'>` tags switching the TTS 
+  engine mid-sentence for Italian proper nouns and a full inscription 
+  read aloud in Italian. A different phoneme strategy than Angkor: 
+  language switching rather than IPA injection.
+
+- `07_Audio/1.mp3` — Piazza della Repubblica, language switching showcase (3 min)
+
 ## Known Limitations & Tech Debt
 
 This is a functional prototype, not a production system. Here's what doesn't scale and what would need to change.
@@ -327,4 +361,4 @@ This is a functional prototype, not a production system. Here's what doesn't sca
 
 ### Technical Limitations
 * **No tests:** The DSV parser, Pydantic validation logic, and phoneme injection are untested. The system is validated empirically across multiple cities (with 10–20 research calls per audioguide), but there are zero unit or integration tests.
-* **Naive Rate Limiting & Scale:** Claude is protected by basic exponential backoff (`tenacity`) for 429 errors, but Gemini relies on raw API calls. The system is idempotent by design (a failed run can be resumed from the last saved checkpoint), but at a larger scale, this in-memory async architecture would melt. A true production system would require a robust message broker (e.g., Celery or RabbitMQ) to manage API queues.
+* **Naive Rate Limiting & Scale:** Claude is protected by basic exponential backoff (`tenacity`) for 429 errors, but Gemini relies on raw API calls. The system is idempotent by design (a failed run can be resumed from the last saved checkpoint), but at a larger scale, this in-memory async architecture would melt. A true production system would require a robust message broker to manage API queues.

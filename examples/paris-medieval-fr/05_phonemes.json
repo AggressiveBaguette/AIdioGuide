@@ -1,0 +1,154 @@
+{
+    "replacement_list": [
+        {
+            "expression": "William Chester Jordan",
+            "langue": "en-US",
+            "phonemes_ipa": "ˈwɪljəm ˈtʃɛstəɹ ˈdʒɔːɹdən",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "rex christianissimus",
+            "langue": "la-VA",
+            "phonemes_ipa": "reks kristi.aniˈsimus",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Parens Scientiarum",
+            "langue": "la-VA",
+            "phonemes_ipa": "ˈpa.rens si.en.tsi.ˈa.rum",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "vico degli strami",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈviko ˈdeʎʎi ˈstrami",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Dante Alighieri",
+            "langue": "it-IT",
+            "phonemes_ipa": "ˈdante aliˈɡjɛːri",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Vox in excelso",
+            "langue": "la-VA",
+            "phonemes_ipa": "vɔks in ɛksˈtʃɛlso",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Via Turonensis",
+            "langue": "la-VA",
+            "phonemes_ipa": "ˈvi.a turoˈnensis",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Childebert Ier",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʃildəbɛʁ pʁəmje",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "cardo maximus",
+            "langue": "la-VA",
+            "phonemes_ipa": "ˈkardo ˈmaksimus",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Hohenstaufen",
+            "langue": "de-DE",
+            "phonemes_ipa": "ˈhoːənˌʃtaʊ̯fn̩",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Philippe IV",
+            "langue": "fr-FR",
+            "phonemes_ipa": "filip katʁ",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Baudouin II",
+            "langue": "fr-FR",
+            "phonemes_ipa": "bodwɛ̃ dø",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Grégoire IX",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ɡʁeɡwaʁ nøf",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Jean-XXIII",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʒɑ̃ vɛ̃t tʁwɑ",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Louis XIII",
+            "langue": "fr-FR",
+            "phonemes_ipa": "lwi tʁɛz",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Charles VI",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʃaʁl sis",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Charles V",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ʃaʁl sɛ̃k",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Louis XIV",
+            "langue": "fr-FR",
+            "phonemes_ipa": "lwi katɔʁz",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Henri II",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ɑ̃ʁi dø",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Henri-IV",
+            "langue": "fr-FR",
+            "phonemes_ipa": "ɑ̃ʁi katʁ",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Louis X",
+            "langue": "fr-FR",
+            "phonemes_ipa": "lwi dis",
+            "type": "native_anomaly"
+        },
+        {
+            "expression": "Orvieto",
+            "langue": "it-IT",
+            "phonemes_ipa": "orˈvjɛːto",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Mozart",
+            "langue": "de-DE",
+            "phonemes_ipa": "ˈmoːtsaʁt",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Oxford",
+            "langue": "en-GB",
+            "phonemes_ipa": "ˈɒksfəd",
+            "type": "foreign_entity"
+        },
+        {
+            "expression": "Bach",
+            "langue": "de-DE",
+            "phonemes_ipa": "bax",
+            "type": "foreign_entity"
+        }
+    ]
+}
