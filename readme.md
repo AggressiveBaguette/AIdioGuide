@@ -41,7 +41,7 @@ python main.py generate --city "Paris" --lang "en" --comment "Very good knowledg
 ## Architecture & Workflow
 
 ```mermaid
-flowchart LR
+flowchart TD
     classDef io fill:#f3e8ff,stroke:#9333ea,stroke-width:2px
     classDef agent fill:#d1e7dd,stroke:#0f5132,stroke-width:2px
     classDef tech fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
