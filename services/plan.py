@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class PlanService:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
-    def define_plan(self, strategy: Strategy, verified_facts: VerifiedResearchOutputConcatenated) -> AudioguidePlan:
+    async def define_plan(self, strategy: Strategy, verified_facts: VerifiedResearchOutputConcatenated) -> AudioguidePlan:
         with open("prompt/master_prompt_planification.md", "r", encoding="utf-8") as f:
             template_brut = Template(f.read())
         
@@ -28,12 +28,13 @@ class PlanService:
 
         research_concatenated = self._prepare_research_for_plan(verified_facts)
 
-        worker = self.registery.claude_worker
-        plan = worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=research_concatenated, temperature = 0.7)
+        worker = self.registry.claude_worker
+        plan = await worker.get_json(AudioguidePlan, "--", system_prompt=prompt, research_block_1=research_concatenated, temperature = 0.7)
         return plan
 
     def _prepare_strategy_for_plan(self, strategy: Strategy) -> str:
-        # formating a DSV to send the initial strategy to the LLM that is going to perform the planification
+        """formating a DSV to send the initial strategy to the LLM that is going to perform the planification"""
+        """ expected output : "type|name|narrative_pitch"""
         response_list = []
         for topic in strategy.research_topics:
             pitch = topic.narrative_pitch or ""

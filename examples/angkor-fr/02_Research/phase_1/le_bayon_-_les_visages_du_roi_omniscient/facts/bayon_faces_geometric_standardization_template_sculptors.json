@@ -1,0 +1,37 @@
+[
+    {
+        "title": "Classification of Bayon Faces",
+        "url": "https://link.springer.com/chapter/10.1007/978-0-387-75807_19?error=cookies_not_supported&code=76f425c7-8560-446c-91a8-91b90e72d0cb",
+        "highlights": [
+            "Digital 3D models of historic buildings or cultural heritage objects are useful for preservation. Not only can we store them permanently, but the models can supply a clear guideline for the restoration process. 3D models also provide sufficient information about geometrical characteristics that may help archaeologists to inspect and classify the objects. Currently, we are working on a 3D digital-archiving project of the Bayon Temple. It is a building of stonework that was built in the 12th century in Cambodia. It is famous for its towers with four faces at the four cardinal  ...    into three groups based on subjective criteria. In this chapter, we explore a more objective way to classify the faces by using measured 3D geometrical models. After alignment of 3D faces in the same coordinate system, orientation, and  ...    Kamakura, M., Oishi, T., Takamatsu, J., Ikeuchi, K. (2008). Classification of Bayon Faces. In: Digitally Archiving Cultural Objects. Springer,"
+        ]
+    },
+    {
+        "title": "Clustering Bayon Face Towers Using Restored 3D Shape Models",
+        "url": "https://ieeexplore.ieee.org/document/6103207",
+        "highlights": [
+            "Clustering Bayon Face Towers Using Restored 3D Shape Models | IEEE Conference Publication | IEEE Xplore\n**  ...    * Technical Interests\n### Need Help?\n* **US & Canada:**+1 800 678 4333\n* **Worldwide:**+1 732 981 0060 * Contact & Support\n* About IEEE*Xplore*\n* Contact Us\n* Help * Accessibility\n* Terms of Use\n* Nondiscrimination Policy\n* Sitemap * Privacy & Opting Out of Cookies A not-for-profit organization, IEEE is the world's largest technical professional organization dedicated to advancing technology for the benefit of humanity. © Copyright 2025 IEEE - All rights reserved. Use of this web site signifies your agreement to the terms and conditions. **"
+        ]
+    },
+    {
+        "title": "[PDF] Generating a 3D model of a Bayon tower using non-metric imagery",
+        "url": "https://www.research-collection.ethz.ch/bitstreams/9db2bd16-b2f6-44a2-adf5-5c1b68547305/download",
+        "highlights": [
+            "Research Collection | ETH Library"
+        ]
+    },
+    {
+        "title": "",
+        "url": "https://shapemodelling.cs.unibas.ch/gravis-site-archive/publications/2009/BFModel09.pdf",
+        "highlights": [
+            "3D face models are a powerful tool in  ...    The resulting model parameters separate pose, lighting,  ...    We describe a 3D Morphable Face Model - the\nBasel Face Model (BFM) - that is publicly available (http://faces.cs.unibas.ch/). The usage of the\n1\nBFM is free for non-commercial purposes. This model  ...    modified version of the Optimal Step Nonrigid ICP Al\u0002gorithm [4]. The registration method is applied in the 3D domain on triangulated meshes. It progressively de\u0002forms a template towards the measured surface while  ...    After registration the faces are parameterized as tri\u0002angular meshes with m = 53490 vertices and shared topology. The vertices (xj, yj, zj )\nT ∈ R3 have an asso\u0002ciated color (rj, gj, bj )\nT ∈ [0, 1]3. A face is then repre-\nsented by two 3m dimensional vectors\ns = (x1, y1, z1,... xm, ym, zm)\nT\n(1)  ...    We presented a publicly available 3D Morphable\n"
+        ]
+    },
+    {
+        "title": "The Bayon: A temple with many faces - Smarthistory",
+        "url": "https://smarthistory.org/bayon-temple-angkor-thom/",
+        "highlights": [
+            "Celadon incense burner with lion cover and celadon incense burner with open work geometric design  ...    * Celadon incense burner with lion cover and celadon incense burner with open work geometric design  * [An  ...    * Explore related\n* Bottom\n# The Bayon: A temple with many faces byDr. Melody Rod-ari\nArtwork DetailsDownward pointing arrow Bayon Temple, Angkor Thom (photo: Jakub Hałun, CC BY-SA 4.0) Bayon Temple, Angkor Thom (photo: Jakub Hałun, CC BY-SA 4.0)  Scene showing a marketplace and fortune telling,  ...    Bayon, the most notable temple at Angkor Thom (photo: Dmitry A. Mottl, CC BY-SA 4.0)\n### **The many faces of Bayon** The cruciform platform—the third and innermost level of the Bayon—consists of a central tower that is surrounded by  ...    Tower Faces, Bayon Temple, Angkor Thom, Cambodia (photo:Kirk Siang, CC BY-NC-ND 2.0)  The sanctuary is  ...    Cite this page as: Dr. Melody Rod-ari, \"The Bayon: A"
+        ]
+    }
+]

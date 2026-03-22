@@ -1,14 +1,26 @@
 import os
-from anthropic import Anthropic
+from anthropic import AsyncAnthropic, RateLimitError
 from utils import save_LLM_output
 import re
 from loguru import logger
-
+from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
+import asyncio
 
 class Claude:
     def __init__(self):
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
-        self.client = Anthropic(api_key=self.api_key)
+        self.client = AsyncAnthropic(api_key=self.api_key)
+        self.semaphore = asyncio.Semaphore(5)
+
+    @retry(
+        wait=wait_random_exponential(min=1, max=60), 
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(RateLimitError)
+    )
+    async def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
+        async with self.semaphore:
+            return await self._get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature, cache, messages_history)
+
 
     def get_system_block(self, system_prompt="", research_block_1="", research_block_2="", plan=""):
         """The order of the different blocks is thought to optimize token usage, using the cache strategy"""
@@ -45,9 +57,9 @@ class Claude:
         return system_block
 
 
-    def get_json(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
-        # synchronous http call, return json matching pydantic classes
-        claude_response = self.get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature)
+    async def get_json(self, pydantic_schema, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1):
+        # async http call, return json matching pydantic classes
+        claude_response = await self.get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature)
 
         logger.debug("get_json")
         
@@ -57,7 +69,7 @@ class Claude:
         json_str = match.group(1).strip() if match else claude_response.strip()
 
         try:
-            validated_data = pydantic_schema.parse_raw(json_str)
+            validated_data = pydantic_schema.model_validate_json(json_str)
             return validated_data
 
         except Exception as e:
@@ -66,8 +78,9 @@ class Claude:
             logger.error(f"[Error]: {e}")
             raise e
 
-    def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
-        # synchronous http call, wait for the full text to be generated
+
+    async def _get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
+        # async http call, wait for the full text to be generated
         try:
             logger.info("Before Claude API call")
 
@@ -91,7 +104,7 @@ class Claude:
 
             logger.debug(f"Claude system_block : {system_block}")
             logger.debug(f"Claude messages_history : {messages_history[:100]}")
-            response = self.client.messages.create(**api_param)
+            response = await self.client.messages.create(**api_param)
             logger.info("Claude API call done")
             logger.debug(response)
 

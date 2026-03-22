@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from models.registry import WorkerRegistry
 
 class RedactionService:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
         with open("prompt/master_prompt_redaction.md", "r", encoding="utf-8") as f:
             self.template_system_prompt = Template(f.read())
@@ -19,7 +19,7 @@ class RedactionService:
             self.template_prompt_instructions = Template(f.read())
 
 
-    def create_stop_text(self, plan: AudioguidePlan, stop: EtapeParcours, facts_phase_1: VerifiedResearchOutputConcatenated, facts_phase_2: VerifiedResearchOutputConcatenated, messages_history: list[dict[str, str]]) -> str:
+    async def create_stop_text(self, plan: AudioguidePlan, stop: EtapeParcours, facts_phase_1: VerifiedResearchOutputConcatenated, facts_phase_2: VerifiedResearchOutputConcatenated, messages_history: list[dict[str, str]]) -> str:
 
         stop_list = "\n".join([f"arrêt {stop.numero} : {stop.titre_etape}" for stop in plan.parcours])
         
@@ -44,8 +44,8 @@ class RedactionService:
             faits_bruts = facts
         )
 
-        worker = self.registery.claude_worker
-        stop_text = worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
+        worker = self.registry.claude_worker
+        stop_text = await worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
 
         new_history = list(messages_history)
         new_history.append({"role": "user", "content": prompt})

@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 
 
 class ContentProspector:
-    def __init__(self, user_context: UserContext, registery : WorkerRegistry):
+    def __init__(self, user_context: UserContext, registry : WorkerRegistry):
         self.user_context = user_context
-        self.registery = registery
+        self.registry = registry
 
     async def content_prospector(self, research_topic: ResearchTopic, research_angle: str):
         """Generation of content, with high risk of hallucination, 0.6 temperature to have a good mix between creativity and fiability"""
@@ -36,10 +36,10 @@ class ContentProspector:
             angle_narratif=research_angle
         )
 
-        worker = self.registery.claude_worker
+        worker = self.registry.claude_worker
 
         logger.info(f"content_prospector | location={research_topic.name}")
-        content = await asyncio.to_thread(worker.get_text, prompt, temperature=0.6)
+        content = await worker.get_text(prompt, temperature=0.6)
 
         return self.parse_content_prospector(content, research_topic)
 
@@ -74,7 +74,7 @@ class ContentProspector:
                             ))
 
             except Exception as e:
-                # Often LLM sends bad ouput that need to be remove
+                # Often LLM sends bad ouput that need to be removed
                 logger.error(f"Cannot be parsed, line: {line} | {e}")
 
         logger.debug(f"research_output : {research_output}")

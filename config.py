@@ -8,6 +8,17 @@ class Languages(Enum):
         self.code = code
         self.voice_id = voice_id
 
+    @classmethod
+    def get_by_code(cls, code: str) -> "Languages":
+        for lang in cls:
+            if lang.code == code:
+                return lang
+        raise ValueError(f"Language {code} not available")
+
+    @classmethod
+    def list_all_codes(cls) -> list[str]:
+        return [lang.code for lang in cls]
+
 TTS_LANGUAGES_NO_PHONEMES = {
     "ar-EG", "ar-SA", "ca-ES", "cs-CZ", "da-DK", "de-AT", "de-CH", "de-DE", 
     "el-GR", "en-AU", "en-CA", "en-GB", "en-IE", "en-IN", "en-US", "es-ES", 

@@ -1,0 +1,22 @@
+# LLM Providers
+anthropic
+google-genai
+
+# Web Search
+exa-py
+
+# Text-to-Speech
+azure-cognitiveservices-speech
+
+# Data Validation
+pydantic
+
+# Configuration
+python-dotenv
+pyyaml
+
+# Logging
+loguru
+
+#retrier
+tenacity

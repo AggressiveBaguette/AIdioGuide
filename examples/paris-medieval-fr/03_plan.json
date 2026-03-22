@@ -1,0 +1,281 @@
+{
+    "titre_audioguide": "Paris Médiéval : Autopsie d'une Capitale",
+    "strategie": "Lire les cicatrices physiques encore visibles dans le tissu urbain actuel pour comprendre comment une île marécageuse devient le cœur d'un royaume capétien. Angle forensic et sociétal pour expert.",
+    "parcours": [
+        {
+            "numero": 1,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Conciergerie : Le Palais Avant la Prison",
+            "localisation": "Conciergerie, 2 Boulevard du Palais, 75001 Paris. Entrée principale face à la Seine. Positionnez-vous dans la Salle des Gens d'Armes.",
+            "transition_vers_suivant": "Remontez vers la cour intérieure du Palais de Justice et cherchez l'escalier qui mène à l'entrée de la Sainte-Chapelle, dont la flèche est visible depuis la cour.",
+            "consigne_plume": "Faites regarder les piles de la Salle des Gens d'Armes : quatre rangées de colonnes supportant des voûtes d'ogives à 8,50 mètres de hauteur, la plus grande salle civile gothique d'Europe — aujourd'hui transformée en billetterie. Élargissez sur la mécanique du pouvoir capétien : ce palais est à la fois le lieu où Philippe le Bel ordonne l'arrestation des Templiers, où Enguerrand de Marigny supervise les chantiers avant d'être pendu, et où Étienne Marcel massacre deux maréchaux sous les yeux du Dauphin — le tout dans le même bâtiment, en moins de cinquante ans.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_3",
+                "ID_5",
+                "ID_9",
+                "ID_57",
+                "ID_58",
+                "ID_60",
+                "ID_61"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 2,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Sainte-Chapelle : Le Coffre-Fort des Reliques",
+            "localisation": "Sainte-Chapelle, 8 Boulevard du Palais, 75001 Paris. Entrée par la cour du Palais de Justice. Montez à la chapelle haute.",
+            "transition_vers_suivant": "Sortez du Palais de Justice par le portail principal sur le Boulevard du Palais, traversez le parvis vers le nord-ouest jusqu'au square Jean-XXIII, puis contournez Notre-Dame par le sud pour atteindre le parvis et l'entrée de la Crypte Archéologique.",
+            "consigne_plume": "Dis à l'auditeur de trouver un endroit pour s'asseoir et écouter. Faites regarder les quinze verrières de la chapelle haute : 1113 scènes bibliques sur 600 mètres carrés de vitraux — le bâtiment n'est qu'un châssis de pierre conçu pour tenir du verre. Élargissez sur la comptabilité brutale de la sainteté royale : Louis IX dépense 135 000 livres tournois pour acheter la Couronne d'Épines à un Baudouin II de Constantinople en faillite, soit plus de trois fois le coût de construction de la chapelle elle-même — l'architecte restera anonyme, les ouvriers aussi, et la chronologie du chantier (1242-1248) coïncide exactement avec l'autodafé du Talmud place de Grève en 1242.",
+            "cible_duree_audio": "8 minutes",
+            "is_grand_format": true,
+            "faits_retenus": [
+                "ID_6",
+                "ID_7",
+                "ID_12",
+                "ID_13",
+                "ID_14",
+                "ID_15",
+                "ID_10"
+            ],
+            "briefs_recherche_additionnelle": [
+                {
+                    "type": "Deep_Dive",
+                    "name": "Mécanique financière des reliques capétiennes",
+                    "narrative_pitch": null
+                },
+                {
+                    "type": "Deep_Dive",
+                    "name": "Confiscations juives et financement royal sous Louis IX",
+                    "narrative_pitch": null
+                }
+            ]
+        },
+        {
+            "numero": 3,
+            "type": "Vestige_Majeur",
+            "titre_etape": "La Crypte Archéologique : Le Palimpseste Brut",
+            "localisation": "Crypte Archéologique du Parvis Notre-Dame, Place Jean-Paul II, 75004 Paris. Entrée par l'escalier au centre du parvis, face à la cathédrale.",
+            "transition_vers_suivant": "Remontez sur le parvis et levez les yeux vers la façade de Notre-Dame. Vous êtes déjà à destination.",
+            "consigne_plume": "Faites pointer la coupe stratigraphique visible à la paroi ouest de la crypte : les bandes d'empierrement calcaire compacté séparées par des limons de crue, c'est la rue Neuve-Notre-Dame de Maurice de Sully, enfouie sous vos pieds. Élargissez sur la violence urbanistique silencieuse : Philippe Auguste exproprie, régularise, efface le parcellaire pré-augustéen — les murs obliques non alignés sur la voirie capétienne en sont la preuve géométrique — et la crypte, ouverte en 1980, ne mentionne nulle part le coût humain de cette rationalisation.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_1",
+                "ID_16",
+                "ID_17",
+                "ID_18",
+                "ID_19",
+                "ID_20"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 4,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Notre-Dame : La Technologie Gothique comme Instrument Politique",
+            "localisation": "Parvis de Notre-Dame de Paris, Place Jean-Paul II, 75004 Paris. Positionnez-vous face à la façade occidentale, en reculant jusqu'au centre du parvis.",
+            "transition_vers_suivant": "Traversez le pont Saint-Louis, puis le pont de la Tournelle pour rejoindre la rive gauche. Descendez le quai de Montebello vers l'est jusqu'à la rue du Fouarre, première rue à gauche après la rue Galande.",
+            "consigne_plume": "Faites regarder les arcs-boutants du chœur depuis le flanc sud : repérez les moignons de culées maçonnées plus sombres au niveau du triforium extérieur — ce sont les cicatrices de la première génération d'arcs (vers 1180), arrachés et remplacés vers 1220. Élargissez sur la logique de chantier comme instrument de pouvoir : Maurice de Sully démolit l'église Saint-Étienne et le baptistère Saint-Jean en 1163 pour lancer le chantier — une opération d'urbanisme d'envergure au service d'un prélat royal — et le jubé gothique du XIIIe siècle sera détruit en 1708 sur ordre du chapitre et de Louis XIV, dont les fragments survivent au Musée de Cluny.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_21",
+                "ID_22",
+                "ID_23",
+                "ID_24",
+                "ID_25"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 5,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Rue du Fouarre : La Paille, Dante et l'Université Comme Champ de Bataille",
+            "localisation": "Rue du Fouarre, 75005 Paris. Entrée depuis le quai de Montebello, entre le quai et la rue Galande. Longueur totale : environ 80 mètres.",
+            "transition_vers_suivant": "Remontez la rue du Fouarre vers le nord, prenez à gauche la rue Galande, puis à droite la rue Saint-Jacques vers le sud. Marchez environ 200 mètres.",
+            "consigne_plume": "Faites regarder le gabarit de la rue du Fouarre : 17 mètres de large, tracé et dimensions médiévaux partiellement conservés — Dante Alighieri cite cette rue dans le Paradis (X, 137) sous le nom de 'vico degli strami', la rue de la paille sur laquelle les étudiants s'asseyaient pour suivre les cours en plein air. Élargissez sur la mécanique politique de l'autonomie universitaire : en 1229, des étudiants sont tués par les sergents royaux après une bagarre de taverne, Blanche de Castille refuse toute réparation, les maîtres fuient vers Oxford et Toulouse — et c'est Rome, via la bulle Parens Scientiarum de 1231, qui impose à la Couronne l'autonomie juridique de l'Université, transformant un incident de cabaret en instrument de gouvernance européenne.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_28",
+                "ID_29",
+                "ID_30",
+                "ID_32"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 6,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Rue Saint-Jacques : L'Axe du Monde Médiéval",
+            "localisation": "Rue Saint-Jacques, 75005 Paris. Positionnez-vous au croisement avec la rue Soufflot, face au numéro 172 environ, secteur de l'ancienne emprise du couvent des Jacobins.",
+            "transition_vers_suivant": "Continuez vers le nord sur la rue Saint-Jacques jusqu'au boulevard Saint-Germain, puis tournez à droite. Marchez environ 400 mètres jusqu'à la place Saint-Germain-des-Prés.",
+            "consigne_plume": "Faites regarder l'asphalte de la rue Saint-Jacques : sous ce bitume, les pavés de grès et de calcaire ordonnés par Philippe Auguste en 1186 sont encore enfouis, révélés à chaque tranchée de chantier. Élargissez sur la superposition des pouvoirs sur un même axe : la Via Turonensis pèlerine réutilise le cardo maximus gallo-romain sans rupture, et c'est sur cette même rue que les Dominicains s'installent en 1217-1218 pour mener leur mission de prédication — et d'Inquisition.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_26",
+                "ID_31",
+                "ID_33",
+                "ID_34"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 7,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Saint-Germain-des-Prés : L'Abbaye comme État dans l'État",
+            "localisation": "Abbatiale Saint-Germain-des-Prés, 3 Place Saint-Germain-des-Prés, 75006 Paris. Entrez dans l'église et positionnez-vous sous le clocher roman, à la croisée du transept.",
+            "transition_vers_suivant": "Sortez de l'église, traversez le boulevard Saint-Germain et remontez vers le nord par la rue de Buci puis la rue Saint-André-des-Arts jusqu'au quai des Grands-Augustins. Traversez la Seine par le Pont-Neuf, puis longez la rive droite vers l'est par la rue de Rivoli jusqu'à la Place de l'Hôtel de Ville.",
+            "consigne_plume": "Faites regarder les parties romanes du clocher : la maçonnerie du XIe siècle, visible en contraste avec les restaurations du XIXe, est le vestige d'une abbaye qui possédait une immunité juridique confirmée dès Childebert Ier en 558 — elle était soustraite à la juridiction de l'évêque de Paris et gouvernait ses propres serfs, inventoriés dans le Polyptyque d'Irminon vers 823. Élargissez sur la notion d'enclave : le bourg Saint-Germain fonctionnait comme une juridiction distincte de Paris, avec ses propres tribunaux, ses propres marchés, ses propres serfs soumis à la mainmorte — une souveraineté dans la souveraineté, dont aucune plaque ne parle dans l'église actuelle.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_68",
+                "ID_69",
+                "ID_70"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 8,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Place de l'Hôtel de Ville : La Grève, Port, Gibet et Bourse du Travail",
+            "localisation": "Place de l'Hôtel de Ville, 75004 Paris. Positionnez-vous face à la façade de l'Hôtel de Ville, dos à la Seine, devant la statue d'Étienne Marcel.",
+            "transition_vers_suivant": "Depuis la Place de l'Hôtel de Ville, remontez la rue de Rivoli vers l'est sur environ 600 mètres, puis prenez à droite la rue des Archives jusqu'à la rue des Francs-Bourgeois. La tour du Crédit Municipal est au numéro 55-57.",
+            "consigne_plume": "Faites regarder la statue d'Étienne Marcel inaugurée en 1888 devant l'Hôtel de Ville : un traître médiéval recyclé en héros républicain par la IIIe République — Froissart et Jean de Venette le condamnent, la statuaire du XIXe siècle le réhabilite. Élargissez sur la polyvalence fonctionnelle de cet espace : la 'grève' est d'abord une berge alluviale de débarquement marchand, cédée aux bourgeois par Louis VII en 1141, monopolisée par la Hanse des marchands de l'eau, puis transformée en scène d'exécutions publiques — pendaisons, bûchers — et en point de rassemblement des sans-travail, donnant au passage son nom à la 'grève' ouvrière.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_71",
+                "ID_72",
+                "ID_75",
+                "ID_77",
+                "ID_78",
+                "ID_79",
+                "ID_81",
+                "ID_82",
+                "ID_85",
+                "ID_87",
+                "ID_88"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 9,
+            "type": "Respiration_Contexte",
+            "titre_etape": "Tour Philippe Auguste, Rue des Francs-Bourgeois : L'Enceinte comme Frontière du Droit",
+            "localisation": "Crédit Municipal de Paris, 55 Rue des Francs-Bourgeois, 75004 Paris. La tour médiévale cylindrique est visible depuis la cour intérieure.",
+            "transition_vers_suivant": "Continuez rue des Francs-Bourgeois vers l'est jusqu'à la rue des Archives, puis descendez vers le sud jusqu'à la rue de Rivoli. Traversez vers la rive droite de la Seine par le pont Marie, puis longez le quai des Célestins vers l'est jusqu'à la rue des Jardins-Saint-Paul.",
+            "consigne_plume": "Faites regarder la tour cylindrique de l'enceinte Philippe Auguste intégrée dans le bâtiment du Crédit Municipal : base médiévale restaurée en 2014, elle matérialise la logique d'un mur qui n'est pas seulement défensif mais juridique — être hors-les-murs, c'est être hors-droit urbain. Élargissez sur la géographie du contrôle capétien : l'enceinte de Philippe Auguste (1190-1215) est le premier instrument de définition de Paris comme espace légal, fiscal et militaire distinct du reste du royaume.",
+            "cible_duree_audio": "2 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_46",
+                "ID_64"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 10,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Rue des Jardins-Saint-Paul : Le Plus Long Mur de Paris",
+            "localisation": "Rue des Jardins-Saint-Paul, 75004 Paris. Longez le mur depuis le numéro 7 jusqu'au numéro 11. Le segment conservé mesure environ 120 mètres de long, 6 à 7 mètres de hauteur.",
+            "transition_vers_suivant": "Remontez la rue des Jardins-Saint-Paul vers le nord, rejoignez la rue Saint-Antoine vers l'ouest, puis prenez la rue du Temple vers le nord jusqu'à la rue de Bretagne. Continuez vers le nord jusqu'à la rue Étienne-Marcel, puis vers l'ouest jusqu'à la rue Saint-Denis. Le square des Innocents est à l'intersection de la rue Berger et de la rue Saint-Denis.",
+            "consigne_plume": "Faites regarder l'alternance des assises de calcaire lutétien le long de ce mur : 120 mètres continus, 6 à 7 mètres de hauteur conservée — le plus long vestige en élévation de l'enceinte de Philippe Auguste à Paris. Élargissez sur ce que ce mur révèle de la peur : construit entre 1190 et 1215 pendant que Philippe Auguste est en croisade puis en guerre contre les Plantagenêts, il transforme Paris en place forte — et c'est précisément parce qu'il devient insuffisant après la Jacquerie de 1358 que Charles V construira une nouvelle enceinte, dont la Bastille sera le verrou oriental.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_50",
+                "ID_48",
+                "ID_11"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 11,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Square des Innocents : Deux Millions de Corps Sous une Fontaine",
+            "localisation": "Square des Innocents, Place Joachim-du-Bellay, 75001 Paris. Positionnez-vous au centre du square, face à la Fontaine des Innocents de Jean Goujon.",
+            "transition_vers_suivant": "Depuis le square, remontez la rue Saint-Denis vers le nord sur environ 400 mètres, puis tournez à gauche rue Étienne-Marcel. La Tour Jean-sans-Peur est au numéro 20.",
+            "consigne_plume": "Faites regarder le dallage du square et la fontaine de Jean Goujon (1549) en son centre : vous êtes debout sur une fosse commune médiévale. Les fouilles de 1786-1787 ont exhumé entre 15 000 et 20 000 squelettes entassés sans cercueil — fragment d'un total estimé à deux millions de corps accumulés sur dix siècles, dont les ossements ont été transférés aux Catacombes en charrettes nocturnes escortées de prêtres psalmodiant. Élargissez sur l'économie macabre : les arcades des charniers étaient louées à des marchands dès le XIIIe siècle, le chapitre Sainte-Opportune percevait les loyers, et la Danse Macabre peinte sur le mur sud en 1424-1425 — commandée par les autorités religieuses — normalisait la cohabitation des vivants et des morts dans un espace à la fois commercial, funéraire et festif.",
+            "cible_duree_audio": "4 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_37",
+                "ID_40",
+                "ID_41",
+                "ID_42",
+                "ID_43",
+                "ID_44",
+                "ID_45"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 12,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Tour Jean-sans-Peur : L'Architecture de la Culpabilité",
+            "localisation": "Tour Jean-sans-Peur, 20 Rue Étienne-Marcel, 75002 Paris. Entrez dans la tour et montez jusqu'à la salle de la voûte sommitale.",
+            "transition_vers_suivant": "Redescendez rue Étienne-Marcel vers l'est, puis prenez la rue du Louvre vers le sud jusqu'au quai de la Mégisserie. Traversez la Seine par le Pont-Neuf et rejoignez la rue Clovis par le boulevard Saint-Michel et la rue Soufflot (environ 15 minutes à pied).",
+            "consigne_plume": "Faites regarder la voûte sommitale de la tour : les entrelacs de chêne, de houblon et d'aubépine sculptés en relief — emblèmes de Jean sans Peur, de son père Philippe le Hardi et de sa mère Marguerite de Flandre. Cette propagande dynastique gravée dans la pierre est construite entre 1409 et 1411, moins de deux ans après l'assassinat de Louis d'Orléans le 23 novembre 1407 — commandité par Jean lui-même. Élargissez sur la logique de l'affirmation territoriale post-criminelle : on ne fuit pas, on bâtit, on sculpte ses armoiries sur le lieu même du crime politique, transformant la culpabilité en monument.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_35",
+                "ID_36"
+            ],
+            "briefs_recherche_additionnelle": []
+        },
+        {
+            "numero": 13,
+            "type": "Vestige_Majeur",
+            "titre_etape": "Muraille de Philippe Auguste, Rue Clovis : Ce Que le Sol Cache",
+            "localisation": "Rue Clovis, 75005 Paris. Positionnez-vous devant le tronçon de muraille visible entre le lycée Henri-IV et l'église Saint-Étienne-du-Mont, numéros 6-8 rue Clovis.",
+            "transition_vers_suivant": null,
+            "consigne_plume": "Faites regarder le pied du mur visible rue Clovis : ce niveau de pierre n'est pas la base réelle de la fondation — celle-ci est enfouie à 4,10 mètres sous le niveau actuel, sous des siècles de remblais. Le parement intérieur, conservé sur 5,50 mètres de hauteur dans la cour du lycée Henri-IV, est inaccessible au public. Élargissez sur la stratigraphie comme métaphore du pouvoir capétien : ce que l'on voit n'est que la partie émergée d'un système d'enfouissement systématique — des fondations, des expulsions, des corps, des rues entières — et la ville actuelle repose littéralement sur ce que le Moyen Âge a décidé de ne plus montrer.",
+            "cible_duree_audio": "3 minutes",
+            "is_grand_format": false,
+            "faits_retenus": [
+                "ID_51",
+                "ID_52",
+                "ID_27"
+            ],
+            "briefs_recherche_additionnelle": []
+        }
+    ],
+    "fils_narratifs": [
+        {
+            "theme": "La mécanique fiscale des expulsions capétiennes",
+            "introduit_au": 2,
+            "developpe_aux": [
+                3,
+                8
+            ],
+            "clos_au": 10,
+            "resume": "Louis IX confisque les biens juifs (1234-1248) en concomitance avec le chantier de la Sainte-Chapelle -> Philippe Auguste efface le parcellaire de la Juiverie de l'Île de la Cité après 1182 -> Philippe le Bel arrête 100 000 Juifs en une nuit (1306) et reverse leurs biens à la Couronne -> Louis X les rappelle en 1315 contre paiement : l'expulsion/rappel comme pompe fiscale cyclique et renouvelable."
+        },
+        {
+            "theme": "La violence royale et ses monuments involontaires",
+            "introduit_au": 1,
+            "developpe_aux": [
+                8,
+                11
+            ],
+            "clos_au": 12,
+            "resume": "Le Palais de la Cité concentre arrestations des Templiers (1307), exécution de Marigny (1315) et massacre des maréchaux par Marcel (1358) -> la Place de Grève cumule exécutions publiques et rassemblements populaires dans le même espace -> le Square des Innocents banalise deux millions de morts sous un marché -> la Tour Jean-sans-Peur transforme un assassinat politique en programme sculptural dynastique."
+        },
+        {
+            "theme": "Les enceintes comme instruments de pouvoir et de peur",
+            "introduit_au": 9,
+            "developpe_aux": [
+                10
+            ],
+            "clos_au": 13,
+            "resume": "L'enceinte de Philippe Auguste (1190-1215) définit Paris comme espace juridique et fiscal distinct -> le plus long segment conservé (rue des Jardins-Saint-Paul) matérialise la logique défensive contre les Plantagenêts -> la Jacquerie de 1358 et l'invasion du Palais par Marcel poussent Charles V à construire une nouvelle enceinte avec la Bastille comme verrou -> la muraille de la rue Clovis révèle que la fondation réelle est enfouie à 4,10 mètres : le pouvoir capétien repose sur ce qu'il a systématiquement enfoui."
+        }
+    ]
+}
