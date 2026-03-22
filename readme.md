@@ -4,7 +4,7 @@ AIdioguide is a multi-agent pipeline designed to generate immersive historical a
 
 Tech Stack: Python 3.10+, Anthropic (Claude Sonnet 4.6 / Gemini Flash 3.0), Exa, Azure TTS (Neural Multilingual), SSML.
 
-**[Listen to an example here: Florence Grand Format (8 min)]([#](https://github.com/AggressiveBaguette/AIdioGuide/blob/main/examples/firenze-en/07_Audio/7.mp3))**
+**[Listen to an example here: Florence Grand Format (8 min)](examples/florence_en/07_Audio/7.mp3)**
 
 ---
 
@@ -12,12 +12,9 @@ Tech Stack: Python 3.10+, Anthropic (Claude Sonnet 4.6 / Gemini Flash 3.0), Exa,
 
 A good audioguide doesn't recite facts. It starts from something you can see right now, explains why it matters, and uses it as a doorway into a larger story. Standing in front of the Conciergerie, you don't need dates — you need to understand why Philippe IV destroyed the Knights Templar from the very building in front of you.
 
-The problem: ask an LLM directly for precise architectural details and anecdotes and it hallucinates. Confidently. Early tests showed ~80% hallucination rate on specific claims — the gargoyle that "represents medieval medicine", the inscription that "dates from the original construction". The narration sounded great. Google Maps showed a 
-1960s apartment building.
+The problem: ask an LLM directly for precise architectural details and anecdotes and it hallucinates. Confidently. Early tests showed ~80% hallucination rate on specific claims — the gargoyle that "represents medieval medicine", the inscription that "dates from the original construction". The narration sounded great. Google Maps showed a 1960s apartment building.
 
-Grounding the narration in verifiable facts without losing the narrative thread requires a pipeline that separates concerns: 
-**research and fact-checking first, storytelling second.**
-That's what this system is.
+Grounding the narration in verifiable facts without losing the narrative thread requires a pipeline that separates concerns: **research and fact-checking first, storytelling second.** That's what this system is.
 
 ## Quickstart & CLI
 
@@ -126,12 +123,9 @@ That's the acceptable loss. The 60 facts that make it through are factually audi
 
 #### What this prevents
 
-Early versions without this layer produced confident, well-narrated 
-hallucinations at ~80% rate on specific architectural details and 
-anecdotes. The narration sounded great. The facts were invented.
+Early versions without this layer produced confident, well-narrated hallucinations at ~80% rate on specific architectural details and anecdotes. The narration sounded great. The facts were invented.
 
-The pipeline trades completeness for auditability. Every claim in the 
-final audio can be traced back to a verified source.
+The pipeline trades completeness for auditability. Every claim in the final audio can be traced back to a verified source.
 
 #### Three research modes
 
@@ -181,29 +175,15 @@ The directive is strict by design. If a research agent finds a compelling fact t
 
 ### The Planner — geographic logic and the guillotine rule
 
-The Planner is the most editorially powerful agent in the pipeline. 
-It receives the Strategist's initial stop list and the full validated 
-fact corpus — and rewrites both.
+The Planner is the most editorially powerful agent in the pipeline. It receives the Strategist's initial stop list and the full validated fact corpus — and rewrites both.
 
-**Geographic reordering.** Stops are reorganized by adjacent zones — 
-the itinerary must make sense on foot. A thematically coherent but 
-geographically absurd sequence is restructured before narration begins. 
-Every stop gets a precise street address to prevent the listener from 
-ending up at the wrong building.
+**Geographic reordering.** Stops are reorganized by adjacent zones — the itinerary must make sense on foot. A thematically coherent but geographically absurd sequence is restructured before narration begins. Every stop gets a precise street address to prevent the listener from ending up at the wrong building.
 
-**Hard suppression of ungrounded stops.** Any stop with no validated 
-facts is deleted without mercy. No facts = no stop, regardless of how 
-interesting the location seemed during planning.
+**Hard suppression of ungrounded stops.** Any stop with no validated facts is deleted without mercy. No facts = no stop, regardless of how interesting the location seemed during planning.
 
-**Editorial freedom.** The Planner can add stops the Strategist never 
-planned — "breathing stops" in front of disappeared or anonymous 
-elements, used to deliver broader historical context between two major 
-sites. It can also designate one stop as Grand Format (~8 minutes), 
-requiring the listener to sit down and listen.
+**Editorial freedom.** The Planner can add stops the Strategist never planned — "breathing stops" in front of disappeared or anonymous elements, used to deliver broader historical context between two major sites. It can also designate one stop as Grand Format (~8 minutes), requiring the listener to sit down and listen.
 
-**Narrative thread declaration.** Before narration begins, the Planner 
-explicitly maps recurring figures and themes across the itinerary — 
-where each thread is introduced, developed, and closed:
+**Narrative thread declaration.** Before narration begins, the Planner explicitly maps recurring figures and themes across the itinerary — where each thread is introduced, developed, and closed:
 ```json
 {
   "theme": "Le Pouvoir Contre la Ville : De Marcel à Charles V",
@@ -214,14 +194,10 @@ where each thread is introduced, developed, and closed:
 }
 ```
 
-Without this, the same historical figure surfaces independently at 
-multiple stops with no coherence between them. On an early version of 
-the medieval Paris audioguide, Étienne Marcel appeared three times — 
-each stop treating him as if the listener had never heard of him.
+Without this, the same historical figure surfaces independently at multiple stops with no coherence between them. On an early version of 
+the medieval Paris audioguide, Étienne Marcel appeared three times — each stop treating him as if the listener had never heard of him.
 
-The Narrator receives these threads as part of its context at every stop. 
-It knows that Marcel is introduced at stop 6, developed at 8 and 9, and 
-closed at 16 — and writes accordingly. 
+The Narrator receives these threads as part of its context at every stop. It knows that Marcel is introduced at stop 6, developed at 8 and 9, and closed at 16 — and writes accordingly. 
 
 ### Sequential narration in a parallel pipeline
 
@@ -321,17 +297,11 @@ examples/paris_medieval_fr/
 
 ### Angkor (French) — `examples/angkor_fr/`
 
-- `02_Research/phase_1/porte_sud_dangkor_thom.../02.1_unverified_research.dsv`  
-  vs `02.3_verified_research.dsv`  
-  The fact-checker on a subject with sources across French, English, 
-  Khmer and Chinese — including a Zhou Daguan 1296 eyewitness account.
+- `02_Research/phase_1/porte_sud_dangkor_thom.../02.1_unverified_research.dsv`  vs `02.3_verified_research.dsv`  
+  The fact-checker on a subject with sources across French, English,   Khmer and Chinese — including a Zhou Daguan 1296 eyewitness account.
 
 - `04_Scripts/9.txt` → `06_Scripts_with_SSML/9.txt`  
-  The most phoneme-dense stop in the corpus: Preah Khan, with Khmer 
-  proper nouns (`Preah Khan`, `Jayavarman VII`, `Lokesvara`, `Bayon`, 
-  `khñum vraḥ`) and Sanskrit terms handled by IPA injection. Compare 
-  the plain script with the SSML version to see the phoneme layer in 
-  action.
+  The most phoneme-dense stop in the corpus: Preah Khan, with Khmer proper nouns (`Preah Khan`, `Jayavarman VII`, `Lokesvara`, `Bayon`,   `khñum vraḥ`) and Sanskrit terms handled by IPA injection. Compare the plain script with the SSML version to see the phoneme layer in action.
 
 - `07_Audio/9.mp3` — Preah Khan, phoneme showcase (3 min)
 
@@ -340,11 +310,7 @@ examples/paris_medieval_fr/
 ### Florence (English) — `examples/florence_en/`
 
 - `04_Scripts/1.txt` → `06_Scripts_with_SSML/1.txt`  
-  Stop 1 — Piazza della Repubblica. The plain English narration vs the 
-  SSML version with `<lang xml:lang='it-IT'>` tags switching the TTS 
-  engine mid-sentence for Italian proper nouns and a full inscription 
-  read aloud in Italian. A different phoneme strategy than Angkor: 
-  language switching rather than IPA injection.
+  Stop 1 — Piazza della Repubblica. The plain English narration vs the SSML version with `<lang xml:lang='it-IT'>` tags switching the TTS engine mid-sentence for Italian proper nouns and a full inscription read aloud in Italian. A different phoneme strategy than Angkor: language switching rather than IPA injection.
 
 - `07_Audio/1.mp3` — Piazza della Repubblica, language switching showcase (3 min)
 
