@@ -4,7 +4,7 @@ AIdioguide is a multi-agent pipeline designed to generate immersive historical a
 
 Tech Stack: Python 3.10+, Anthropic (Claude Sonnet 4.6 / Gemini Flash 3.0), Exa, Azure TTS (Neural Multilingual), SSML.
 
-**[Listen to an example here: Florence Grand Format (8 min)](#)**
+**[Listen to an example here: Florence Grand Format (8 min)]([#](https://github.com/AggressiveBaguette/AIdioGuide/blob/main/examples/firenze-en/07_Audio/7.mp3))**
 
 ---
 
