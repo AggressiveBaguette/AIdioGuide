@@ -46,16 +46,17 @@ flowchart TD
     Input([Input\nCity + listener profile]):::io
 
     subgraph CorePipeline [AI orchestrator pipeline]
-        S["**Strategist**\nSonnet"]:::agent
-        R["**Research + fact-check**\nSonnet · Exa · Gemini Flash"]:::agent
-        P["**Planner**\nSonnet"]:::agent
-        N["**Narrator**\nSonnet"]:::agent
+        S["<b>Strategist</b>\nSonnet"]:::agent
+        R["<b>Research + fact-check</b>\nSonnet · Exa · Gemini Flash"]:::agent
+        P["<b>Planner</b>\nSonnet"]:::agent
+        R2["<b>Research + fact-check 2</b>\nSonnet · Exa · Gemini Flash"]:::agent
+        N["<b>Narrator</b>\nSonnet"]:::agent
     end
 
     subgraph TechnicalGeneration [Post-processing & TTS]
-    Ph["**Phoneme detection**\nGemini Flash"]:::tech
-    SSML["**SSML injection**\nPython · regex"]:::tech
-    A["**Audio generation**\nAzure TTS"]:::tech
+    Ph["<b>Phoneme detection</b>\nGemini Flash"]:::tech
+    SSML["<b>SSML injection</b>\nPython · regex"]:::tech
+    A["<b>Audio generation</b>\nAzure TTS"]:::tech
     end
 
     Output([Output\nFinal audioguide]):::io
@@ -64,6 +65,8 @@ flowchart TD
     S -->|01_strategy.dsv| R
     R -->|02_verified_research.dsv| P
     P -->|03_plan.json| N
+    P --> R2
+    R2 --> |02_verified_research.dsv| N
     N -->|04_scripts/*.txt| Ph
     Ph -->|05_phonemes.json| SSML
     SSML -->|06_scripts_with_ssml/*.txt| A
