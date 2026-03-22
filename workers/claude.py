@@ -4,11 +4,23 @@ from utils import save_LLM_output
 import re
 from loguru import logger
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
+import asyncio
 
 class Claude:
     def __init__(self):
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
         self.client = AsyncAnthropic(api_key=self.api_key)
+        self.semaphore = asyncio.Semaphore(3)
+
+    @retry(
+        wait=wait_random_exponential(min=1, max=60), 
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(RateLimitError)
+    )
+    async def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
+        async with self.semaphore:
+            return await self._get_text(content, system_prompt, research_block_1, research_block_2, plan, temperature, cache, messages_history)
+
 
     def get_system_block(self, system_prompt="", research_block_1="", research_block_2="", plan=""):
         """The order of the different blocks is thought to optimize token usage, using the cache strategy"""
@@ -66,12 +78,8 @@ class Claude:
             logger.error(f"[Error]: {e}")
             raise e
 
-    @retry(
-        wait=wait_random_exponential(min=1, max=60), 
-        stop=stop_after_attempt(5),
-        retry=retry_if_exception_type(RateLimitError)
-    )
-    async def get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
+
+    async def _get_text(self, content, system_prompt="", research_block_1="", research_block_2="", plan="", temperature=1, cache = False, messages_history: list | None = None):
         # async http call, wait for the full text to be generated
         try:
             logger.info("Before Claude API call")
