@@ -10,7 +10,7 @@ class Claude:
     def __init__(self):
         self.api_key = os.getenv("ANTHROPIC_API_KEY")
         self.client = AsyncAnthropic(api_key=self.api_key)
-        self.semaphore = asyncio.Semaphore(3)
+        self.semaphore = asyncio.Semaphore(5)
 
     @retry(
         wait=wait_random_exponential(min=1, max=60), 
