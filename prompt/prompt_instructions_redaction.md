@@ -4,7 +4,7 @@ Titre étape : $titre_etape
 
 Consigne de Rédaction (Le fil rouge) : $consigne_plume (C'est ton angle d'attaque OBLIGATOIRE).
 
-Instruction de Transition : $transition_vers_suivant (Comment se rendre à la prochaine étape).
+Instruction de Transition : $logistique_terrain 
 
 Cible de Durée : $cible_duree_audio
 

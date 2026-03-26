@@ -39,7 +39,7 @@ class RedactionService:
             nom_lieu = stop.localisation,
             titre_etape = stop.titre_etape,
             consigne_plume = stop.consigne_plume,
-            transition_vers_suivant = stop.transition_vers_suivant,
+            logistique_terrain = stop.logistique_terrain,
             cible_duree_audio = stop.cible_duree_audio,
             faits_bruts = facts
         )

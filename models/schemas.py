@@ -56,12 +56,17 @@ class VerifiedResearchOutputConcatenated(BaseModel):
     raw_output: str
     research_lines: List[VerifiedResearchOutputConcatenatedLine] = Field(default_factory=list)
 
+class LogistiqueTerrain(BaseModel):
+    temps_marche_minutes: int
+    franchissement_seuil: bool
+    instruction_navigation_vers_suivant: str
+
 class EtapeParcours(BaseModel):
     numero: int
     type: Literal["Vestige_Majeur", "Respiration_Contexte"] = "Vestige_Majeur"
     titre_etape: str
     localisation: str
-    transition_vers_suivant: str | None = None
+    logistique_terrain: LogistiqueTerrain | None = None
     consigne_plume: str
     cible_duree_audio: str
     is_grand_format: bool = False
