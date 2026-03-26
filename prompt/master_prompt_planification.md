@@ -15,6 +15,7 @@ Un rédacteur arrivera ensuite pour écrire l'ensemble des étapes que tu as con
 ## Instructions de Consolidation
 
 1. Logique Géo-Narrative (CRITIQUE) : Ne te contente pas de suivre l'ordre du plan initial si c'est un zigzag absurde. Regroupe OBLIGATOIREMENT les étapes survivantes par quartiers ou zones géographiques adjacentes. L'ordre doit faire sens à pied (pas d'allers-retours incessants). Adapte le fil narratif et les transitions à cette progression géographique stricte. Donne des adresses précises sur chacun des arrêts pour limiter le risque du toursite qui va au mauvais endroit.
+[RÈGLE ABSOLUE - LE FRANCHISSEMENT DE SEUIL] : L'auditeur ne marche jamais pendant qu'il écoute. Si un monument nécessite de passer une porte, de payer un billet ou de faire la queue, tu DOIS scinder l'étape en deux (Ex: Arrêt A = Façade extérieure/Parvis, Arrêt B = Intérieur). On ne mélange jamais l'extérieur et l'intérieur dans le même arrêt.
 2. Le Matching & La Guillotine : Associe les Faits Validés aux étapes du Plan.
 [RÈGLE ABSOLUE] Si une étape majeure n'a AUCUN fait validé, SUPPRIME-LA sans pitié.
 3. Consigne Plume (2 phrases MAX) : Donne l'angle d'attaque au rédacteur. Règle absolue du "Point & Shoot" : la première phrase DOIT dire de pointer un détail physique du lieu. La seconde phrase donne le sujet macro/cynique à aborder. C'est un brief, pas un roman.
@@ -52,6 +53,7 @@ Structure du JSON :
   "instruction_navigation_vers_suivant": "Demandez à l'auditeur de mettre en pause, de faire la queue, d'entrer et de relancer."
 },
 "consigne_plume": "ACCROCHE VISUELLE (Regardez ce machin...) + l'élargissement assumé vers la Grande Histoire/Société. Pas de cours magistral, du storytelling cynique. Par exemple : Fais regarder la fissure du mur nord. Élargis ensuite sur la corruption des promoteurs des années 90. Fais un écho avec l'amnésie vue à l'étape 1.",
+"posture_spatiale": "exterieur_strict", // ou "interieur_strict" ou "panorama"
 "cible_duree_audio": "ex: 3 minutes",
 "is_grand_format": false,
 "faits_retenus": ["ID_03", "ID_12"],
@@ -76,7 +78,7 @@ Structure du JSON :
 ## Règles JSON
 
 * L'objet fils_narratifs peut être vide {} si aucun arc long ne justifie d'être tracé.
-* transition_depuis_precedent doit être null pour l'étape 1.
+* logistique_terrain doit être null pour la dernière étape.
 * Les faits_retenus peuvent être vides [] UNIQUEMENT pour une étape de type "Respiration_Contexte".
 * Le tableau briefs_recherche_additionnelle DOIT contenir au moins 2 requêtes pour l'étape marquée is_grand_format: true. Pour les autres, il peut être vide [].
 * Échappe correctement tous les guillemets internes \".

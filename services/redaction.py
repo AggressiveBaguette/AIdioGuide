@@ -41,7 +41,8 @@ class RedactionService:
             consigne_plume = stop.consigne_plume,
             logistique_terrain = stop.logistique_terrain,
             cible_duree_audio = stop.cible_duree_audio,
-            faits_bruts = facts
+            faits_bruts = facts, 
+            posture_spatiale = stop.posture_spatiale
         )
 
         worker = self.registry.claude_worker
