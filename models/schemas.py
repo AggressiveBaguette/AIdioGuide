@@ -69,6 +69,7 @@ class EtapeParcours(BaseModel):
     logistique_terrain: LogistiqueTerrain | None = None
     consigne_plume: str
     cible_duree_audio: str
+    posture_spatiale: str
     is_grand_format: bool = False
     faits_retenus: List[str] = Field(default_factory=list)
     briefs_recherche_additionnelle: List[ResearchTopic] = Field(default_factory=list)
