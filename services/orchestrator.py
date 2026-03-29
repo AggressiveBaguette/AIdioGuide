@@ -193,6 +193,6 @@ async def orchestrator(user_context: UserContext):
     phonemes_list = await orchestration.phonemes_detection(plan, audioguide_text)
     logger.info("PHONEMES DETECTION: END")
 
-    logger.info("AUDIO GENERATION: START")
-    await orchestration.audio_generation(phonemes_list, audioguide_text)
-    logger.info("AUDIO GENERATION: END")
+    # logger.info("AUDIO GENERATION: START")
+    # await orchestration.audio_generation(phonemes_list, audioguide_text)
+    # logger.info("AUDIO GENERATION: END")
