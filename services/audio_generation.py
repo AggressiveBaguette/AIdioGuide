@@ -58,7 +58,7 @@ class AudioService:
         return content
         
     def _add_header_footer_tags(self, content: str) -> str:
-        header = f"""<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="{self.user_context.language.code}"><voice name="{self.user_context.language.voice_id}">"""
+        header = f"""<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="{self.user_context.language.code}"><voice name="{self.user_context.language.voice_id}" parameters="temperature=0.5">"""
         footer = "</voice></speak>"
         return header + content + footer
     
@@ -76,7 +76,7 @@ class AudioService:
 
     def _remove_useless_linebreak(self, content: str) -> str:
         # Remove lines break, to avoid TTS to make long pauses. Pauses are control through SSML tags.
-        content = re.sub(r"\n", " ", content)
+        content = re.sub(r"\n\n", "\n", content)
         return content
 
     def _add_foreign_tags_but_no_phonemes(self, content: str, phonemes_replacement: PhonemesList) -> str:
@@ -92,3 +92,4 @@ class AudioService:
                     replacement = rf"<lang xml:lang='{term.langue}'>\g<0></lang>"
                     content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
         return content
+

@@ -45,8 +45,8 @@ class RedactionService:
             posture_spatiale = stop.posture_spatiale
         )
 
-        worker = self.registry.claude_worker
-        stop_text = await worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history)
+        worker = self.registry.gemini_worker
+        stop_text = await worker.get_text(prompt, system_prompt=system_prompt, temperature = 0.8, cache = True, messages_history = messages_history, model = "pro")
 
         new_history = list(messages_history)
         new_history.append({"role": "user", "content": prompt})

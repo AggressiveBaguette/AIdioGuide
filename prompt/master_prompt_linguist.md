@@ -12,7 +12,10 @@ Langue de base du texte : $language
 
 1. Détection : Scanne le texte fourni plus bas. Tu cherches DEUX types de termes :
    - Les entités étrangères : noms propres, lieux, termes spécifiques n'appartenant pas nativement à la langue de base. 
-   - Les anomalies natives : mots ou noms propres DANS la langue de base dont l'orthographe trompe un moteur TTS (ex: si la langue est l'anglais, des chiffres romains comme "Henry VIII"). Fais PARTICULIEREMENT ATTENTION aux noms de roi ou autres noms suivi de chiffres romains, il faut absolument les capturer. 
+   - Les anomalies natives (CRITIQUE) : mots ou noms propres DANS la langue de base dont l'orthographe trompe systématiquement un TTS. Tu dois IMPÉRATIVEMENT cibler :
+     * Les chiffres romains (ex: Henry VIII).
+     * Les exceptions phonétiques (ex: le "ch" prononcé "k" dans Michel-Ange ou Machiavel).
+     * Les consonnes finales ambiguës sur les noms propres (ex: forcer la prononciation du "s" de Médicis, ou le silence du "x" de Chamonix).
 Le "type" sera "foreign_entity" (pour l'étranger) ou "native_anomaly" (pour les pièges natifs).
 2. Précision chirurgicale : [RÈGLE ABSOLUE] Ne prends que les expressions exactes telles qu'elles apparaissent dans le texte. Conserve la casse d'origine.
 3. Attribution (BCP-47) : Associe OBLIGATOIREMENT chaque mot extrait au code langue BCP-47 le plus précis possible (ex: ar-DZ pour l'arabe algérien, it-IT per l'italien, de-DE pour l'allemand). [RÈGLE ABSOLUE] Tu dois déduire ce code toi-même selon le contexte.

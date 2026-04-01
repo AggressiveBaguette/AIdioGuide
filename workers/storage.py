@@ -49,15 +49,15 @@ class SaveFiles:
             case Category.PLAN:
                 file_name = f"{path}/03_plan.json"
             case Category.REDACTION:
-                file_name = f"{path}/04_Scripts/{id}.txt"
+                file_name = f"{path}/04_Scripts/{int(id):02d}.txt"
             case Category.REDACTION_HISTORY:
-                file_name = f"{path}/04_Scripts/Conversation_history/{id}.json"
+                file_name = f"{path}/04_Scripts/Conversation_history/{int(id):02d}.json"
             case Category.PHONEMES:
                 file_name = f"{path}/05_phonemes.json"
             case Category.REDACTION_WITH_SSML:
-                file_name = f"{path}/06_Scripts_with_SSML/{id}.txt"
+                file_name = f"{path}/06_Scripts_with_SSML/{int(id):02d}.txt"
             case Category.AUDIO:
-                file_name = f"{path}/07_Audio/{id}.mp3"
+                file_name = f"{path}/07_Audio/{int(id):02d}.mp3"
             case _:
                 logger.error(f"Category {category} not found!")
                 raise ValueError(f"Category {category} not found!")
